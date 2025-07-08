@@ -27,9 +27,14 @@ export const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png" 
+              alt="The Grid Logo" 
+              className="h-10 w-auto"
+            />
             <span className="font-editorial text-2xl font-semibold text-foreground">
-              ArchitecturalHUB
+              The Grid
             </span>
           </Link>
 
@@ -39,9 +44,9 @@ export const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`font-sans text-sm font-medium transition-colors hover:text-foreground ${
+                className={`font-sans text-sm font-medium transition-colors hover:text-primary ${
                   isActive(item.path) 
-                    ? 'text-foreground border-b-2 border-foreground pb-1' 
+                    ? 'text-primary border-b-2 border-primary pb-1' 
                     : 'text-muted-foreground'
                 }`}
               >
@@ -103,7 +108,7 @@ export const Navigation = () => {
                   to={item.path}
                   className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                     isActive(item.path)
-                      ? 'bg-muted text-foreground'
+                      ? 'bg-accent text-primary'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`}
                   onClick={() => setIsMenuOpen(false)}

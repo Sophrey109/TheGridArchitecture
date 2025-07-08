@@ -44,7 +44,7 @@ export const Footer = () => {
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center mb-6">
               <span className="font-editorial text-2xl font-semibold text-foreground">
-                ArchitecturalHUB
+                The Grid
               </span>
             </Link>
             <p className="body-text text-muted-foreground mb-6 max-w-md">
@@ -61,7 +61,7 @@ export const Footer = () => {
                   placeholder="Enter your email"
                   className="flex-1"
                 />
-                <Button>Subscribe</Button>
+                <Button className="bg-primary hover:bg-primary/90">Subscribe</Button>
               </div>
               <p className="caption-text mt-2">
                 Weekly digest of the best in architecture and design.
@@ -78,7 +78,7 @@ export const Footer = () => {
                   <li key={link.name}>
                     <Link
                       to={link.path}
-                      className="body-text text-muted-foreground hover:text-foreground transition-colors"
+                      className="body-text text-muted-foreground hover:text-primary transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -92,21 +92,21 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="caption-text mb-4 md:mb-0">
-            © 2024 ArchitecturalHUB. All rights reserved.
+            © 2024 The Grid. All rights reserved.
           </p>
           
           {/* Social Links */}
           <div className="flex space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:text-primary">
               <Twitter className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:text-primary">
               <Linkedin className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:text-primary">
               <Instagram className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:text-primary">
               <Mail className="h-5 w-5" />
             </Button>
           </div>

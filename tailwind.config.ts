@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -57,6 +56,7 @@ export default {
 				beige: 'hsl(40 15% 95%)',
 				'warm-grey': 'hsl(30 3% 85%)',
 				charcoal: 'hsl(0 0% 15%)',
+				'grid-orange': 'hsl(14 85% 55%)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
