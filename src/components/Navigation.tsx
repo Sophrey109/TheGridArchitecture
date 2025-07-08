@@ -22,12 +22,16 @@ export const Navigation = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const handleNavClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 transition-transform duration-200 hover:scale-105">
             <img 
               src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png" 
               alt="The Grid Logo" 
@@ -44,11 +48,12 @@ export const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`font-sans text-sm font-medium transition-colors hover:text-primary ${
+                className={`nav-link font-sans text-sm font-medium hover:text-primary ${
                   isActive(item.path) 
                     ? 'text-primary border-b-2 border-primary pb-1' 
                     : 'text-muted-foreground'
                 }`}
+                onClick={handleNavClick}
               >
                 {item.name}
               </Link>
@@ -60,17 +65,18 @@ export const Navigation = () => {
             {/* Search */}
             <div className="relative">
               {isSearchOpen ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 animate-fade-in">
                   <Input
                     type="text"
                     placeholder="Search..."
-                    className="w-64 h-10"
+                    className="w-64 h-10 transition-all duration-200"
                     autoFocus
                   />
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsSearchOpen(false)}
+                    className="transition-transform duration-200 hover:scale-110"
                   >
                     <X className="h-5 w-5" />
                   </Button>
@@ -80,6 +86,7 @@ export const Navigation = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsSearchOpen(true)}
+                  className="transition-transform duration-200 hover:scale-110"
                 >
                   <Search className="h-5 w-5" />
                 </Button>
@@ -90,7 +97,7 @@ export const Navigation = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden transition-transform duration-200 hover:scale-110"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -100,18 +107,18 @@ export const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-border">
+          <div className="lg:hidden border-t border-border animate-slide-up">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ${
                     isActive(item.path)
                       ? 'bg-accent text-primary'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={handleNavClick}
                 >
                   {item.name}
                 </Link>
