@@ -1,13 +1,21 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import { Layout } from '@/components/Layout';
+import { FeaturedCarousel } from '@/components/home/FeaturedCarousel';
+import { TrendingGrid } from '@/components/home/TrendingGrid';
+import { CategoriesSection } from '@/components/home/CategoriesSection';
+import { NewsletterSection } from '@/components/home/NewsletterSection';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <Layout>
+      <div className="animate-fade-in">
+        <FeaturedCarousel />
+        <TrendingGrid />
+        <CategoriesSection />
+        <NewsletterSection />
       </div>
-    </div>
+    </Layout>
   );
 };
 
