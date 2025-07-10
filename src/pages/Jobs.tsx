@@ -1,8 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '@/components/Layout';
+import { JobFilterBar } from '@/components/jobs/FilterBar';
 
 const Jobs = () => {
+  const [selectedDiscipline, setSelectedDiscipline] = useState('all');
+  const [selectedTitle, setSelectedTitle] = useState('all');
+  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [selectedType, setSelectedType] = useState('all');
+
+  const handleClearFilters = () => {
+    setSelectedDiscipline('all');
+    setSelectedTitle('all');
+    setSelectedLocation('all');
+    setSelectedType('all');
+  };
+
   return (
     <Layout>
       <div className="min-h-screen py-16">
@@ -14,10 +27,32 @@ const Jobs = () => {
             </p>
           </div>
           
+          <JobFilterBar
+            selectedDiscipline={selectedDiscipline}
+            selectedTitle={selectedTitle}
+            selectedLocation={selectedLocation}
+            selectedType={selectedType}
+            onDisciplineChange={setSelectedDiscipline}
+            onTitleChange={setSelectedTitle}
+            onLocationChange={setSelectedLocation}
+            onTypeChange={setSelectedType}
+            onClearFilters={handleClearFilters}
+          />
+          
           <div className="text-center py-20">
             <p className="body-text text-muted-foreground">
-              Job board with location and role filtering coming soon...
+              Job listings with advanced filtering coming soon...
             </p>
+            {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all') && (
+              <div className="mt-4 text-sm text-muted-foreground">
+                <p>Active filters: 
+                  {selectedDiscipline !== 'all' && ` Discipline: ${selectedDiscipline}`}
+                  {selectedTitle !== 'all' && ` Title: ${selectedTitle}`}
+                  {selectedLocation !== 'all' && ` Location: ${selectedLocation}`}
+                  {selectedType !== 'all' && ` Type: ${selectedType}`}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
