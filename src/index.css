@@ -214,12 +214,15 @@
   }
 }
 
-/* Logo movement animation keyframes */
-@keyframes logoMove {
+/* Logo bounce animation keyframes */
+@keyframes logoBounce {
   0% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(20px) scale(1.05);
   }
   100% {
-    transform: translate(-50%, -200vh) scale(0.8);
+    transform: translateY(-200vh) scale(0.8);
   }
 }

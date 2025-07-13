@@ -31,7 +31,7 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
         src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png"
         alt="Logo"
         className={`w-32 h-32 object-contain transition-all duration-[1800ms] ease-out ${
-          isAnimating ? 'transform -translate-y-[50vh] scale-75' : ''
+          isAnimating ? 'animate-[logoBounce_1.8s_ease-out_forwards]' : ''
         }`}
       />
     </div>
