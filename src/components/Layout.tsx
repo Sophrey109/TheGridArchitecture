@@ -43,11 +43,13 @@ export const Layout = ({ children }: LayoutProps) => {
       {showSplash && !hasShownSplash && (
         <SplashScreen onAnimationComplete={handleSplashComplete} />
       )}
-      {!showSplash && <Navigation />}
-      <main className={`pt-20 page-transition ${!showSplash ? 'page-fade-in' : ''}`}>
-        {children}
-      </main>
-      <Footer />
+      <div className={`transition-opacity duration-500 ${showSplash ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <Navigation />
+        <main className="pt-20">
+          {children}
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };
