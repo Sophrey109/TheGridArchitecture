@@ -90,6 +90,7 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll during animations */
   }
 
   /* Editorial typography styles */
@@ -178,6 +179,11 @@
     @apply transition-all duration-200 ease-in-out;
   }
 
+  /* Splash screen animations */
+  .splash-logo-bounce {
+    animation: logoMove 1s ease-out forwards;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
@@ -205,5 +211,15 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Logo movement animation keyframes */
+@keyframes logoMove {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -200vh) scale(0.8);
   }
 }
