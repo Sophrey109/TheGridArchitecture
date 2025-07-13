@@ -33,9 +33,12 @@ export const Layout = ({ children }: LayoutProps) => {
   }, [location.pathname, showSplash]);
 
   const handleSplashComplete = () => {
-    setShowSplash(false);
-    setHasShownSplash(true);
-    sessionStorage.setItem('hasVisited', 'true');
+    // Add a small delay before showing content for smoother transition
+    setTimeout(() => {
+      setShowSplash(false);
+      setHasShownSplash(true);
+      sessionStorage.setItem('hasVisited', 'true');
+    }, 200);
   };
 
   return (
@@ -43,7 +46,7 @@ export const Layout = ({ children }: LayoutProps) => {
       {showSplash && !hasShownSplash && (
         <SplashScreen onAnimationComplete={handleSplashComplete} />
       )}
-      <div className={`transition-opacity duration-500 ${showSplash ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`transition-all duration-1000 ease-out ${showSplash ? 'opacity-0 pointer-events-none translate-y-2' : 'opacity-100 translate-y-0'}`}>
         <Navigation />
         <main className="pt-20">
           {children}
