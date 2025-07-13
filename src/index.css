@@ -159,15 +159,15 @@
   }
 
   .hero-text {
-    @apply font-editorial text-4xl md:text-6xl font-medium leading-tight;
+    @apply font-archivo-black text-4xl md:text-6xl font-black leading-tight;
   }
 
   .article-title {
-    @apply font-editorial text-2xl md:text-4xl font-medium leading-tight;
+    @apply font-archivo-black text-2xl md:text-4xl font-black leading-tight;
   }
 
   .section-title {
-    @apply font-editorial text-xl md:text-2xl font-medium rounded-lg shadow-soft p-4 bg-card;
+    @apply font-archivo-black text-xl md:text-2xl font-black;
   }
 
   .body-text {
