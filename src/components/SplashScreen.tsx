@@ -28,7 +28,7 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
       }`}
     >
       <div 
-        className={`font-editorial text-6xl md:text-8xl font-bold text-primary ${
+        className={`font-archivo-black text-6xl md:text-8xl text-primary ${
           isAnimating ? 'animate-[logoBounce_1.8s_ease-out_forwards]' : ''
         }`}
       >

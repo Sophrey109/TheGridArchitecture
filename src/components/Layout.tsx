@@ -43,7 +43,7 @@ export const Layout = ({ children }: LayoutProps) => {
       {showSplash && !hasShownSplash && (
         <SplashScreen onAnimationComplete={handleSplashComplete} />
       )}
-      <Navigation />
+      {!showSplash && <Navigation />}
       <main className={`pt-20 page-transition ${!showSplash ? 'page-fade-in' : ''}`}>
         {children}
       </main>

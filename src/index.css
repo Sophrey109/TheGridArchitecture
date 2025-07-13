@@ -107,6 +107,10 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
+  .font-archivo-black {
+    font-family: 'Archivo Black', system-ui, -apple-system, sans-serif;
+  }
+
   /* Custom utility classes */
   .text-beige {
     color: hsl(var(--beige));
