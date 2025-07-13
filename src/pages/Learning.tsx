@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Layout } from '@/components/Layout';
+import { DesignEssentials } from '@/components/learning/DesignEssentials';
 
 const Learning = () => {
   return (
@@ -14,10 +15,20 @@ const Learning = () => {
             </p>
           </div>
           
-          <div className="text-center py-20">
-            <p className="body-text text-muted-foreground">
-              Learning resources with free and premium tabs coming soon...
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main content area */}
+            <div className="lg:col-span-3">
+              <div className="text-center py-20">
+                <p className="body-text text-muted-foreground">
+                  Learning resources with free and premium tabs coming soon...
+                </p>
+              </div>
+            </div>
+            
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <DesignEssentials />
+            </div>
           </div>
         </div>
       </div>
