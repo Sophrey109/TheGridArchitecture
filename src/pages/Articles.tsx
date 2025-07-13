@@ -87,6 +87,12 @@ const Articles = () => {
   };
 
   const filteredArticles = getFilteredArticles();
+  
+  // Debug logging
+  console.log('Articles data:', articles);
+  console.log('Filtered articles:', filteredArticles);
+  console.log('Loading state:', isLoading);
+  console.log('Error state:', error);
 
   if (isLoading) {
     return (
