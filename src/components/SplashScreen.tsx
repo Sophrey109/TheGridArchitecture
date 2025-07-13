@@ -27,13 +27,13 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
         isAnimating ? '-translate-y-full' : ''
       }`}
     >
-      <img 
-        src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png"
-        alt="Logo"
-        className={`w-32 h-32 object-contain ${
+      <div 
+        className={`font-editorial text-6xl md:text-8xl font-bold text-primary ${
           isAnimating ? 'animate-[logoBounce_1.8s_ease-out_forwards]' : ''
         }`}
-      />
+      >
+        The Grid.
+      </div>
     </div>
   );
 };
