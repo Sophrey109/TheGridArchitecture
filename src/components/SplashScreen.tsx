@@ -23,12 +23,12 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 bg-white flex items-center justify-center transition-transform duration-[1800ms] ease-out ${
-        isAnimating ? '-translate-y-full' : ''
+      className={`fixed inset-0 z-50 bg-white flex items-center justify-center transition-all duration-[1800ms] ease-out ${
+        isAnimating ? '-translate-y-full opacity-0' : 'opacity-100'
       }`}
     >
       <div 
-        className={`font-archivo-black text-6xl md:text-8xl text-primary ${
+        className={`font-archivo-black text-6xl md:text-8xl text-primary font-black ${
           isAnimating ? 'animate-[logoBounce_1.8s_ease-out_forwards]' : ''
         }`}
       >
