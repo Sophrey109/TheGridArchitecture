@@ -9,14 +9,14 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    // Start animation after a longer delay
+    // Start animation after a longer delay to stay on screen for 5 seconds
     const timer = setTimeout(() => {
       setIsAnimating(true);
       // Complete animation after the transition duration
       setTimeout(() => {
         onAnimationComplete();
-      }, 1800); // Longer animation duration
-    }, 1000); // Longer initial delay
+      }, 1800); // Animation duration
+    }, 3200); // Stay on screen for 3.2s + 1.8s animation = 5s total
 
     return () => clearTimeout(timer);
   }, [onAnimationComplete]);
