@@ -47,6 +47,36 @@ export type Database = {
         }
         Relationships: []
       }
+      "Job Adverts": {
+        Row: {
+          Company: string | null
+          "Date Posted": string | null
+          Description: string | null
+          id: number
+          "Job Title": string
+          Location: string | null
+          Salary: string | null
+        }
+        Insert: {
+          Company?: string | null
+          "Date Posted"?: string | null
+          Description?: string | null
+          id?: number
+          "Job Title": string
+          Location?: string | null
+          Salary?: string | null
+        }
+        Update: {
+          Company?: string | null
+          "Date Posted"?: string | null
+          Description?: string | null
+          id?: number
+          "Job Title"?: string
+          Location?: string | null
+          Salary?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

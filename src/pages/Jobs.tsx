@@ -2,12 +2,17 @@
 import React, { useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { JobFilterBar } from '@/components/jobs/FilterBar';
+import { JobCard } from '@/components/jobs/JobCard';
+import { useJobs } from '@/hooks/useJobs';
+import { Loader2 } from 'lucide-react';
 
 const Jobs = () => {
   const [selectedDiscipline, setSelectedDiscipline] = useState('all');
   const [selectedTitle, setSelectedTitle] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
+  
+  const { data: jobs, isLoading, error } = useJobs();
 
   const handleClearFilters = () => {
     setSelectedDiscipline('all');
@@ -39,21 +44,44 @@ const Jobs = () => {
             onClearFilters={handleClearFilters}
           />
           
-          <div className="text-center py-20">
-            <p className="body-text text-muted-foreground">
-              Job listings with advanced filtering coming soon...
-            </p>
-            {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all') && (
-              <div className="mt-4 text-sm text-muted-foreground">
-                <p>Active filters: 
-                  {selectedDiscipline !== 'all' && ` Discipline: ${selectedDiscipline}`}
-                  {selectedTitle !== 'all' && ` Title: ${selectedTitle}`}
-                  {selectedLocation !== 'all' && ` Location: ${selectedLocation}`}
-                  {selectedType !== 'all' && ` Type: ${selectedType}`}
-                </p>
-              </div>
-            )}
-          </div>
+          {isLoading && (
+            <div className="flex justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          )}
+          
+          {error && (
+            <div className="text-center py-20">
+              <p className="text-red-500">Error loading jobs: {error.message}</p>
+            </div>
+          )}
+          
+          {jobs && jobs.length === 0 && (
+            <div className="text-center py-20">
+              <p className="body-text text-muted-foreground">
+                No job listings available at the moment.
+              </p>
+            </div>
+          )}
+          
+          {jobs && jobs.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {jobs.map((job) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+          )}
+          
+          {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all') && (
+            <div className="mt-4 text-sm text-muted-foreground text-center">
+              <p>Active filters: 
+                {selectedDiscipline !== 'all' && ` Discipline: ${selectedDiscipline}`}
+                {selectedTitle !== 'all' && ` Title: ${selectedTitle}`}
+                {selectedLocation !== 'all' && ` Location: ${selectedLocation}`}
+                {selectedType !== 'all' && ` Type: ${selectedType}`}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
