@@ -52,6 +52,7 @@ export type Database = {
           Company: string | null
           "Date Posted": string | null
           Description: string | null
+          "External Link": string | null
           id: number
           is_active: boolean | null
           "Job Title": string
@@ -63,6 +64,7 @@ export type Database = {
           Company?: string | null
           "Date Posted"?: string | null
           Description?: string | null
+          "External Link"?: string | null
           id?: number
           is_active?: boolean | null
           "Job Title": string
@@ -74,6 +76,7 @@ export type Database = {
           Company?: string | null
           "Date Posted"?: string | null
           Description?: string | null
+          "External Link"?: string | null
           id?: number
           is_active?: boolean | null
           "Job Title"?: string

@@ -9,6 +9,7 @@ export interface Job {
   Salary: string | null;
   Description: string | null;
   'Date Posted': string | null;
+  'External Link': string | null;
 }
 
 export const useJobs = () => {

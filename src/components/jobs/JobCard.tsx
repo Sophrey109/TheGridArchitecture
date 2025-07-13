@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, DollarSign, Calendar, Building } from 'lucide-react';
@@ -15,7 +16,8 @@ export const JobCard = ({ job }: JobCardProps) => {
   };
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow">
+    <Link to={`/jobs/${job.id}`} className="block h-full">
+      <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
       <CardHeader>
         <CardTitle className="text-lg font-bold">{job['Job Title']}</CardTitle>
         {job.Company && (
@@ -52,5 +54,6 @@ export const JobCard = ({ job }: JobCardProps) => {
         )}
       </CardContent>
     </Card>
+    </Link>
   );
 };
