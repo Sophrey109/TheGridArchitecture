@@ -3,62 +3,47 @@ import React, { useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { FilterBar } from '@/components/articles/FilterBar';
 import { ArticleCard } from '@/components/articles/ArticleCard';
+import { useArticles } from '@/hooks/useArticles';
 
-// Sample articles data
-const sampleArticles = [
-  {
-    id: 1,
-    title: "The Future of Sustainable Architecture",
-    excerpt: "Exploring innovative approaches to eco-friendly building design and their impact on urban environments.",
-    type: 'research' as const,
-    date: "Jan 15, 2025",
-    imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop"
-  },
-  {
-    id: 2,
-    title: "Why BIM is Essential for Modern Architecture",
-    excerpt: "An opinion piece on how Building Information Modeling is revolutionizing the architecture industry.",
-    type: 'opinion' as const,
-    date: "Jan 12, 2025",
-    imageUrl: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=250&fit=crop"
-  },
-  {
-    id: 3,
-    title: "New Zoning Laws Approved for Urban Development",
-    excerpt: "City council approves new regulations that will reshape downtown development projects.",
-    type: 'news' as const,
-    date: "Jan 10, 2025",
-    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=250&fit=crop"
-  },
-  {
-    id: 4,
-    title: "The Oslo Opera House: A Study in Public Architecture",
-    excerpt: "Examining how Snøhetta's design created a new model for cultural buildings.",
-    type: 'case-studies' as const,
-    date: "Jan 8, 2025",
-    imageUrl: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=250&fit=crop"
-  },
-  {
-    id: 5,
-    title: "Rethinking Open Office Spaces Post-Pandemic",
-    excerpt: "How workplace design is evolving to meet new health and productivity requirements.",
-    type: 'opinion' as const,
-    date: "Dec 28, 2024",
-    imageUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop"
-  },
-  {
-    id: 6,
-    title: "Smart Building Technology Integration Study",
-    excerpt: "Research findings on the effectiveness of IoT sensors in commercial building management.",
-    type: 'research' as const,
-    date: "Dec 25, 2024",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop"
+// Helper function to extract excerpt from content
+const getExcerpt = (content: string | null): string => {
+  if (!content) return "No content available.";
+  const plainText = content.replace(/<[^>]*>/g, '');
+  return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
+};
+
+// Helper function to determine article type based on content or title
+const determineArticleType = (title: string, content: string | null): 'opinion' | 'research' | 'news' | 'case-studies' => {
+  const text = `${title} ${content || ''}`.toLowerCase();
+  
+  if (text.includes('opinion') || text.includes('think') || text.includes('believe')) {
+    return 'opinion';
+  } else if (text.includes('research') || text.includes('study') || text.includes('findings')) {
+    return 'research';
+  } else if (text.includes('news') || text.includes('approved') || text.includes('announced')) {
+    return 'news';
+  } else if (text.includes('case study') || text.includes('examining') || text.includes('analysis')) {
+    return 'case-studies';
   }
-];
+  
+  return 'research'; // default
+};
+
+// Helper function to format date
+const formatDate = (dateString: string | null): string => {
+  if (!dateString) return "No date";
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+};
 
 const Articles = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
+  const { data: articles, isLoading, error } = useArticles();
 
   const handleClearFilters = () => {
     setSelectedType('all');
@@ -66,9 +51,14 @@ const Articles = () => {
   };
 
   const getFilteredArticles = () => {
-    return sampleArticles.filter(article => {
-      const typeMatch = selectedType === 'all' || article.type === selectedType;
-      const yearMatch = selectedYear === 'all' || article.date.includes(selectedYear);
+    if (!articles) return [];
+    
+    return articles.filter(article => {
+      const articleType = determineArticleType(article.Title, article.Content);
+      const formattedDate = formatDate(article['Published Date']);
+      
+      const typeMatch = selectedType === 'all' || articleType === selectedType;
+      const yearMatch = selectedYear === 'all' || formattedDate.includes(selectedYear);
       return typeMatch && yearMatch;
     });
   };
@@ -96,6 +86,26 @@ const Articles = () => {
   };
 
   const filteredArticles = getFilteredArticles();
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="body-text text-muted-foreground">Loading articles...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="body-text text-destructive">Error loading articles. Please try again later.</p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -132,11 +142,11 @@ const Articles = () => {
                 {filteredArticles.map((article) => (
                   <ArticleCard
                     key={article.id}
-                    title={article.title}
-                    excerpt={article.excerpt}
-                    type={article.type}
-                    date={article.date}
-                    imageUrl={article.imageUrl}
+                    title={article.Title}
+                    excerpt={getExcerpt(article.Content)}
+                    type={determineArticleType(article.Title, article.Content)}
+                    date={formatDate(article['Published Date'])}
+                    imageUrl="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop"
                   />
                 ))}
               </div>
