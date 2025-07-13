@@ -91,43 +91,41 @@ const categories: Category[] = [
 
 export const CategoriesSection = () => {
   return (
-    <section className="py-16 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="hero-text mb-4">Explore by Category</h2>
-          <p className="body-text text-muted-foreground max-w-2xl mx-auto">
-            Discover content tailored to your interests across architecture, technology, and design.
-          </p>
-        </div>
+    <section className="bg-muted/30 -mx-4 px-4 py-16 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div className="text-center mb-12">
+        <h2 className="hero-text mb-4">Explore by Category</h2>
+        <p className="body-text text-muted-foreground max-w-2xl mx-auto">
+          Discover content tailored to your interests across architecture, technology, and design.
+        </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => {
-            const IconComponent = category.icon;
-            return (
-              <Link key={category.name} to={category.link}>
-                <Card className="article-card h-full border-border/50 hover:border-primary/50 transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className={`w-12 h-12 rounded-lg ${category.color} flex items-center justify-center mb-4`}>
-                      <IconComponent className="h-6 w-6" />
-                    </div>
-                    
-                    <h3 className="section-title mb-2">{category.name}</h3>
-                    <p className="body-text text-muted-foreground mb-4 text-sm leading-relaxed">
-                      {category.description}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="caption-text text-primary font-medium">
-                        {category.count} articles
-                      </span>
-                      <span className="text-primary">→</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((category) => {
+          const IconComponent = category.icon;
+          return (
+            <Link key={category.name} to={category.link}>
+              <Card className="article-card h-full border-border/50 hover:border-primary/50 transition-all duration-300">
+                <CardContent className="p-6">
+                  <div className={`w-12 h-12 rounded-lg ${category.color} flex items-center justify-center mb-4`}>
+                    <IconComponent className="h-6 w-6" />
+                  </div>
+                  
+                  <h3 className="section-title mb-2">{category.name}</h3>
+                  <p className="body-text text-muted-foreground mb-4 text-sm leading-relaxed">
+                    {category.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="caption-text text-primary font-medium">
+                      {category.count} articles
+                    </span>
+                    <span className="text-primary">→</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

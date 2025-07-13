@@ -80,77 +80,75 @@ const trendingArticles: TrendingArticle[] = [
 
 export const TrendingGrid = () => {
   return (
-    <section className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-12">
-          <div>
-            <h2 className="hero-text mb-4">Trending Now</h2>
-            <p className="body-text text-muted-foreground max-w-2xl">
-              The most-read articles and conversations shaping architecture and design today.
-            </p>
-          </div>
-          <Link 
-            to="/articles" 
-            className="body-text text-primary hover:text-primary/80 transition-colors font-medium"
-          >
-            View All Articles →
-          </Link>
+    <section className="bg-background">
+      <div className="flex items-center justify-between mb-12">
+        <div>
+          <h2 className="hero-text mb-4">Trending Now</h2>
+          <p className="body-text text-muted-foreground max-w-2xl">
+            The most-read articles and conversations shaping architecture and design today.
+          </p>
         </div>
+        <Link 
+          to="/articles" 
+          className="body-text text-primary hover:text-primary/80 transition-colors font-medium"
+        >
+          View All Articles →
+        </Link>
+      </div>
 
-        <div className="editorial-grid">
-          {trendingArticles.map((article, index) => (
-            <Card key={article.id} className={`article-card group overflow-hidden ${
-              index === 0 ? 'md:col-span-2 md:row-span-2' : ''
-            }`}>
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={article.imageUrl}
-                  alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
-                    {article.category}
-                  </span>
-                </div>
-                {index === 0 && (
-                  <div className="absolute top-4 right-4">
-                    <div className="flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded">
-                      <TrendingUp className="h-4 w-4" />
-                      <span className="text-sm font-medium">#1 Trending</span>
-                    </div>
-                  </div>
-                )}
+      <div className="editorial-grid">
+        {trendingArticles.map((article, index) => (
+          <Card key={article.id} className={`article-card group overflow-hidden ${
+            index === 0 ? 'md:col-span-2 md:row-span-2' : ''
+          }`}>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <img
+                src={article.imageUrl}
+                alt={article.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute top-4 left-4">
+                <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
+                  {article.category}
+                </span>
               </div>
-              
-              <CardContent className="p-6">
-                <Link to={`/articles/${article.id}`} className="group">
-                  <h3 className={`${index === 0 ? 'article-title' : 'section-title'} mb-3 group-hover:text-primary transition-colors`}>
-                    {article.title}
-                  </h3>
-                </Link>
-                
-                <p className="body-text text-muted-foreground mb-4 line-clamp-2">
-                  {article.excerpt}
-                </p>
-                
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="h-4 w-4" />
-                      <span>{new Date(article.publishDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-4 w-4" />
-                      <span>{article.readTime}</span>
-                    </div>
+              {index === 0 && (
+                <div className="absolute top-4 right-4">
+                  <div className="flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded">
+                    <TrendingUp className="h-4 w-4" />
+                    <span className="text-sm font-medium">#1 Trending</span>
                   </div>
-                  <span className="font-medium">{article.views.toLocaleString()} views</span>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              )}
+            </div>
+            
+            <CardContent className="p-6">
+              <Link to={`/articles/${article.id}`} className="group">
+                <h3 className={`${index === 0 ? 'article-title' : 'section-title'} mb-3 group-hover:text-primary transition-colors`}>
+                  {article.title}
+                </h3>
+              </Link>
+              
+              <p className="body-text text-muted-foreground mb-4 line-clamp-2">
+                {article.excerpt}
+              </p>
+              
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{new Date(article.publishDate).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{article.readTime}</span>
+                  </div>
+                </div>
+                <span className="font-medium">{article.views.toLocaleString()} views</span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </section>
   );
