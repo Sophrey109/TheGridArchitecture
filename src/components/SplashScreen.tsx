@@ -15,8 +15,8 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
       // Complete animation after the transition duration
       setTimeout(() => {
         onAnimationComplete();
-      }, 1500); // Animation duration
-    }, 1500); // Stay on screen for 1.5s + 1.5s animation = 3s total
+      }, 1800); // Slower animation duration
+    }, 1200); // Stay on screen for 1.2s + 1.8s animation = 3s total
 
     return () => clearTimeout(timer);
   }, [onAnimationComplete]);
@@ -28,8 +28,8 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
       }`}
     >
       <div 
-        className={`font-archivo-black text-6xl md:text-8xl text-primary font-black transition-all duration-[1500ms] ease-in-out ${
-          isAnimating ? 'animate-[textBounceExit_1.5s_ease-in-out_forwards]' : 'animate-[textBounceEntry_0.8s_ease-out_forwards]'
+        className={`font-archivo-black text-6xl md:text-8xl text-primary font-black transition-all duration-[1800ms] ease-in-out ${
+          isAnimating ? 'animate-[textBounceExit_1.8s_ease-in-out_forwards]' : 'animate-[textBounceEntry_1s_ease-out_forwards]'
         }`}
       >
         The Grid.
