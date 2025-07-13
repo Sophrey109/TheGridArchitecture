@@ -21,11 +21,10 @@ export const FilterBar = ({
 }: FilterBarProps) => {
   const types = [
     { value: 'all', label: 'All Types' },
-    { value: 'architecture', label: 'Architecture' },
-    { value: 'interiors', label: 'Interiors' },
-    { value: 'furniture', label: 'Furniture' },
-    { value: 'technology', label: 'Technology' },
-    { value: 'interviews', label: 'Interviews' }
+    { value: 'opinion', label: 'Opinion' },
+    { value: 'research', label: 'Research' },
+    { value: 'news', label: 'News' },
+    { value: 'case-studies', label: 'Case Studies' }
   ];
 
   const years = [
