@@ -67,6 +67,7 @@ export default {
 			fontFamily: {
 				'editorial': ['Playfair Display', 'Georgia', 'serif'],
 				'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+				'mono': ['Fragment Mono', 'Courier New', 'monospace'],
 			},
 			keyframes: {
 				'accordion-down': {
