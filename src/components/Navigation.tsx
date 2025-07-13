@@ -37,7 +37,7 @@ export const Navigation = () => {
               alt="The Grid Logo" 
               className="h-10 w-auto"
             />
-            <span className="font-editorial text-2xl font-semibold text-foreground">
+            <span className="font-archivo-black text-2xl font-black text-foreground">
               The Grid
             </span>
           </Link>
