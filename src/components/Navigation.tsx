@@ -27,7 +27,7 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50 transition-all duration-300">
+    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50 transition-all duration-300 shadow-medium rounded-b-xl mx-4 mt-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -113,7 +113,7 @@ export const Navigation = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ${
+                  className={`block px-3 py-2 rounded-xl text-base font-medium transition-all duration-200 shadow-soft ${
                     isActive(item.path)
                       ? 'bg-accent text-primary'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'

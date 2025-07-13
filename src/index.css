@@ -38,7 +38,12 @@
     --input: 40 5% 90%;
     --ring: 14 85% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Editorial shadow additions */
+    --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-medium: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-large: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
     /* Editorial color additions */
     --beige: 40 15% 95%;
@@ -126,6 +131,19 @@
   .bg-charcoal {
     background-color: hsl(var(--charcoal));
   }
+
+  /* Shadow utility classes */
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
+  }
+
+  .shadow-large {
+    box-shadow: var(--shadow-large);
+  }
 }
 
 /* Editorial layout utilities */
@@ -145,7 +163,7 @@
   }
 
   .section-title {
-    @apply font-editorial text-xl md:text-2xl font-medium;
+    @apply font-editorial text-xl md:text-2xl font-medium rounded-lg shadow-soft p-4 bg-card;
   }
 
   .body-text {
@@ -158,7 +176,7 @@
 
   /* Hover effects for editorial elements */
   .article-card {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-xl shadow-lg;
   }
 
   .overlay-text {
