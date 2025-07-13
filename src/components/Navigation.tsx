@@ -13,10 +13,8 @@ export const Navigation = () => {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Articles', path: '/articles' },
-    { name: 'Learning', path: '/learning' },
     { name: 'Jobs', path: '/jobs' },
     { name: 'Competitions', path: '/competitions' },
-    { name: 'Exhibitions', path: '/exhibitions' },
     { name: 'Contact', path: '/contact' },
   ];
 
