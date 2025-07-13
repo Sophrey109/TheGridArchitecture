@@ -53,27 +53,33 @@ export type Database = {
           "Date Posted": string | null
           Description: string | null
           id: number
+          is_active: boolean | null
           "Job Title": string
           Location: string | null
           Salary: string | null
+          Type: string | null
         }
         Insert: {
           Company?: string | null
           "Date Posted"?: string | null
           Description?: string | null
           id?: number
+          is_active?: boolean | null
           "Job Title": string
           Location?: string | null
           Salary?: string | null
+          Type?: string | null
         }
         Update: {
           Company?: string | null
           "Date Posted"?: string | null
           Description?: string | null
           id?: number
+          is_active?: boolean | null
           "Job Title"?: string
           Location?: string | null
           Salary?: string | null
+          Type?: string | null
         }
         Relationships: []
       }
