@@ -8,6 +8,8 @@ export interface Article {
   Author: string | null;
   'Published Date': string | null;
   is_published: boolean | null;
+  image_url: string | null;
+  excerpt: string | null;
 }
 
 export const useArticles = () => {

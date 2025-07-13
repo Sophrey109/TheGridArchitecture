@@ -18,7 +18,9 @@ export type Database = {
         Row: {
           Author: string | null
           Content: string | null
+          excerpt: string | null
           id: string
+          image_url: string | null
           is_published: boolean | null
           "Published Date": string | null
           Title: string
@@ -26,7 +28,9 @@ export type Database = {
         Insert: {
           Author?: string | null
           Content?: string | null
+          excerpt?: string | null
           id: string
+          image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
           Title: string
@@ -34,7 +38,9 @@ export type Database = {
         Update: {
           Author?: string | null
           Content?: string | null
+          excerpt?: string | null
           id?: string
+          image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
           Title?: string

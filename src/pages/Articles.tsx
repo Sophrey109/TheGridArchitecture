@@ -5,8 +5,9 @@ import { FilterBar } from '@/components/articles/FilterBar';
 import { ArticleCard } from '@/components/articles/ArticleCard';
 import { useArticles } from '@/hooks/useArticles';
 
-// Helper function to extract excerpt from content
-const getExcerpt = (content: string | null): string => {
+// Helper function to extract excerpt from content or use stored excerpt
+const getExcerpt = (excerpt: string | null, content: string | null): string => {
+  if (excerpt) return excerpt;
   if (!content) return "No content available.";
   const plainText = content.replace(/<[^>]*>/g, '');
   return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
@@ -143,10 +144,10 @@ const Articles = () => {
                   <ArticleCard
                     key={article.id}
                     title={article.Title}
-                    excerpt={getExcerpt(article.Content)}
+                    excerpt={getExcerpt(article.excerpt, article.Content)}
                     type={determineArticleType(article.Title, article.Content)}
                     date={formatDate(article['Published Date'])}
-                    imageUrl="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop"
+                    imageUrl={article.image_url}
                   />
                 ))}
               </div>
