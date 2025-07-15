@@ -1,91 +1,141 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useArticles } from '@/hooks/useArticles';
+import { supabase } from '@/integrations/supabase/client';
 
-interface TrendingArticle {
-  id: string;
-  title: string;
-  excerpt: string;
-  imageUrl: string;
-  category: string;
-  publishDate: string;
-  readTime: string;
-  views: number;
-}
+// Helper function to extract excerpt from content or use stored excerpt
+const getExcerpt = (excerpt: string | null, content: string | null): string => {
+  if (excerpt) return excerpt;
+  if (!content) return "No content available.";
+  const plainText = content.replace(/<[^>]*>/g, '');
+  return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
+};
 
-const trendingArticles: TrendingArticle[] = [
-  {
-    id: '4',
-    title: 'Parametric Design: The Mathematics Behind Stunning Architecture',
-    excerpt: 'How computational design is revolutionizing the way architects approach complex forms.',
-    imageUrl: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=600&h=400&fit=crop',
-    category: 'Technology',
-    publishDate: '2024-01-14',
-    readTime: '10 min read',
-    views: 12500
-  },
-  {
-    id: '5',
-    title: 'Urban Planning in Crisis: Designing Resilient Cities',
-    excerpt: 'Strategies for creating adaptive urban environments in the face of climate change.',
-    imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop',
-    category: 'Urban Design',
-    publishDate: '2024-01-13',
-    readTime: '7 min read',
-    views: 9800
-  },
-  {
-    id: '6',
-    title: 'Material Innovation: Bio-based Building Materials',
-    excerpt: 'Exploring mushroom bricks, bamboo composites, and other sustainable alternatives.',
-    imageUrl: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=400&fit=crop',
-    category: 'Materials',
-    publishDate: '2024-01-11',
-    readTime: '9 min read',
-    views: 8900
-  },
-  {
-    id: '7',
-    title: 'The Return of Brutalism: Modern Takes on Concrete Architecture',
-    excerpt: 'How contemporary architects are reimagining brutalist principles for today.',
-    imageUrl: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&h=400&fit=crop',
-    category: 'Architecture History',
-    publishDate: '2024-01-09',
-    readTime: '6 min read',
-    views: 11200
-  },
-  {
-    id: '8',
-    title: 'Smart Buildings: IoT Integration in Modern Architecture',
-    excerpt: 'The convergence of building automation and architectural design.',
-    imageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&h=400&fit=crop',
-    category: 'Smart Technology',
-    publishDate: '2024-01-08',
-    readTime: '8 min read',
-    views: 7600
-  },
-  {
-    id: '9',
-    title: 'Adaptive Reuse: Breathing New Life into Historic Buildings',
-    excerpt: 'Case studies of successful architectural transformations and preservation.',
-    imageUrl: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop',
-    category: 'Preservation',
-    publishDate: '2024-01-07',
-    readTime: '11 min read',
-    views: 6800
+// Helper function to determine article type based on content or title
+const determineArticleType = (title: string, content: string | null): string => {
+  const text = `${title} ${content || ''}`.toLowerCase();
+  
+  if (text.includes('opinion') || text.includes('think') || text.includes('believe')) {
+    return 'Opinion';
+  } else if (text.includes('research') || text.includes('study') || text.includes('findings')) {
+    return 'Research';
+  } else if (text.includes('news') || text.includes('approved') || text.includes('announced')) {
+    return 'News';
+  } else if (text.includes('case study') || text.includes('examining') || text.includes('analysis')) {
+    return 'Case Study';
   }
-];
+  
+  return 'Article';
+};
+
+// Helper function to format date
+const formatDate = (dateString: string | null): string => {
+  if (!dateString) return "No date";
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+};
 
 export const TrendingGrid = () => {
+  const { data: articles, isLoading, error, refetch } = useArticles();
+
+  // Set up real-time updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('articles-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'Articles'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'Articles'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
+
+  // Limit to 6 most recent articles for the home page
+  const recentArticles = articles?.slice(0, 6) || [];
+
+  if (isLoading) {
+    return (
+      <section className="bg-background">
+        <div className="flex items-center justify-between mb-12">
+          <div>
+            <h2 className="hero-text mb-4">Latest Articles</h2>
+            <p className="body-text text-muted-foreground max-w-2xl">
+              The newest articles and insights on architecture and design.
+            </p>
+          </div>
+        </div>
+        <div className="editorial-grid">
+          {[...Array(6)].map((_, index) => (
+            <Card key={index} className={`article-card overflow-hidden ${
+              index === 0 ? 'md:col-span-2 md:row-span-2' : ''
+            }`}>
+              <div className="relative aspect-[4/3] bg-muted animate-pulse" />
+              <CardContent className="p-6">
+                <div className="h-6 bg-muted rounded animate-pulse mb-3" />
+                <div className="h-4 bg-muted rounded animate-pulse mb-2" />
+                <div className="h-4 bg-muted rounded animate-pulse mb-4 w-3/4" />
+                <div className="flex items-center justify-between">
+                  <div className="h-4 bg-muted rounded animate-pulse w-1/3" />
+                  <div className="h-4 bg-muted rounded animate-pulse w-1/4" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="bg-background">
+        <div className="flex items-center justify-between mb-12">
+          <div>
+            <h2 className="hero-text mb-4">Latest Articles</h2>
+            <p className="body-text text-destructive">
+              Error loading articles. Please try again later.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-background">
       <div className="flex items-center justify-between mb-12">
         <div>
-          <h2 className="hero-text mb-4">Trending Now</h2>
+          <h2 className="hero-text mb-4">Latest Articles</h2>
           <p className="body-text text-muted-foreground max-w-2xl">
-            The most-read articles and conversations shaping architecture and design today.
+            The newest articles and insights on architecture and design.
           </p>
         </div>
         <Link 
@@ -97,26 +147,26 @@ export const TrendingGrid = () => {
       </div>
 
       <div className="editorial-grid">
-        {trendingArticles.map((article, index) => (
+        {recentArticles.map((article, index) => (
           <Card key={article.id} className={`article-card group overflow-hidden ${
             index === 0 ? 'md:col-span-2 md:row-span-2' : ''
           }`}>
             <div className="relative aspect-[4/3] overflow-hidden">
               <img
-                src={article.imageUrl}
-                alt={article.title}
+                src={article.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop'}
+                alt={article.Title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4">
                 <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
-                  {article.category}
+                  {determineArticleType(article.Title, article.Content)}
                 </span>
               </div>
               {index === 0 && (
                 <div className="absolute top-4 right-4">
                   <div className="flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded">
                     <TrendingUp className="h-4 w-4" />
-                    <span className="text-sm font-medium">#1 Trending</span>
+                    <span className="text-sm font-medium">Latest</span>
                   </div>
                 </div>
               )}
@@ -125,26 +175,27 @@ export const TrendingGrid = () => {
             <CardContent className="p-6">
               <Link to={`/articles/${article.id}`} className="group">
                 <h3 className={`${index === 0 ? 'article-title' : 'section-title'} mb-3 group-hover:text-primary transition-colors`}>
-                  {article.title}
+                  {article.Title}
                 </h3>
               </Link>
               
               <p className="body-text text-muted-foreground mb-4 line-clamp-2">
-                {article.excerpt}
+                {getExcerpt(article.excerpt, article.Content)}
               </p>
               
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
-                    <span>{new Date(article.publishDate).toLocaleDateString()}</span>
+                    <span>{formatDate(article['Published Date'])}</span>
                   </div>
-                  <div className="flex items-center space-x-1">
-                    <Clock className="h-4 w-4" />
-                    <span>{article.readTime}</span>
-                  </div>
+                  {article.Author && (
+                    <div className="flex items-center space-x-1">
+                      <Clock className="h-4 w-4" />
+                      <span>By {article.Author}</span>
+                    </div>
+                  )}
                 </div>
-                <span className="font-medium">{article.views.toLocaleString()} views</span>
               </div>
             </CardContent>
           </Card>
