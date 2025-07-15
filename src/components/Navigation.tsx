@@ -15,6 +15,7 @@ export const Navigation = () => {
     { name: 'Articles', path: '/articles' },
     { name: 'Jobs', path: '/jobs' },
     { name: 'Competitions', path: '/competitions' },
+    { name: 'Ask an Architect', path: '/ask-architect' },
     { name: 'Contact', path: '/contact' },
   ];
 
