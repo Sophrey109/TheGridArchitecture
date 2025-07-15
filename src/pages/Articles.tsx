@@ -44,9 +44,17 @@ const formatDate = (dateString: string | null): string => {
 const Articles = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
+  const [selectedTag, setSelectedTag] = useState<string>('');
   const { data: articles, isLoading, error } = useArticles();
 
   const handleClearFilters = () => {
+    setSelectedType('all');
+    setSelectedYear('all');
+    setSelectedTag('');
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTag(tag);
     setSelectedType('all');
     setSelectedYear('all');
   };
@@ -60,7 +68,9 @@ const Articles = () => {
       
       const typeMatch = selectedType === 'all' || articleType === selectedType;
       const yearMatch = selectedYear === 'all' || formattedDate.includes(selectedYear);
-      return typeMatch && yearMatch;
+      const tagMatch = !selectedTag || (article.tags && article.tags.includes(selectedTag));
+      
+      return typeMatch && yearMatch && tagMatch;
     });
   };
 
@@ -68,19 +78,18 @@ const Articles = () => {
     const filteredArticles = getFilteredArticles();
     const count = filteredArticles.length;
     
-    if (selectedType === 'all' && selectedYear === 'all') {
+    if (selectedType === 'all' && selectedYear === 'all' && !selectedTag) {
       return `All articles (${count})`;
     }
     
     const typeText = selectedType !== 'all' ? selectedType.replace('-', ' ') : '';
     const yearText = selectedYear !== 'all' ? selectedYear : '';
+    const tagText = selectedTag ? `tagged with "${selectedTag}"` : '';
     
-    if (typeText && yearText) {
-      return `${typeText} articles from ${yearText} (${count})`;
-    } else if (typeText) {
-      return `${typeText} articles (${count})`;
-    } else if (yearText) {
-      return `Articles from ${yearText} (${count})`;
+    const filters = [typeText, yearText, tagText].filter(Boolean);
+    
+    if (filters.length > 0) {
+      return `Articles ${filters.join(' and ')} (${count})`;
     }
     
     return `Filtered articles (${count})`;
@@ -142,10 +151,26 @@ const Articles = () => {
               <p className="body-text text-muted-foreground mb-6">
                 Showing: {getFilteredContent()}
               </p>
+              {selectedTag && (
+                <div className="mb-4">
+                  <p className="text-sm text-muted-foreground mb-2">Currently filtering by tag:</p>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-primary/10 text-primary rounded-md text-sm">
+                      #{selectedTag}
+                    </span>
+                    <button
+                      onClick={() => setSelectedTag('')}
+                      className="text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      Clear tag filter
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             
             {filteredArticles.length > 0 ? (
-              <div className="editorial-grid">
+                <div className="editorial-grid">
                 {filteredArticles.map((article) => (
                   <ArticleCard
                     key={article.id}
@@ -154,6 +179,8 @@ const Articles = () => {
                     type={determineArticleType(article.Title, article.Content)}
                     date={formatDate(article['Published Date'])}
                     imageUrl={article.image_url}
+                    tags={article.tags}
+                    onTagClick={handleTagClick}
                   />
                 ))}
               </div>

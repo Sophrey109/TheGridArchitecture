@@ -10,6 +10,7 @@ export interface Article {
   is_published: boolean | null;
   image_url: string | null;
   excerpt: string | null;
+  tags: string[] | null;
 }
 
 export const useArticles = () => {

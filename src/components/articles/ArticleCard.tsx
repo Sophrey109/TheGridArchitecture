@@ -9,6 +9,8 @@ interface ArticleCardProps {
   type: 'opinion' | 'research' | 'news' | 'case-studies';
   date: string;
   imageUrl?: string;
+  tags?: string[];
+  onTagClick?: (tag: string) => void;
 }
 
 const getTypeVariant = (type: string) => {
@@ -35,7 +37,7 @@ const getTypeLabel = (type: string) => {
   }
 };
 
-export const ArticleCard = ({ title, excerpt, type, date, imageUrl }: ArticleCardProps) => {
+export const ArticleCard = ({ title, excerpt, type, date, imageUrl, tags, onTagClick }: ArticleCardProps) => {
   // Fallback images for different article types
   const getFallbackImage = (type: string) => {
     const fallbacks = {
@@ -72,9 +74,22 @@ export const ArticleCard = ({ title, excerpt, type, date, imageUrl }: ArticleCar
         </h3>
       </CardHeader>
       <CardContent className="pt-0">
-        <p className="body-text text-muted-foreground line-clamp-3">
+        <p className="body-text text-muted-foreground line-clamp-3 mb-3">
           {excerpt}
         </p>
+        {tags && tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {tags.map((tag, index) => (
+              <button
+                key={index}
+                onClick={() => onTagClick?.(tag)}
+                className="text-xs px-2 py-1 bg-muted rounded-md hover:bg-muted/80 transition-colors text-muted-foreground hover:text-foreground"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

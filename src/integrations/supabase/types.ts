@@ -23,6 +23,7 @@ export type Database = {
           image_url: string | null
           is_published: boolean | null
           "Published Date": string | null
+          tags: string[] | null
           Title: string
         }
         Insert: {
@@ -33,6 +34,7 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
+          tags?: string[] | null
           Title: string
         }
         Update: {
@@ -43,6 +45,7 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
+          tags?: string[] | null
           Title?: string
         }
         Relationships: []
