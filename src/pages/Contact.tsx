@@ -14,10 +14,19 @@ const Contact = () => {
             </p>
           </div>
           
-          <div className="text-center py-20">
-            <p className="body-text text-muted-foreground">
-              Contact forms for different inquiry types coming soon...
-            </p>
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card rounded-lg border p-8 mb-8">
+              <h2 className="heading-lg mb-4 text-center">Submit a Story</h2>
+              <p className="body-text text-muted-foreground text-center leading-relaxed">
+                Want to share your story with the world? Email us your design, artwork, building or about an interesting topic. We will be in touch as soon as possible but if we haven't got back to you, please feel free to send us a reminder.
+              </p>
+            </div>
+            
+            <div className="text-center py-12">
+              <p className="body-text text-muted-foreground">
+                Contact forms for different inquiry types coming soon...
+              </p>
+            </div>
           </div>
         </div>
       </div>
