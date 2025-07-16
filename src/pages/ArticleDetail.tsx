@@ -243,7 +243,10 @@ const ArticleDetail = () => {
 
             {/* Article content */}
             <div 
-              className="prose prose-lg max-w-none dark:prose-invert prose-headings:scroll-mt-24"
+              className="prose prose-lg max-w-none dark:prose-invert prose-headings:scroll-mt-24 
+                         prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4
+                         prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
+                         prose-p:text-base prose-p:leading-relaxed prose-p:mb-4"
               dangerouslySetInnerHTML={{ __html: article.Content || '' }}
             />
           </div>
