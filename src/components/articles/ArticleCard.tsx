@@ -1,9 +1,11 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 interface ArticleCardProps {
+  id: string;
   title: string;
   excerpt: string;
   type: 'opinion' | 'research' | 'news' | 'case-studies';
@@ -37,7 +39,7 @@ const getTypeLabel = (type: string) => {
   }
 };
 
-export const ArticleCard = ({ title, excerpt, type, date, imageUrl, tags, onTagClick }: ArticleCardProps) => {
+export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, onTagClick }: ArticleCardProps) => {
   // Fallback images for different article types
   const getFallbackImage = (type: string) => {
     const fallbacks = {
@@ -52,27 +54,28 @@ export const ArticleCard = ({ title, excerpt, type, date, imageUrl, tags, onTagC
   const displayImage = imageUrl || getFallbackImage(type);
 
   return (
-    <Card className="article-card h-full group hover-scale animate-fade-in">
-      <div className="aspect-video overflow-hidden rounded-t-lg">
-        <img
-          src={displayImage}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-      </div>
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <Badge variant={getTypeVariant(type)} className="text-xs animate-scale-in">
-            {getTypeLabel(type)}
-          </Badge>
-          <span className="caption-text text-xs text-muted-foreground">
-            {date}
-          </span>
+    <Link to={`/articles/${id}`}>
+      <Card className="article-card h-full group hover-scale animate-fade-in">
+        <div className="aspect-video overflow-hidden rounded-t-lg">
+          <img
+            src={displayImage}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
-        <h3 className="article-title text-lg font-medium leading-tight story-link">
-          {title}
-        </h3>
-      </CardHeader>
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <Badge variant={getTypeVariant(type)} className="text-xs animate-scale-in">
+              {getTypeLabel(type)}
+            </Badge>
+            <span className="caption-text text-xs text-muted-foreground">
+              {date}
+            </span>
+          </div>
+          <h3 className="article-title text-lg font-medium leading-tight story-link">
+            {title}
+          </h3>
+        </CardHeader>
       <CardContent className="pt-0">
         <p className="body-text text-muted-foreground line-clamp-3 mb-3">
           {excerpt}
@@ -92,5 +95,6 @@ export const ArticleCard = ({ title, excerpt, type, date, imageUrl, tags, onTagC
         )}
       </CardContent>
     </Card>
+    </Link>
   );
 };

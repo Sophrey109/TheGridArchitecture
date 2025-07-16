@@ -174,6 +174,7 @@ const Articles = () => {
                 {filteredArticles.map((article) => (
                   <ArticleCard
                     key={article.id}
+                    id={article.id}
                     title={article.Title}
                     excerpt={getExcerpt(article.excerpt, article.Content)}
                     type={determineArticleType(article.Title, article.Content)}
