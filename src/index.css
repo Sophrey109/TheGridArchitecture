@@ -263,3 +263,27 @@
     opacity: 0;
   }
 }
+
+/* Article content styling */
+.article-content h2 {
+  @apply text-2xl font-bold mt-8 mb-4 text-foreground;
+  scroll-margin-top: 6rem;
+}
+
+.article-content h3 {
+  @apply text-xl font-semibold mt-6 mb-3 text-foreground;
+  scroll-margin-top: 6rem;
+}
+
+.article-content h4 {
+  @apply text-lg font-medium mt-4 mb-2 text-foreground;
+  scroll-margin-top: 6rem;
+}
+
+.article-content p {
+  @apply text-base leading-relaxed mb-4 text-foreground;
+}
+
+.article-content img {
+  @apply max-w-full h-auto rounded-lg my-6;
+}
