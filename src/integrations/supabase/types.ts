@@ -61,6 +61,7 @@ export type Database = {
           image_url: string | null
           is_published: boolean | null
           "Published Date": string | null
+          related_articles: string[] | null
           tags: string[] | null
           Title: string
         }
@@ -72,6 +73,7 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
+          related_articles?: string[] | null
           tags?: string[] | null
           Title: string
         }
@@ -83,6 +85,7 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean | null
           "Published Date"?: string | null
+          related_articles?: string[] | null
           tags?: string[] | null
           Title?: string
         }

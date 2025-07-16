@@ -11,6 +11,7 @@ export interface Article {
   image_url: string | null;
   excerpt: string | null;
   tags: string[] | null;
+  related_articles: string[] | null;
 }
 
 export const useArticles = () => {
