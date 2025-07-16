@@ -48,17 +48,25 @@ const ArticleDetail = () => {
 
   useEffect(() => {
     if (article?.Content) {
+      console.log('Original article content:', article.Content);
+      
       // Parse content for headings and generate table of contents
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = article.Content;
       
+      console.log('Parsed HTML structure:', tempDiv.innerHTML);
+      
       const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      console.log('Found headings:', headings.length);
+      
       const toc: TableOfContentsItem[] = [];
 
       headings.forEach((heading, index) => {
         const id = `heading-${index}`;
         const text = heading.textContent || '';
         const level = parseInt(heading.tagName.charAt(1));
+        
+        console.log(`Heading ${index}: ${heading.tagName} - ${text}`);
         
         // Add ID to heading for navigation
         heading.id = id;
@@ -69,7 +77,9 @@ const ArticleDetail = () => {
       setTableOfContents(toc);
       
       // Update the article content with IDs
-      setArticle(prev => prev ? { ...prev, Content: tempDiv.innerHTML } : null);
+      const updatedContent = tempDiv.innerHTML;
+      console.log('Updated content with IDs:', updatedContent);
+      setArticle(prev => prev ? { ...prev, Content: updatedContent } : null);
     }
   }, [article?.Content]);
 
