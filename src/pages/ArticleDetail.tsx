@@ -48,6 +48,8 @@ const ArticleDetail = () => {
     fetchArticle();
   }, [id]);
 
+  const [firstImageUrl, setFirstImageUrl] = useState<string | null>(null);
+
   useEffect(() => {
     if (article?.Content) {
       console.log('Original article content:', article.Content);
@@ -57,6 +59,12 @@ const ArticleDetail = () => {
       tempDiv.innerHTML = article.Content;
       
       console.log('Parsed HTML structure:', tempDiv.innerHTML);
+      
+      // Extract first image from content
+      const firstImg = tempDiv.querySelector('img');
+      if (firstImg && firstImg.src) {
+        setFirstImageUrl(firstImg.src);
+      }
       
       const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
       console.log('Found headings:', headings.length);
@@ -234,10 +242,10 @@ const ArticleDetail = () => {
                   </p>
                 )}
 
-                {article.image_url && (
+                {firstImageUrl && (
                   <div className="aspect-video overflow-hidden rounded-lg mb-8">
                     <img
-                      src={article.image_url}
+                      src={firstImageUrl}
                       alt={article.Title}
                       className="w-full h-full object-cover"
                     />
