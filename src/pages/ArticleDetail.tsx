@@ -48,8 +48,6 @@ const ArticleDetail = () => {
     fetchArticle();
   }, [id]);
 
-  const [firstImageUrl, setFirstImageUrl] = useState<string | null>(null);
-
   // Function to clean up malformed HTML
   const cleanupHTML = (html: string): string => {
     return html
@@ -57,9 +55,13 @@ const ArticleDetail = () => {
       .replace(/\/>\s*\/>/g, '/>')
       // Fix img tags with extra spaces in attributes
       .replace(/src\s*=\s*"/g, 'src="')
-      // Remove any HTML comments that might be broken
+      // Fix malformed img tags like <img src ="..." /> />
+      .replace(/(<img[^>]*?)\s*\/>\s*\/>/g, '$1 />')
+      // Remove any broken HTML comments
       .replace(/<!--\s*</g, '<!--')
       .replace(/>\s*-->/g, '-->')
+      // Fix any malformed closing tags
+      .replace(/\s*\/>\s*>/g, ' />')
       // Ensure all img tags have proper styling for responsive images
       .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;"$2>');
   };
@@ -72,12 +74,6 @@ const ArticleDetail = () => {
       // Parse content for headings and generate table of contents
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = cleanedContent;
-      
-      // Extract first image from content
-      const firstImg = tempDiv.querySelector('img');
-      if (firstImg && firstImg.src) {
-        setFirstImageUrl(firstImg.src);
-      }
       
       const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
       
@@ -251,15 +247,6 @@ const ArticleDetail = () => {
                   </p>
                 )}
 
-                {firstImageUrl && (
-                  <div className="aspect-video overflow-hidden rounded-lg mb-8">
-                    <img
-                      src={firstImageUrl}
-                      alt={article.Title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
 
                 {article.tags && article.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-8">
