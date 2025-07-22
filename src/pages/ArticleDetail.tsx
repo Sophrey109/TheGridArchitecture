@@ -70,6 +70,13 @@ const ArticleDetail = () => {
       .replace(/>\s*-->/g, '-->')
       // Fix any malformed closing tags
       .replace(/\s*\/>\s*>/g, ' />')
+      // Remove semantic HTML structure to ensure consistent styling
+      .replace(/<\/?article[^>]*>/g, '')
+      .replace(/<\/?header[^>]*>/g, '')
+      .replace(/<\/?section[^>]*>/g, '')
+      // Convert h1 in content to h2 to maintain hierarchy
+      .replace(/<h1([^>]*)>/g, '<h2$1>')
+      .replace(/<\/h1>/g, '</h2>')
       // Ensure all img tags are properly closed and have responsive styling
       .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;"$2 />')
       // Final cleanup for any remaining malformed img tags
