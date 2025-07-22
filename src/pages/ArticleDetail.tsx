@@ -50,15 +50,28 @@ const ArticleDetail = () => {
 
   const [firstImageUrl, setFirstImageUrl] = useState<string | null>(null);
 
+  // Function to clean up malformed HTML
+  const cleanupHTML = (html: string): string => {
+    return html
+      // Fix malformed image tags with extra //>
+      .replace(/\/>\s*\/>/g, '/>')
+      // Fix img tags with extra spaces in attributes
+      .replace(/src\s*=\s*"/g, 'src="')
+      // Remove any HTML comments that might be broken
+      .replace(/<!--\s*</g, '<!--')
+      .replace(/>\s*-->/g, '-->')
+      // Ensure all img tags have proper styling for responsive images
+      .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;"$2>');
+  };
+
   useEffect(() => {
     if (article?.Content) {
-      console.log('Original article content:', article.Content);
+      // Clean up the HTML content first
+      const cleanedContent = cleanupHTML(article.Content);
       
       // Parse content for headings and generate table of contents
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = article.Content;
-      
-      console.log('Parsed HTML structure:', tempDiv.innerHTML);
+      tempDiv.innerHTML = cleanedContent;
       
       // Extract first image from content
       const firstImg = tempDiv.querySelector('img');
@@ -67,7 +80,6 @@ const ArticleDetail = () => {
       }
       
       const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      console.log('Found headings:', headings.length);
       
       const toc: TableOfContentsItem[] = [];
 
@@ -75,8 +87,6 @@ const ArticleDetail = () => {
         const id = `heading-${index}`;
         const text = heading.textContent || '';
         const level = parseInt(heading.tagName.charAt(1));
-        
-        console.log(`Heading ${index}: ${heading.tagName} - ${text}`);
         
         // Add ID to heading for navigation
         heading.id = id;
@@ -86,9 +96,8 @@ const ArticleDetail = () => {
 
       setTableOfContents(toc);
       
-      // Update the article content with IDs
+      // Update the article content with cleaned HTML and IDs
       const updatedContent = tempDiv.innerHTML;
-      console.log('Updated content with IDs:', updatedContent);
       setArticle(prev => prev ? { ...prev, Content: updatedContent } : null);
     }
   }, [article?.Content]);
