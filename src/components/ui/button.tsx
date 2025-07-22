@@ -5,24 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white text-black border-2 border-black shadow-[0_4px_0_0_black]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-white text-black border-2 border-black shadow-[0_4px_0_0_black] hover:shadow-[0_2px_0_0_black] hover:translate-y-[2px]",
-        destructive:
-          "bg-white text-black border-2 border-black shadow-[0_4px_0_0_black] hover:shadow-[0_2px_0_0_black] hover:translate-y-[2px]",
-        outline:
-          "bg-white text-black border-2 border-black shadow-[0_4px_0_0_black] hover:shadow-[0_2px_0_0_black] hover:translate-y-[2px]",
-        secondary:
-          "bg-white text-black border-2 border-black shadow-[0_4px_0_0_black] hover:shadow-[0_2px_0_0_black] hover:translate-y-[2px]",
-        ghost: "bg-white text-black border-2 border-black shadow-[0_4px_0_0_black] hover:shadow-[0_2px_0_0_black] hover:translate-y-[2px]",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-primary text-primary-foreground shadow-md hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5",
+        destructive: "bg-destructive text-destructive-foreground shadow-md hover:bg-destructive/90 hover:shadow-lg hover:-translate-y-0.5",
+        outline: "border border-border bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md",
+        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 hover:shadow-md hover:-translate-y-0.5",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline hover:text-primary-dark",
+        gradient: "bg-gradient-primary text-primary-foreground shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:scale-[1.02]",
+        glass: "bg-background/60 backdrop-blur-xl border border-border/20 hover:bg-background/80 shadow-lg hover:shadow-xl",
+        modern: "bg-card border border-border/50 shadow-lg hover:shadow-xl hover:border-border hover:-translate-y-1",
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        sm: "h-9 px-3 text-xs",
+        lg: "h-12 px-6 text-base",
+        xl: "h-14 px-8 text-lg",
         icon: "h-10 w-10",
       },
     },

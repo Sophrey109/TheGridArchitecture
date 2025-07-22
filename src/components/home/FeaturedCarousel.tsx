@@ -63,47 +63,48 @@ export const FeaturedCarousel = () => {
   const currentArticle = featuredArticles[currentSlide];
 
   return (
-    <section className="relative h-[70vh] min-h-[600px] overflow-hidden">
+    <section className="relative h-[75vh] min-h-[650px] overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105"
         style={{ backgroundImage: `url(${currentArticle.imageUrl})` }}
       >
-        <div className="overlay-text" />
+        <div className="overlay-gradient" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-2xl">
-            <div className="flex items-center space-x-4 mb-4">
-              <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
+          <div className="max-w-3xl">
+            <div className="flex items-center space-x-4 mb-6 animate-slide-in-up">
+              <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-xl shadow-lg">
                 {currentArticle.category}
               </span>
-              <div className="flex items-center space-x-2 text-white/80">
+              <div className="flex items-center space-x-2 text-white/70">
                 <Calendar className="h-4 w-4" />
-                <span className="caption-text">{new Date(currentArticle.publishDate).toLocaleDateString()}</span>
+                <span className="small-text">{new Date(currentArticle.publishDate).toLocaleDateString()}</span>
               </div>
             </div>
             
-            <h1 className="hero-text text-white mb-6 animate-slide-up">
+            <h1 className="hero-text text-white mb-6 animate-slide-in-up drop-shadow-2xl">
               {currentArticle.title}
             </h1>
             
-            <p className="body-text text-white/90 mb-8 text-lg leading-relaxed animate-fade-in">
+            <p className="subtitle text-white/90 mb-10 animate-fade-in-scale">
               {currentArticle.excerpt}
             </p>
             
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-fade-in-scale">
               <Link to={`/articles/${currentArticle.id}`}>
-                <Button size="lg" className="bg-white text-black hover:bg-white/90">
+                <Button variant="glass" size="lg" className="bg-white/20 text-white border-white/30 hover:bg-white/30 hover:scale-105 shadow-xl">
                   Read Full Article
                 </Button>
               </Link>
-              <div className="flex items-center space-x-2 text-white/80">
+              <div className="flex items-center space-x-3 text-white/70">
                 <Clock className="h-4 w-4" />
-                <span className="caption-text">{currentArticle.readTime}</span>
-                <span className="caption-text">by {currentArticle.author}</span>
+                <span className="small-text">{currentArticle.readTime}</span>
+                <span className="small-text">•</span>
+                <span className="small-text">by {currentArticle.author}</span>
               </div>
             </div>
           </div>
@@ -111,33 +112,35 @@ export const FeaturedCarousel = () => {
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 right-8 flex space-x-2">
+      <div className="absolute bottom-8 right-8 flex space-x-3">
         <Button
-          variant="secondary"
+          variant="glass"
           size="icon"
           onClick={prevSlide}
-          className="bg-white/20 hover:bg-white/30 text-white"
+          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
         <Button
-          variant="secondary"
+          variant="glass"
           size="icon"
           onClick={nextSlide}
-          className="bg-white/20 hover:bg-white/30 text-white"
+          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl"
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
         {featuredArticles.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentSlide ? 'bg-white' : 'bg-white/50'
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentSlide 
+                ? 'bg-white w-8 shadow-lg' 
+                : 'bg-white/40 hover:bg-white/60'
             }`}
           />
         ))}

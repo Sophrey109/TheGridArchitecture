@@ -32,17 +32,17 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50 transition-all duration-300 shadow-medium rounded-b-xl mx-4 mt-2">
+    <nav className="fixed top-0 left-0 right-0 bg-background/90 backdrop-blur-xl border-b border-border/50 z-50 transition-all duration-300 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 transition-transform duration-200 hover:scale-105">
+          <Link to="/" className="flex items-center space-x-3 transition-all duration-200 hover:scale-105 group">
             <img 
               src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png" 
               alt="The Grid Logo" 
-              className="h-10 w-auto"
+              className="h-10 w-auto transition-transform duration-200 group-hover:rotate-3"
             />
-            <span className="font-archivo-black text-2xl font-black text-foreground">
+            <span className="font-editorial text-2xl font-bold text-foreground bg-gradient-primary bg-clip-text text-transparent">
               The Grid
             </span>
           </Link>
@@ -53,14 +53,17 @@ export const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`nav-link font-sans text-sm font-medium hover:text-primary ${
+                className={`nav-link font-sans text-sm font-medium transition-all duration-200 hover:text-primary relative ${
                   isActive(item.path) 
-                    ? 'text-primary border-b-2 border-primary pb-1' 
+                    ? 'text-primary' 
                     : 'text-muted-foreground'
                 }`}
                 onClick={handleNavClick}
               >
                 {item.name}
+                {isActive(item.path) && (
+                  <span className="absolute -bottom-6 left-0 right-0 h-0.5 bg-gradient-primary rounded-full"></span>
+                )}
               </Link>
             ))}
             
@@ -69,22 +72,25 @@ export const Navigation = () => {
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  className={`nav-link font-sans text-sm font-medium hover:text-primary flex items-center space-x-1 ${
+                  className={`nav-link font-sans text-sm font-medium hover:text-primary flex items-center space-x-1 relative ${
                     learningItems.some(item => isActive(item.path))
-                      ? 'text-primary border-b-2 border-primary pb-1' 
+                      ? 'text-primary' 
                       : 'text-muted-foreground'
                   }`}
                 >
                   <span>Learning</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+                  {learningItems.some(item => isActive(item.path)) && (
+                    <span className="absolute -bottom-6 left-0 right-0 h-0.5 bg-gradient-primary rounded-full"></span>
+                  )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background border border-border">
+              <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border border-border/50 shadow-xl rounded-xl">
                 {learningItems.map((item) => (
                   <DropdownMenuItem key={item.name} asChild>
                     <Link
                       to={item.path}
-                      className="w-full cursor-pointer"
+                      className="w-full cursor-pointer transition-colors duration-200 hover:bg-accent/50"
                       onClick={handleNavClick}
                     >
                       {item.name}
@@ -103,25 +109,25 @@ export const Navigation = () => {
                 <div className="flex items-center space-x-2 animate-fade-in">
                   <Input
                     type="text"
-                    placeholder="Search..."
-                    className="w-64 h-10 transition-all duration-200"
+                    placeholder="Search articles, jobs..."
+                    className="w-64 h-10 bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl transition-all duration-200 focus:bg-background focus:border-border"
                     autoFocus
                   />
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsSearchOpen(false)}
-                    className="transition-transform duration-200 hover:scale-110"
+                    className="transition-all duration-200 hover:scale-110 hover:bg-accent/50 rounded-xl"
                   >
                     <X className="h-5 w-5" />
                   </Button>
                 </div>
               ) : (
                 <Button
-                  variant="ghost"
+                  variant="glass"
                   size="icon"
                   onClick={() => setIsSearchOpen(true)}
-                  className="transition-transform duration-200 hover:scale-110"
+                  className="transition-all duration-200 hover:scale-110 rounded-xl"
                 >
                   <Search className="h-5 w-5" />
                 </Button>
