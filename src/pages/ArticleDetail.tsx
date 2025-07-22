@@ -57,13 +57,19 @@ const ArticleDetail = () => {
       .replace(/src\s*=\s*"/g, 'src="')
       // Fix malformed img tags like <img src ="..." /> />
       .replace(/(<img[^>]*?)\s*\/>\s*\/>/g, '$1 />')
+      // Fix malformed img tags with missing quotes
+      .replace(/src\s*=\s*([^"\s>]+)(?:\s|>)/g, 'src="$1" ')
+      // Fix broken image URLs with double slashes
+      .replace(/src="([^"]*?)\/\/([^"]*?)"/g, 'src="$1/$2"')
       // Remove any broken HTML comments
       .replace(/<!--\s*</g, '<!--')
       .replace(/>\s*-->/g, '-->')
       // Fix any malformed closing tags
       .replace(/\s*\/>\s*>/g, ' />')
+      // Fix self-closing img tags without proper space
+      .replace(/(<img[^>]+?)\/>/g, '$1 />')
       // Ensure all img tags have proper styling for responsive images
-      .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px;"$2>');
+      .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;"$2>');
   };
 
   useEffect(() => {
