@@ -337,8 +337,7 @@
   .hover-scale {
     @apply transition-transform duration-200 hover:scale-105;
   }
-}
-}
+  }
 
 /* Page transition keyframes */
 @keyframes pageSlideIn {
