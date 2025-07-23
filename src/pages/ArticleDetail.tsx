@@ -210,7 +210,7 @@ const ArticleDetail = () => {
                     <h3 className="font-bold text-sm text-foreground mb-4">
                       Table of Contents
                     </h3>
-                    <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                    <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm items-start justify-start">
                       {tableOfContents.map((item) => (
                         <button
                           key={item.id}
