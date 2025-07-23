@@ -24,7 +24,8 @@ export const FilterBar = ({
     { value: 'opinion', label: 'Opinion' },
     { value: 'research', label: 'Research' },
     { value: 'news', label: 'News' },
-    { value: 'case-studies', label: 'Case Studies' }
+    { value: 'case-studies', label: 'Case Studies' },
+    { value: 'Architectural Styles', label: 'Architectural Styles' }
   ];
 
   const years = [

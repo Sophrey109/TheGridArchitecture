@@ -13,21 +13,9 @@ const getExcerpt = (excerpt: string | null, content: string | null): string => {
   return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
 };
 
-// Helper function to determine article type based on content or title
-const determineArticleType = (title: string, content: string | null): 'opinion' | 'research' | 'news' | 'case-studies' => {
-  const text = `${title} ${content || ''}`.toLowerCase();
-  
-  if (text.includes('opinion') || text.includes('think') || text.includes('believe')) {
-    return 'opinion';
-  } else if (text.includes('research') || text.includes('study') || text.includes('findings')) {
-    return 'research';
-  } else if (text.includes('news') || text.includes('approved') || text.includes('announced')) {
-    return 'news';
-  } else if (text.includes('case study') || text.includes('examining') || text.includes('analysis')) {
-    return 'case-studies';
-  }
-  
-  return 'research'; // default
+// Helper function to get article type, fallback to determined type if not set
+const getArticleType = (article: any): string => {
+  return article.article_type || 'research'; // Use database article_type or fallback
 };
 
 // Helper function to format date
@@ -69,7 +57,7 @@ const Articles = () => {
     if (!articles) return [];
     
     return articles.filter(article => {
-      const articleType = determineArticleType(article.Title, article.Content);
+      const articleType = getArticleType(article);
       const formattedDate = formatDate(article['Published Date']);
       
       const typeMatch = selectedType === 'all' || articleType === selectedType;
@@ -183,7 +171,7 @@ const Articles = () => {
                     id={article.id}
                     title={article.Title}
                     excerpt={getExcerpt(article.excerpt, article.Content)}
-                    type={determineArticleType(article.Title, article.Content)}
+                    type={getArticleType(article)}
                     date={formatDate(article['Published Date'])}
                     imageUrl={article.image_url}
                     tags={article.tags}

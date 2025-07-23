@@ -8,7 +8,7 @@ interface ArticleCardProps {
   id: string;
   title: string;
   excerpt: string;
-  type: 'opinion' | 'research' | 'news' | 'case-studies';
+  type: string; // Changed to accept any string type from database
   date: string;
   imageUrl?: string;
   tags?: string[];
