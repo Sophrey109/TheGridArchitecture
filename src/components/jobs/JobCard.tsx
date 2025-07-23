@@ -52,6 +52,20 @@ export const JobCard = ({ job }: JobCardProps) => {
             {job.Description}
           </p>
         )}
+        
+        {job['External Link'] && (
+          <div className="mt-4 pt-3 border-t border-border/50">
+            <a
+              href={job['External Link']}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Apply Now
+            </a>
+          </div>
+        )}
       </CardContent>
     </Card>
     </Link>
