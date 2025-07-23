@@ -51,9 +51,14 @@ const ArticleDetail = () => {
 
   // Function to clean up malformed HTML
   const cleanupHTML = (html: string): string => {
-    return html
+    console.log('Original HTML:', html.substring(0, 500));
+    
+    const result = html
       // Fix URLs with extra parentheses at the end like: "URL)"
-      .replace(/src="([^"]+)\)"/g, 'src="$1"')
+      .replace(/src="([^"]+)\)"/g, (match, url) => {
+        console.log('Fixed parenthesis URL:', match, '->', `src="${url}"`);
+        return `src="${url}"`;
+      })
       // Fix other malformed image patterns
       .replace(/<img([^>]*?)src\s*=\s*"?([^"\s>]+)"?([^>]*?)>/g, '<img$1src="$2"$3 />')
       .replace(/<img([^>]*?)src\s+(https?:\/\/[^\s">]+)([^>]*?)>/g, '<img$1src="$2"$3 />')
@@ -68,6 +73,9 @@ const ArticleDetail = () => {
       .replace(/<\/h1>/g, '</h2>')
       // Add responsive styling to all images
       .replace(/<img([^>]*?)\/>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;" />');
+    
+    console.log('Cleaned HTML:', result.substring(0, 500));
+    return result;
   };
 
   useEffect(() => {
