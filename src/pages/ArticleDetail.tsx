@@ -241,9 +241,9 @@ const ArticleDetail = () => {
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <Link to={`/articles?type=${getTypeLabel(article.Title, article.Content).toLowerCase().replace(' ', '-')}`}>
-                    <Badge variant={getTypeVariant(article.Title, article.Content)} className="cursor-pointer hover:opacity-80 transition-opacity">
-                      {getTypeLabel(article.Title, article.Content)}
+                  <Link to={`/articles?type=${(article.article_type || getTypeLabel(article.Title, article.Content)).toLowerCase().replace(' ', '-')}`}>
+                    <Badge variant={getTypeVariant(article.article_type || article.Title, article.Content)} className="cursor-pointer hover:opacity-80 transition-opacity">
+                      {article.article_type || getTypeLabel(article.Title, article.Content)}
                     </Badge>
                   </Link>
                   <div className="flex items-center text-sm text-muted-foreground">

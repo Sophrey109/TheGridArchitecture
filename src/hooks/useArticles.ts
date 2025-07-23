@@ -12,6 +12,7 @@ export interface Article {
   excerpt: string | null;
   tags: string[] | null;
   related_articles: string[] | null;
+  article_type: string | null;
 }
 
 export const useArticles = () => {

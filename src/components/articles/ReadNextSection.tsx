@@ -28,7 +28,7 @@ export const ReadNextSection: React.FC<ReadNextSectionProps> = ({
       try {
         const { data, error } = await supabase
           .from('Articles')
-          .select('*')
+          .select('id, Title, Content, Author, "Published Date", is_published, image_url, excerpt, tags, related_articles, article_type')
           .in('id', relatedArticleIds)
           .eq('is_published', true)
           .neq('id', currentArticleId)
