@@ -67,38 +67,6 @@ export const Navigation = () => {
               </Link>
             ))}
             
-            {/* Learning Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className={`nav-link font-sans text-sm font-medium hover:text-primary flex items-center space-x-1 relative ${
-                    learningItems.some(item => isActive(item.path))
-                      ? 'text-primary' 
-                      : 'text-muted-foreground'
-                  }`}
-                >
-                  <span>Learning</span>
-                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
-                  {learningItems.some(item => isActive(item.path)) && (
-                    <span className="absolute -bottom-6 left-0 right-0 h-0.5 bg-gradient-primary rounded-full"></span>
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border border-border/50 shadow-xl rounded-xl">
-                {learningItems.map((item) => (
-                  <DropdownMenuItem key={item.name} asChild>
-                    <Link
-                      to={item.path}
-                      className="w-full cursor-pointer transition-colors duration-200 hover:bg-accent/50"
-                      onClick={handleNavClick}
-                    >
-                      {item.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
 
           {/* Search and Menu */}
@@ -164,27 +132,6 @@ export const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
-              
-              {/* Learning Section in Mobile */}
-              <div className="pt-2 border-t border-border/50 mt-2">
-                <div className="px-3 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Learning
-                </div>
-                {learningItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    className={`block px-3 py-2 ml-4 rounded-xl text-base font-medium transition-all duration-200 shadow-soft ${
-                      isActive(item.path)
-                        ? 'bg-accent text-primary'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    }`}
-                    onClick={handleNavClick}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
             </div>
           </div>
         )}
