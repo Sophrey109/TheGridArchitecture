@@ -10,6 +10,7 @@ export interface Job {
   Description: string | null;
   'Date Posted': string | null;
   'External Link': string | null;
+  Type: string | null;
 }
 
 export const useJobs = () => {

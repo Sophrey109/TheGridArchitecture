@@ -25,7 +25,7 @@ const JobDetail = () => {
         .single();
 
       if (error) throw error;
-      return data as Job & { 'External Link': string | null };
+      return data as Job;
     },
     enabled: !!id,
   });
@@ -171,7 +171,7 @@ const JobDetail = () => {
                   <div className="space-y-3 pt-4 border-t">
                     <div>
                       <h4 className="font-medium mb-1">Job Type</h4>
-                      <Badge variant="secondary">Full-time</Badge>
+                      <Badge variant="secondary">{job.Type || 'Not specified'}</Badge>
                     </div>
                     
                     {job.Salary && (
