@@ -40,7 +40,7 @@ export const Navigation = () => {
             <img 
               src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png" 
               alt="The Grid Logo" 
-              className="h-10 w-auto transition-transform duration-200 group-hover:rotate-3"
+              className="h-10 w-auto transition-transform duration-200 group-hover:rotate-3 rounded-lg"
             />
             <span className="font-editorial text-2xl font-bold text-foreground bg-gradient-primary bg-clip-text text-transparent">
               The Grid
