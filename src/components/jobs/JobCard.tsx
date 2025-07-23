@@ -16,58 +16,61 @@ export const JobCard = ({ job }: JobCardProps) => {
   };
 
   return (
-    <Link to={`/jobs/${job.id}`} className="block h-full">
-      <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
-      <CardHeader>
-        <CardTitle className="text-lg font-bold">{job['Job Title']}</CardTitle>
-        {job.Company && (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Building className="h-4 w-4" />
-            <span>{job.Company}</span>
+    <Card className="h-full hover:shadow-lg transition-shadow">
+      <div className="flex h-full">
+        <Link to={`/jobs/${job.id}`} className="flex-1 block">
+          <div className="cursor-pointer h-full">
+            <CardHeader>
+              <CardTitle className="text-lg font-bold">{job['Job Title']}</CardTitle>
+              {job.Company && (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Building className="h-4 w-4" />
+                  <span>{job.Company}</span>
+                </div>
+              )}
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {job.Location && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>{job.Location}</span>
+                </div>
+              )}
+              
+              {job.Salary && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <DollarSign className="h-4 w-4" />
+                  <span>{job.Salary}</span>
+                </div>
+              )}
+              
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                <span>Posted {formatDate(job['Date Posted'])}</span>
+              </div>
+              
+              {job.Description && (
+                <p className="text-sm text-muted-foreground line-clamp-3 mt-3">
+                  {job.Description}
+                </p>
+              )}
+            </CardContent>
           </div>
-        )}
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {job.Location && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span>{job.Location}</span>
-          </div>
-        )}
-        
-        {job.Salary && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <DollarSign className="h-4 w-4" />
-            <span>{job.Salary}</span>
-          </div>
-        )}
-        
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar className="h-4 w-4" />
-          <span>Posted {formatDate(job['Date Posted'])}</span>
-        </div>
-        
-        {job.Description && (
-          <p className="text-sm text-muted-foreground line-clamp-3 mt-3">
-            {job.Description}
-          </p>
-        )}
+        </Link>
         
         {job['External Link'] && (
-          <div className="mt-4 pt-3 border-t border-border/50">
+          <div className="flex items-center p-4 border-l border-border/50">
             <a
               href={job['External Link']}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium whitespace-nowrap"
             >
               Apply Now
             </a>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
-    </Link>
   );
 };
