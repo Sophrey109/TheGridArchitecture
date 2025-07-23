@@ -135,7 +135,7 @@ const JobDetail = () => {
                 <CardContent>
                   {job.Description ? (
                     <div 
-                      className="prose prose-sm max-w-none"
+                      className="prose prose-sm max-w-none prose-headings:font-semibold prose-headings:text-foreground prose-h2:text-lg prose-h2:mt-6 prose-h2:mb-3 prose-p:mb-4 prose-p:text-muted-foreground"
                       dangerouslySetInnerHTML={{ __html: job.Description }}
                     />
                   ) : (
