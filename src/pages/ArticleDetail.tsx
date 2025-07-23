@@ -210,21 +210,18 @@ const ArticleDetail = () => {
                     <h3 className="font-bold text-sm text-foreground mb-4">
                       Table of Contents
                     </h3>
-                    <nav className="flex flex-wrap gap-2">
+                    <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                       {tableOfContents.map((item) => (
                         <button
                           key={item.id}
                           onClick={() => scrollToHeading(item.id)}
-                          className={`text-xs transition-all duration-200 rounded-md px-3 py-1.5 hover:bg-muted/80 hover:text-primary border border-border/30 hover:border-primary/30 ${
-                            item.level === 1 ? 'font-semibold text-foreground bg-muted/20' : 
+                          className={`transition-colors duration-200 hover:text-primary underline-offset-4 hover:underline ${
+                            item.level === 1 ? 'font-semibold text-foreground' : 
                             item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
-                            item.level === 3 ? 'text-muted-foreground hover:text-foreground text-xs' : 
-                            'text-muted-foreground/80 hover:text-foreground text-xs'
+                            item.level === 3 ? 'text-muted-foreground hover:text-foreground' : 
+                            'text-muted-foreground/80 hover:text-foreground'
                           }`}
                         >
-                          {item.level > 1 && (
-                            <span className="mr-1 text-muted-foreground/40">•</span>
-                          )}
                           {item.text}
                         </button>
                       ))}
