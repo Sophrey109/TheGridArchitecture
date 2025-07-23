@@ -28,7 +28,7 @@ export const ReadNextSection: React.FC<ReadNextSectionProps> = ({
       try {
         const { data, error } = await supabase
           .from('Articles')
-          .select('id, Title, Content, Author, "Published Date", is_published, image_url, excerpt, tags, related_articles, article_type')
+          .select('*')
           .in('id', relatedArticleIds)
           .eq('is_published', true)
           .neq('id', currentArticleId)
@@ -118,15 +118,15 @@ export const ReadNextSection: React.FC<ReadNextSectionProps> = ({
                 </div>
               )}
               
-              {/* Article Type Badge */}
-              <div className="flex items-center gap-2 mb-2">
-                <Badge 
-                  variant={getTypeVariant(article.Title, article.Content)}
-                  className="text-xs"
-                >
-                  {getTypeLabel(article.Title, article.Content)}
-                </Badge>
-              </div>
+               {/* Article Type Badge */}
+               <div className="flex items-center gap-2 mb-2">
+                 <Badge 
+                   variant={getTypeVariant(article.article_type || article.Title, article.Content)}
+                   className="text-xs"
+                 >
+                   {article.article_type || getTypeLabel(article.Title, article.Content)}
+                 </Badge>
+               </div>
 
               {/* Article Title */}
               <h4 className="font-medium text-sm line-clamp-2 mb-2 hover:text-primary transition-colors">
