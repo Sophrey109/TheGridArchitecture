@@ -59,6 +59,12 @@ const Articles = () => {
     setSelectedYear('all');
   };
 
+  const handleTypeClick = (type: string) => {
+    setSelectedType(type);
+    setSelectedYear('all');
+    setSelectedTag('');
+  };
+
   const getFilteredArticles = () => {
     if (!articles) return [];
     
@@ -182,6 +188,7 @@ const Articles = () => {
                     imageUrl={article.image_url}
                     tags={article.tags}
                     onTagClick={handleTagClick}
+                    onTypeClick={handleTypeClick}
                   />
                 ))}
               </div>

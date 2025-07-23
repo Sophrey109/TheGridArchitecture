@@ -13,6 +13,7 @@ interface ArticleCardProps {
   imageUrl?: string;
   tags?: string[];
   onTagClick?: (tag: string) => void;
+  onTypeClick?: (type: string) => void;
 }
 
 const getTypeVariant = (type: string) => {
@@ -39,7 +40,7 @@ const getTypeLabel = (type: string) => {
   }
 };
 
-export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, onTagClick }: ArticleCardProps) => {
+export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, onTagClick, onTypeClick }: ArticleCardProps) => {
   // Fallback images for different article types
   const getFallbackImage = (type: string) => {
     const fallbacks = {
@@ -65,9 +66,18 @@ export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, on
         </div>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <Badge variant={getTypeVariant(type)} className="text-xs animate-scale-in">
-              {getTypeLabel(type)}
-            </Badge>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onTypeClick?.(type);
+              }}
+              className="inline-block"
+            >
+              <Badge variant={getTypeVariant(type)} className="text-xs animate-scale-in hover:opacity-80 transition-opacity cursor-pointer">
+                {getTypeLabel(type)}
+              </Badge>
+            </button>
             <span className="caption-text text-xs text-muted-foreground">
               {date}
             </span>
