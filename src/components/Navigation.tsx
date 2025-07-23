@@ -15,13 +15,13 @@ export const Navigation = () => {
     { name: 'Home', path: '/' },
     { name: 'Articles', path: '/articles' },
     { name: 'Jobs', path: '/jobs' },
-    { name: 'Competitions', path: '/competitions' },
-    { name: 'Exhibitions', path: '/exhibitions' },
+    // Hidden from public: { name: 'Competitions', path: '/competitions' },
+    // Hidden from public: { name: 'Exhibitions', path: '/exhibitions' },
     { name: 'Contact', path: '/contact' },
   ];
 
   const learningItems = [
-    { name: 'Learning Resources', path: '/learning' },
+    // Hidden from public: { name: 'Learning Resources', path: '/learning' },
     { name: 'Ask an Architect', path: '/ask-architect' },
   ];
 
