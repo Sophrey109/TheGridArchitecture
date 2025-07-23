@@ -49,17 +49,12 @@ export const JobCard = ({ job }: JobCardProps) => {
                 <span>Posted {formatDate(job['Date Posted'])}</span>
               </div>
               
-              {job.Description && (
-                <p className="text-sm text-muted-foreground line-clamp-3 mt-3">
-                  {job.Description}
-                </p>
-              )}
             </CardContent>
           </div>
         </Link>
         
         {job['External Link'] && (
-          <div className="flex items-center p-4 border-l border-border/50">
+          <div className="flex items-center p-4">
             <a
               href={job['External Link']}
               target="_blank"
