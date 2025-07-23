@@ -51,36 +51,24 @@ const ArticleDetail = () => {
   // Function to clean up malformed HTML
   const cleanupHTML = (html: string): string => {
     return html
-      // Fix img tags with missing = sign like 'src https://...'
-      .replace(/(<img[^>]*?)src\s+https/g, '$1src="https')
-      .replace(/(<img[^>]*?)src\s+=/g, '$1src=')
-      // Fix img tags with space before = like 'src ='
-      .replace(/(<img[^>]*?)src\s*=\s*https/g, '$1src="https')
-      // Fix img tags missing quotes around URLs
-      .replace(/src\s*=\s*([^"\s>]+)/g, 'src="$1"')
-      // Fix incomplete quotes or missing closing quotes
-      .replace(/src="([^"]*?)\s*\/>/g, 'src="$1" />')
-      .replace(/src="([^"]*?)$/g, 'src="$1"')
-      // Fix double quotes issues
-      .replace(/src=""([^"]*?)"/g, 'src="$1"')
-      // Fix malformed closing tags like /> />
-      .replace(/\/>\s*\/>/g, '/>')
-      // Remove any broken HTML comments
-      .replace(/<!--\s*</g, '<!--')
-      .replace(/>\s*-->/g, '-->')
-      // Fix any malformed closing tags
-      .replace(/\s*\/>\s*>/g, ' />')
-      // Remove semantic HTML structure to ensure consistent styling
+      // Fix most common malformed image patterns in the article
+      // Pattern 1: <img src ="URL" with space before =
+      .replace(/<img([^>]*?)src\s*=\s*"?([^"\s>]+)"?([^>]*?)>/g, '<img$1src="$2"$3 />')
+      // Pattern 2: <img src https://... (missing = sign)
+      .replace(/<img([^>]*?)src\s+(https?:\/\/[^\s">]+)([^>]*?)>/g, '<img$1src="$2"$3 />')
+      // Pattern 3: <img src = https://... (space around = and missing quotes)
+      .replace(/<img([^>]*?)src\s*=\s*(https?:\/\/[^\s">]+)([^>]*?)>/g, '<img$1src="$2"$3 />')
+      // Pattern 4: Fix any remaining unclosed img tags
+      .replace(/<img([^>]*?)(?!\s*\/?>)/g, '<img$1 />')
+      // Remove malformed HTML elements
       .replace(/<\/?article[^>]*>/g, '')
       .replace(/<\/?header[^>]*>/g, '')
       .replace(/<\/?section[^>]*>/g, '')
       // Convert h1 in content to h2 to maintain hierarchy
       .replace(/<h1([^>]*)>/g, '<h2$1>')
       .replace(/<\/h1>/g, '</h2>')
-      // Ensure all img tags are properly closed and have responsive styling
-      .replace(/<img([^>]+?)(?:style="[^"]*")?([^>]*?)>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;"$2 />')
-      // Final cleanup for any remaining malformed img tags
-      .replace(/<img([^>]*?)\/>/g, '<img$1 />');
+      // Add responsive styling to all images
+      .replace(/<img([^>]*?)\/>/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;" />');
   };
 
   useEffect(() => {
