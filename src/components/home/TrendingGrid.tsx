@@ -14,22 +14,6 @@ const getExcerpt = (excerpt: string | null, content: string | null): string => {
   return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
 };
 
-// Helper function to determine article type based on content or title
-const determineArticleType = (title: string, content: string | null): string => {
-  const text = `${title} ${content || ''}`.toLowerCase();
-  
-  if (text.includes('opinion') || text.includes('think') || text.includes('believe')) {
-    return 'Opinion';
-  } else if (text.includes('research') || text.includes('study') || text.includes('findings')) {
-    return 'Research';
-  } else if (text.includes('news') || text.includes('approved') || text.includes('announced')) {
-    return 'News';
-  } else if (text.includes('case study') || text.includes('examining') || text.includes('analysis')) {
-    return 'Case Study';
-  }
-  
-  return 'Article';
-};
 
 // Helper function to format date
 const formatDate = (dateString: string | null): string => {
@@ -159,7 +143,7 @@ export const TrendingGrid = () => {
               />
               <div className="absolute top-4 left-4">
                 <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
-                  {determineArticleType(article.Title, article.Content)}
+                  {article.article_type || 'Article'}
                 </span>
               </div>
               {index === 0 && (
