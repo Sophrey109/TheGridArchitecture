@@ -134,9 +134,10 @@ const JobDetail = () => {
                 </CardHeader>
                 <CardContent>
                   {job.Description ? (
-                    <div className="prose prose-sm max-w-none">
-                      <p className="whitespace-pre-wrap">{job.Description}</p>
-                    </div>
+                    <div 
+                      className="prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: job.Description }}
+                    />
                   ) : (
                     <p className="text-muted-foreground italic">No description provided.</p>
                   )}
