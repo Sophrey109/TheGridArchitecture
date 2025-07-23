@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -241,9 +241,11 @@ const ArticleDetail = () => {
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <Badge variant={getTypeVariant(article.Title, article.Content)}>
-                    {getTypeLabel(article.Title, article.Content)}
-                  </Badge>
+                  <Link to={`/articles?type=${getTypeLabel(article.Title, article.Content).toLowerCase().replace(' ', '-')}`}>
+                    <Badge variant={getTypeVariant(article.Title, article.Content)} className="cursor-pointer hover:opacity-80 transition-opacity">
+                      {getTypeLabel(article.Title, article.Content)}
+                    </Badge>
+                  </Link>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar className="mr-1 h-4 w-4" />
                     {formatDate(article['Published Date'])}
