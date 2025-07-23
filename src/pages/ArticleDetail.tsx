@@ -205,25 +205,29 @@ const ArticleDetail = () => {
             {/* Table of Contents - Sidebar */}
             {tableOfContents.length > 0 && (
               <div className="lg:col-span-1 order-2 lg:order-1">
-                <Card className="sticky top-8">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-4">Table of Contents</h3>
-                    <nav className="space-y-2">
+                <Card className="sticky top-8 bg-card/50 backdrop-blur-sm border-border/50">
+                  <CardContent className="p-8">
+                    <h3 className="font-bold text-lg mb-6 text-foreground border-b border-border/30 pb-3">
+                      Table of Contents
+                    </h3>
+                    <nav className="space-y-3">
                       {tableOfContents.map((item) => (
                         <button
                           key={item.id}
                           onClick={() => scrollToHeading(item.id)}
-                          className={`block w-full text-left text-sm hover:text-primary transition-colors ${
-                            item.level === 1 ? 'font-medium' : 
-                            item.level === 2 ? 'ml-3' : 
-                            item.level === 3 ? 'ml-6' : 'ml-9'
+                          className={`block w-full text-left text-sm transition-all duration-200 rounded-md px-3 py-2 hover:bg-muted/80 hover:text-primary group ${
+                            item.level === 1 ? 'font-semibold text-foreground' : 
+                            item.level === 2 ? 'ml-2 font-medium text-muted-foreground hover:text-foreground' : 
+                            item.level === 3 ? 'ml-4 text-muted-foreground hover:text-foreground' : 
+                            'ml-6 text-muted-foreground/80 hover:text-foreground'
                           }`}
-                          style={{ 
-                            paddingLeft: `${(item.level - 1) * 12}px`,
-                            fontSize: item.level === 1 ? '14px' : '13px'
-                          }}
                         >
-                          {item.text}
+                          <span className="flex items-center gap-2">
+                            {item.level > 1 && (
+                              <span className="w-1 h-1 bg-muted-foreground/40 rounded-full flex-shrink-0 group-hover:bg-primary transition-colors" />
+                            )}
+                            <span className="leading-relaxed">{item.text}</span>
+                          </span>
                         </button>
                       ))}
                     </nav>
