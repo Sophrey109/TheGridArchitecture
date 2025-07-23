@@ -52,14 +52,12 @@ const ArticleDetail = () => {
   // Function to clean up malformed HTML
   const cleanupHTML = (html: string): string => {
     return html
-      // Fix most common malformed image patterns in the article
-      // Pattern 1: <img src ="URL" with space before =
+      // Fix URLs with extra parentheses at the end like: "URL)"
+      .replace(/src="([^"]+)\)"/g, 'src="$1"')
+      // Fix other malformed image patterns
       .replace(/<img([^>]*?)src\s*=\s*"?([^"\s>]+)"?([^>]*?)>/g, '<img$1src="$2"$3 />')
-      // Pattern 2: <img src https://... (missing = sign)
       .replace(/<img([^>]*?)src\s+(https?:\/\/[^\s">]+)([^>]*?)>/g, '<img$1src="$2"$3 />')
-      // Pattern 3: <img src = https://... (space around = and missing quotes)
       .replace(/<img([^>]*?)src\s*=\s*(https?:\/\/[^\s">]+)([^>]*?)>/g, '<img$1src="$2"$3 />')
-      // Pattern 4: Fix any remaining unclosed img tags
       .replace(/<img([^>]*?)(?!\s*\/?>)/g, '<img$1 />')
       // Remove malformed HTML elements
       .replace(/<\/?article[^>]*>/g, '')
