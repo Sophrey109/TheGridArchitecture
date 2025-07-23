@@ -207,24 +207,26 @@ const ArticleDetail = () => {
               <div className="lg:col-span-1 order-2 lg:order-1">
                 <Card className="sticky top-8 bg-card/50 backdrop-blur-sm border-border/50">
                   <CardContent className="p-6">
-                    <h3 className="font-bold text-sm text-foreground mb-4">
+                    <h3 className="font-bold text-sm text-foreground mb-4 text-left">
                       Table of Contents
                     </h3>
-                    <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm items-start justify-start">
-                      {tableOfContents.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => scrollToHeading(item.id)}
-                          className={`transition-colors duration-200 hover:text-primary underline-offset-4 hover:underline ${
-                            item.level === 1 ? 'font-semibold text-foreground' : 
-                            item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
-                            item.level === 3 ? 'text-muted-foreground hover:text-foreground' : 
-                            'text-muted-foreground/80 hover:text-foreground'
-                          }`}
-                        >
-                          {item.text}
-                        </button>
-                      ))}
+                    <nav className="text-left">
+                      <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                        {tableOfContents.map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => scrollToHeading(item.id)}
+                            className={`transition-colors duration-200 hover:text-primary underline-offset-4 hover:underline text-left ${
+                              item.level === 1 ? 'font-semibold text-foreground' : 
+                              item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
+                              item.level === 3 ? 'text-muted-foreground hover:text-foreground' : 
+                              'text-muted-foreground/80 hover:text-foreground'
+                            }`}
+                          >
+                            {item.text}
+                          </button>
+                        ))}
+                      </div>
                     </nav>
                   </CardContent>
                 </Card>
