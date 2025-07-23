@@ -22,6 +22,7 @@ const ArticleDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tableOfContents, setTableOfContents] = useState<TableOfContentsItem[]>([]);
+  const [processedContent, setProcessedContent] = useState<string>('');
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -72,7 +73,7 @@ const ArticleDetail = () => {
   };
 
   useEffect(() => {
-    if (article?.Content) {
+    if (article?.Content && article.Content !== processedContent) {
       // Clean up the HTML content first
       const cleanedContent = cleanupHTML(article.Content);
       
@@ -97,11 +98,11 @@ const ArticleDetail = () => {
 
       setTableOfContents(toc);
       
-      // Update the article content with cleaned HTML and IDs
+      // Store the processed content
       const updatedContent = tempDiv.innerHTML;
-      setArticle(prev => prev ? { ...prev, Content: updatedContent } : null);
+      setProcessedContent(updatedContent);
     }
-  }, [article?.Content]);
+  }, [article?.Content, processedContent]);
 
   const scrollToHeading = (headingId: string) => {
     const element = document.getElementById(headingId);
@@ -272,7 +273,7 @@ const ArticleDetail = () => {
               {/* Article content */}
               <div 
                 className="article-content"
-                dangerouslySetInnerHTML={{ __html: article.Content || '' }}
+                dangerouslySetInnerHTML={{ __html: processedContent || article.Content || '' }}
               />
             </div>
 
