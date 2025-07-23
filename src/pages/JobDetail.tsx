@@ -159,7 +159,7 @@ const JobDetail = () => {
                     >
                       <Button className="w-full">
                         <ExternalLink className="h-4 w-4 mr-2" />
-                        Apply Now
+                        Apply Here
                       </Button>
                     </a>
                   ) : (
