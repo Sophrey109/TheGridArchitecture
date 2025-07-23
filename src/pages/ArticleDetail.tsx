@@ -207,32 +207,28 @@ const ArticleDetail = () => {
               <div className="lg:col-span-1 order-2 lg:order-1">
                 <Card className="sticky top-8 bg-card/50 backdrop-blur-sm border-border/50">
                   <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <h3 className="font-bold text-sm text-foreground flex-shrink-0 mt-2">
-                        Contents
-                      </h3>
-                      <nav className="flex-1 space-y-3">
-                        {tableOfContents.map((item) => (
-                          <button
-                            key={item.id}
-                            onClick={() => scrollToHeading(item.id)}
-                            className={`block w-full text-left text-sm transition-all duration-200 rounded-md px-3 py-2 hover:bg-muted/80 hover:text-primary group ${
-                              item.level === 1 ? 'font-semibold text-foreground' : 
-                              item.level === 2 ? 'ml-2 font-medium text-muted-foreground hover:text-foreground' : 
-                              item.level === 3 ? 'ml-4 text-muted-foreground hover:text-foreground' : 
-                              'ml-6 text-muted-foreground/80 hover:text-foreground'
-                            }`}
-                          >
-                            <span className="flex items-center gap-2">
-                              {item.level > 1 && (
-                                <span className="w-1 h-1 bg-muted-foreground/40 rounded-full flex-shrink-0 group-hover:bg-primary transition-colors" />
-                              )}
-                              <span className="leading-relaxed">{item.text}</span>
-                            </span>
-                          </button>
-                        ))}
-                      </nav>
-                    </div>
+                    <h3 className="font-bold text-sm text-foreground mb-4">
+                      Table of Contents
+                    </h3>
+                    <nav className="flex flex-wrap gap-2">
+                      {tableOfContents.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToHeading(item.id)}
+                          className={`text-xs transition-all duration-200 rounded-md px-3 py-1.5 hover:bg-muted/80 hover:text-primary border border-border/30 hover:border-primary/30 ${
+                            item.level === 1 ? 'font-semibold text-foreground bg-muted/20' : 
+                            item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
+                            item.level === 3 ? 'text-muted-foreground hover:text-foreground text-xs' : 
+                            'text-muted-foreground/80 hover:text-foreground text-xs'
+                          }`}
+                        >
+                          {item.level > 1 && (
+                            <span className="mr-1 text-muted-foreground/40">•</span>
+                          )}
+                          {item.text}
+                        </button>
+                      ))}
+                    </nav>
                   </CardContent>
                 </Card>
               </div>
