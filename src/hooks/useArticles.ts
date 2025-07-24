@@ -30,3 +30,20 @@ export const useArticles = () => {
     },
   });
 };
+
+export const useFeaturedArticles = () => {
+  return useQuery({
+    queryKey: ['featured-articles'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('Articles')
+        .select('*')
+        .eq('is_published', true)
+        .eq('featured_on_homepage', true)
+        .order('Published Date', { ascending: false });
+
+      if (error) throw error;
+      return data as Article[];
+    },
+  });
+};

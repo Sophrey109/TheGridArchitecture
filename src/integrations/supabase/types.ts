@@ -58,6 +58,7 @@ export type Database = {
           Author: string | null
           Content: string | null
           excerpt: string | null
+          featured_on_homepage: boolean | null
           id: string
           image_url: string | null
           is_published: boolean | null
@@ -71,6 +72,7 @@ export type Database = {
           Author?: string | null
           Content?: string | null
           excerpt?: string | null
+          featured_on_homepage?: boolean | null
           id: string
           image_url?: string | null
           is_published?: boolean | null
@@ -84,6 +86,7 @@ export type Database = {
           Author?: string | null
           Content?: string | null
           excerpt?: string | null
+          featured_on_homepage?: boolean | null
           id?: string
           image_url?: string | null
           is_published?: boolean | null

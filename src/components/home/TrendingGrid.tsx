@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { useArticles } from '@/hooks/useArticles';
+import { useFeaturedArticles } from '@/hooks/useArticles';
 import { supabase } from '@/integrations/supabase/client';
 
 // Helper function to extract excerpt from content or use stored excerpt
@@ -27,7 +27,7 @@ const formatDate = (dateString: string | null): string => {
 };
 
 export const TrendingGrid = () => {
-  const { data: articles, isLoading, error, refetch } = useArticles();
+  const { data: articles, isLoading, error, refetch } = useFeaturedArticles();
 
   // Set up real-time updates
   useEffect(() => {
