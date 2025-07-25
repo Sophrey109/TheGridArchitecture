@@ -43,23 +43,17 @@ export const JobCard = ({ job }: JobCardProps) => {
                   <span>{job.Salary}</span>
                 </div>
               )}
-              
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>Posted {formatDate(job['Date Posted'])}</span>
-              </div>
-              
             </CardContent>
           </div>
         </Link>
         
         {job['External Link'] && (
-          <div className="flex items-center p-4">
+          <div className="flex items-center p-6">
             <a
               href={job['External Link']}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium whitespace-nowrap"
+              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-lg hover:from-primary/90 hover:to-primary hover:scale-105 transition-all duration-200 text-sm font-semibold whitespace-nowrap shadow-lg hover:shadow-xl"
             >
               Apply Now
             </a>
