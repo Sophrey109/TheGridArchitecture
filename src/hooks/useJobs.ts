@@ -11,6 +11,7 @@ export interface Job {
   'Date Posted': string | null;
   'External Link': string | null;
   Type: string | null;
+  deadline: string | null;
 }
 
 export const useJobs = () => {
