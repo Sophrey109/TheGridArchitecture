@@ -13,6 +13,7 @@ import Competitions from "./pages/Competitions";
 import Learning from "./pages/Learning";
 import Contact from "./pages/Contact";
 import AskArchitect from "./pages/AskArchitect";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/learning" element={<Learning />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/ask-architect" element={<AskArchitect />} />
+          <Route path="/search" element={<Search />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

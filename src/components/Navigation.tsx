@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -29,6 +31,15 @@ export const Navigation = () => {
 
   const handleNavClick = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
   };
 
   return (
@@ -74,22 +85,35 @@ export const Navigation = () => {
             {/* Search */}
             <div className="relative">
               {isSearchOpen ? (
-                <div className="flex items-center space-x-2 animate-fade-in">
+                <form onSubmit={handleSearch} className="flex items-center space-x-2 animate-fade-in">
                   <Input
                     type="text"
                     placeholder="Search articles, jobs..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-64 h-10 bg-background/80 backdrop-blur-sm border border-border/50 rounded-xl transition-all duration-200 focus:bg-background focus:border-border"
                     autoFocus
                   />
                   <Button
+                    type="submit"
                     variant="ghost"
                     size="icon"
-                    onClick={() => setIsSearchOpen(false)}
+                    className="transition-all duration-200 hover:scale-110 hover:bg-accent/50 rounded-xl"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      setSearchQuery('');
+                    }}
                     className="transition-all duration-200 hover:scale-110 hover:bg-accent/50 rounded-xl"
                   >
                     <X className="h-5 w-5" />
                   </Button>
-                </div>
+                </form>
               ) : (
                 <Button
                   variant="glass"
