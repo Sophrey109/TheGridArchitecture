@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, DollarSign, Calendar, Building } from 'lucide-react';
+import { MapPin, Calendar, Building } from 'lucide-react';
 import { Job } from '@/hooks/useJobs';
 
 interface JobCardProps {
@@ -13,6 +13,18 @@ export const JobCard = ({ job }: JobCardProps) => {
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Date not specified';
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const getCurrencySymbol = (currency: string | null) => {
+    switch (currency?.toUpperCase()) {
+      case 'GBP':
+        return '£';
+      case 'EUR':
+        return '€';
+      case 'USD':
+      default:
+        return '$';
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ export const JobCard = ({ job }: JobCardProps) => {
             
             {job.Salary && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <DollarSign className="h-4 w-4" />
+                <span className="text-base font-medium">{getCurrencySymbol(job.currency)}</span>
                 <span>{job.Salary}</span>
               </div>
             )}
