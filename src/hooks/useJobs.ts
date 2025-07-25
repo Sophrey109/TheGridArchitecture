@@ -12,6 +12,7 @@ export interface Job {
   'External Link': string | null;
   Type: string | null;
   deadline: string | null;
+  currency: string | null;
 }
 
 export const useJobs = () => {
