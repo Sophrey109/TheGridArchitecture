@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, DollarSign, Calendar, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Calendar, ExternalLink } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Job } from '@/hooks/useJobs';
@@ -37,6 +37,18 @@ const JobDetail = () => {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const getCurrencySymbol = (currency: string | null) => {
+    switch (currency?.toUpperCase()) {
+      case 'GBP':
+        return '£';
+      case 'EUR':
+        return '€';
+      case 'USD':
+      default:
+        return '$';
+    }
   };
 
   if (isLoading) {
@@ -114,7 +126,7 @@ const JobDetail = () => {
               
               {job.Salary && (
                 <div className="flex items-center gap-1">
-                  <DollarSign className="h-4 w-4" />
+                  <span className="text-base font-medium">{getCurrencySymbol(job.currency)}</span>
                   <span>{job.Salary}</span>
                 </div>
               )}
