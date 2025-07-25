@@ -104,6 +104,7 @@ export type Database = {
         Row: {
           Company: string | null
           "Date Posted": string | null
+          deadline: string | null
           Description: string | null
           "External Link": string | null
           id: number
@@ -116,6 +117,7 @@ export type Database = {
         Insert: {
           Company?: string | null
           "Date Posted"?: string | null
+          deadline?: string | null
           Description?: string | null
           "External Link"?: string | null
           id?: number
@@ -128,6 +130,7 @@ export type Database = {
         Update: {
           Company?: string | null
           "Date Posted"?: string | null
+          deadline?: string | null
           Description?: string | null
           "External Link"?: string | null
           id?: number
@@ -174,7 +177,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      deactivate_expired_jobs: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
