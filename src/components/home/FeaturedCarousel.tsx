@@ -1,73 +1,91 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useBannerFeaturedArticles } from '@/hooks/useArticles';
 
-interface FeaturedArticle {
-  id: string;
-  title: string;
-  excerpt: string;
-  imageUrl: string;
-  category: string;
-  publishDate: string;
-  readTime: string;
-  author: string;
-}
+// Helper function to extract excerpt from content or use stored excerpt
+const getExcerpt = (content: string | null, excerpt: string | null): string => {
+  if (excerpt) return excerpt;
+  if (!content) return 'No preview available.';
+  
+  // Remove HTML tags and get first few sentences
+  const plainText = content.replace(/<[^>]*>/g, '');
+  const sentences = plainText.split('.').slice(0, 2).join('.');
+  return sentences.length > 150 ? sentences.substring(0, 150) + '...' : sentences + '.';
+};
 
-const featuredArticles: FeaturedArticle[] = [
-  {
-    id: '1',
-    title: 'The Future of Sustainable Architecture: Net-Zero Buildings in 2024',
-    excerpt: 'Exploring innovative approaches to carbon-neutral design and the latest in green building technology.',
-    imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop',
-    category: 'Sustainability',
-    publishDate: '2024-01-15',
-    readTime: '8 min read',
-    author: 'Sarah Chen'
-  },
-  {
-    id: '2',
-    title: 'BIM Revolution: How AI is Transforming Building Information Modeling',
-    excerpt: 'Discover the latest AI integrations in BIM workflows and their impact on architectural efficiency.',
-    imageUrl: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&h=800&fit=crop',
-    category: 'BIM Technology',
-    publishDate: '2024-01-12',
-    readTime: '12 min read',
-    author: 'Marcus Rodriguez'
-  },
-  {
-    id: '3',
-    title: 'Minimalist Marvels: Scandinavian Design Principles in Modern Architecture',
-    excerpt: 'An in-depth look at how Nordic design philosophy continues to influence contemporary buildings.',
-    imageUrl: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&h=800&fit=crop',
-    category: 'Design Trends',
-    publishDate: '2024-01-10',
-    readTime: '6 min read',
-    author: 'Elena Johansson'
-  }
-];
+// Helper function to get category from tags or article_type
+const getCategory = (tags: string[] | null, articleType: string | null): string => {
+  if (tags && tags.length > 0) return tags[0];
+  if (articleType) return articleType;
+  return 'Article';
+};
+
+// Helper function to calculate read time
+const calculateReadTime = (content: string | null): string => {
+  if (!content) return '5 min read';
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/).length;
+  const readTime = Math.ceil(wordCount / wordsPerMinute);
+  return `${readTime} min read`;
+};
 
 export const FeaturedCarousel = () => {
+  const { data: articles, isLoading, error } = useBannerFeaturedArticles();
   const [currentSlide, setCurrentSlide] = React.useState(0);
 
+  // Auto-scroll every 30 seconds
+  useEffect(() => {
+    if (!articles || articles.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % articles.length);
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [articles]);
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % featuredArticles.length);
+    if (!articles) return;
+    setCurrentSlide((prev) => (prev + 1) % articles.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + featuredArticles.length) % featuredArticles.length);
+    if (!articles) return;
+    setCurrentSlide((prev) => (prev - 1 + articles.length) % articles.length);
   };
 
-  const currentArticle = featuredArticles[currentSlide];
+  if (isLoading) {
+    return (
+      <section className="relative h-[75vh] min-h-[650px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10 animate-pulse">
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="text-muted-foreground">Loading featured articles...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !articles || articles.length === 0) {
+    return (
+      <section className="relative h-[75vh] min-h-[650px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10">
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="text-muted-foreground">No featured articles available.</div>
+        </div>
+      </section>
+    );
+  }
+
+  const currentArticle = articles[currentSlide];
 
   return (
     <section className="relative h-[75vh] min-h-[650px] overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105"
-        style={{ backgroundImage: `url(${currentArticle.imageUrl})` }}
+        style={{ backgroundImage: `url(${currentArticle.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop'})` }}
       >
         <div className="overlay-gradient" />
       </div>
@@ -78,20 +96,25 @@ export const FeaturedCarousel = () => {
           <div className="max-w-3xl">
             <div className="flex items-center space-x-4 mb-6 animate-slide-in-up">
               <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-xl shadow-lg">
-                {currentArticle.category}
+                {getCategory(currentArticle.tags, currentArticle.article_type)}
               </span>
               <div className="flex items-center space-x-2 text-white/70">
                 <Calendar className="h-4 w-4" />
-                <span className="small-text">{new Date(currentArticle.publishDate).toLocaleDateString()}</span>
+                <span className="small-text">
+                  {currentArticle['Published Date'] 
+                    ? new Date(currentArticle['Published Date']).toLocaleDateString()
+                    : 'Recent'
+                  }
+                </span>
               </div>
             </div>
             
             <h1 className="hero-text text-white mb-6 animate-slide-in-up drop-shadow-2xl">
-              {currentArticle.title}
+              {currentArticle.Title}
             </h1>
             
             <p className="subtitle text-white/90 mb-10 animate-fade-in-scale">
-              {currentArticle.excerpt}
+              {getExcerpt(currentArticle.Content, currentArticle.excerpt)}
             </p>
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-fade-in-scale">
@@ -102,9 +125,9 @@ export const FeaturedCarousel = () => {
               </Link>
               <div className="flex items-center space-x-3 text-white/70">
                 <Clock className="h-4 w-4" />
-                <span className="small-text">{currentArticle.readTime}</span>
+                <span className="small-text">{calculateReadTime(currentArticle.Content)}</span>
                 <span className="small-text">•</span>
-                <span className="small-text">by {currentArticle.author}</span>
+                <span className="small-text">by {currentArticle.Author || 'Anonymous'}</span>
               </div>
             </div>
           </div>
@@ -133,7 +156,7 @@ export const FeaturedCarousel = () => {
 
       {/* Slide Indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
-        {featuredArticles.map((_, index) => (
+        {articles.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}

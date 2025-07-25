@@ -47,3 +47,21 @@ export const useFeaturedArticles = () => {
     },
   });
 };
+
+export const useBannerFeaturedArticles = () => {
+  return useQuery({
+    queryKey: ['banner-featured-articles'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('Articles')
+        .select('*')
+        .eq('is_published', true)
+        .eq('featured_in_banner', true)
+        .order('Published Date', { ascending: false })
+        .limit(3);
+
+      if (error) throw error;
+      return data as Article[];
+    },
+  });
+};
