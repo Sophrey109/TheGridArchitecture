@@ -48,12 +48,12 @@ export const JobCard = ({ job }: JobCardProps) => {
         </Link>
         
         {job['External Link'] && (
-          <div className="flex items-center p-6">
+          <div className="flex items-center justify-center p-4 pt-0">
             <a
               href={job['External Link']}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-lg hover:from-primary/90 hover:to-primary hover:scale-105 transition-all duration-200 text-sm font-semibold whitespace-nowrap shadow-lg hover:shadow-xl"
+              className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-lg hover:from-primary/90 hover:to-primary hover:scale-105 transition-all duration-200 text-sm font-semibold whitespace-nowrap shadow-md hover:shadow-lg"
             >
               Apply Now
             </a>
