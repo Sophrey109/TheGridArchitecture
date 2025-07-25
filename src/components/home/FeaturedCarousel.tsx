@@ -135,12 +135,12 @@ export const FeaturedCarousel = () => {
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 right-8 flex space-x-3">
+      <div className="absolute bottom-8 right-8 flex space-x-3 z-20">
         <Button
           variant="glass"
           size="icon"
           onClick={prevSlide}
-          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl"
+          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl cursor-pointer"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -148,19 +148,19 @@ export const FeaturedCarousel = () => {
           variant="glass"
           size="icon"
           onClick={nextSlide}
-          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl"
+          className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:scale-110 shadow-xl rounded-xl cursor-pointer"
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
         {articles.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
               index === currentSlide 
                 ? 'bg-white w-8 shadow-lg' 
                 : 'bg-white/40 hover:bg-white/60'
