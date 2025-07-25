@@ -103,6 +103,7 @@ export type Database = {
       "Job Adverts": {
         Row: {
           Company: string | null
+          currency: string | null
           "Date Posted": string | null
           deadline: string | null
           Description: string | null
@@ -116,6 +117,7 @@ export type Database = {
         }
         Insert: {
           Company?: string | null
+          currency?: string | null
           "Date Posted"?: string | null
           deadline?: string | null
           Description?: string | null
@@ -129,6 +131,7 @@ export type Database = {
         }
         Update: {
           Company?: string | null
+          currency?: string | null
           "Date Posted"?: string | null
           deadline?: string | null
           Description?: string | null
