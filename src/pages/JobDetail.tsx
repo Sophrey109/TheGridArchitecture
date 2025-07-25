@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Job } from '@/hooks/useJobs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { createSafeHTML } from '@/lib/sanitize';
 
 const JobDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -148,7 +149,7 @@ const JobDetail = () => {
                   {job.Description ? (
                     <div 
                       className="space-y-4 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-foreground [&_h2]:mt-6 [&_h2]:mb-3 [&_p]:text-muted-foreground [&_p]:mb-4 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-outside [&_ul]:space-y-2 [&_ul]:mb-4 [&_ul]:pl-6 [&_li]:text-muted-foreground [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:space-y-2 [&_ol]:mb-4 [&_ol]:pl-6"
-                      dangerouslySetInnerHTML={{ __html: job.Description }}
+                      dangerouslySetInnerHTML={createSafeHTML(job.Description || '')}
                     />
                   ) : (
                     <p className="text-muted-foreground italic">No description provided.</p>

@@ -8,6 +8,7 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
 import { Layout } from '@/components/Layout';
+import { createSafeHTML } from '@/lib/sanitize';
 
 interface TableOfContentsItem {
   id: string;
@@ -281,7 +282,7 @@ const ArticleDetail = () => {
               {/* Article content */}
               <div 
                 className="article-content"
-                dangerouslySetInnerHTML={{ __html: processedContent || article.Content || '' }}
+                dangerouslySetInnerHTML={createSafeHTML(processedContent || article.Content || '')}
               />
             </div>
 
