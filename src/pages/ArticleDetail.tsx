@@ -57,6 +57,13 @@ const ArticleDetail = () => {
     let result = html
       // First fix the specific issue with extra parentheses in URLs
       .replace(/src="([^"]+)\)"/g, 'src="$1"')
+      // Fix double slashes in storage URLs
+      .replace(/\/storage\/v1\/object\/public\/article-images\/\/([^"]*)/g, '/storage/v1/object/public/article-images/$1')
+      // Fix spaces in image URLs by encoding them
+      .replace(/src="([^"]*)\s+([^"]*\.(?:jpg|jpeg|png|gif|webp|svg))"/gi, (match, beforeSpace, afterSpace) => {
+        const fullUrl = beforeSpace + '%20' + afterSpace;
+        return `src="${fullUrl}"`;
+      })
       // Fix missing alt attributes in broken img tags
       .replace(/alt="([^"]*)" Breuer Building/g, 'alt="$1"')
       // Convert h1 in content to h2 to maintain hierarchy
