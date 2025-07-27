@@ -11,7 +11,6 @@ export const Footer = () => {
       title: 'Content',
       links: [
         { name: 'Articles', path: '/articles' },
-        { name: 'Learning Resources', path: '/learning' },
       ],
     },
     {
