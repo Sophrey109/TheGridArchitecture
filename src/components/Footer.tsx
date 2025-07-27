@@ -12,16 +12,12 @@ export const Footer = () => {
       links: [
         { name: 'Articles', path: '/articles' },
         { name: 'Learning Resources', path: '/learning' },
-        { name: 'Competitions', path: '/competitions' },
-        { name: 'Exhibitions', path: '/exhibitions' },
       ],
     },
     {
       title: 'Opportunities',
       links: [
         { name: 'Job Board', path: '/jobs' },
-        { name: 'Freelance Work', path: '/jobs?type=freelance' },
-        { name: 'Internships', path: '/jobs?type=internship' },
         { name: 'Submit Job', path: '/contact?type=job' },
       ],
     },
