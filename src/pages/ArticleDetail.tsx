@@ -50,7 +50,7 @@ const ArticleDetail = () => {
     fetchArticle();
   }, [id]);
 
-  // Function to clean up malformed HTML
+  // Function to clean up malformed HTML while preserving content
   const cleanupHTML = (html: string): string => {
     console.log('Original HTML sample:', html.substring(0, 1000));
     
@@ -59,20 +59,16 @@ const ArticleDetail = () => {
       .replace(/src="([^"]+)\)"/g, 'src="$1"')
       // Fix missing alt attributes in broken img tags
       .replace(/alt="([^"]*)" Breuer Building/g, 'alt="$1"')
-      // Remove any malformed HTML structure elements that might interfere
-      .replace(/<\/?article[^>]*>/g, '')
-      .replace(/<\/?header[^>]*>/g, '')
-      .replace(/<\/?section[^>]*>/g, '')
-      .replace(/<\/?main[^>]*>/g, '')
-      .replace(/<\/?body[^>]*>/g, '')
-      .replace(/<\/?html[^>]*>/g, '')
-      .replace(/<head>[\s\S]*?<\/head>/g, '')
-      .replace(/<\/?footer[^>]*>/g, '')
       // Convert h1 in content to h2 to maintain hierarchy
       .replace(/<h1([^>]*)>/g, '<h2$1>')
       .replace(/<\/h1>/g, '</h2>')
       // Remove markdown code blocks that shouldn't be there
       .replace(/```/g, '')
+      // Clean up DOCTYPE and html structure while preserving content
+      .replace(/<!DOCTYPE[^>]*>/gi, '')
+      .replace(/<\/?html[^>]*>/gi, '')
+      .replace(/<head>[\s\S]*?<\/head>/gi, '')
+      .replace(/<\/?body[^>]*>/gi, '')
       // Ensure all img tags are properly formed and closed
       .replace(/<img([^>]*?)(?:\s*\/?>|>)/g, '<img$1 style="max-width: 100%; height: auto; margin: 1em 0; border-radius: 8px; display: block;" />');
     

@@ -15,7 +15,7 @@ export const sanitizeHTML = (html: string): string => {
       'a', 'img',
       'blockquote', 'pre', 'code',
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
-      'hr'
+      'hr', 'article', 'section', 'main', 'figure', 'figcaption'
     ],
     ALLOWED_ATTR: [
       'href', 'title', 'alt', 'src', 'width', 'height',
@@ -25,8 +25,8 @@ export const sanitizeHTML = (html: string): string => {
     // Remove script tags and on* event handlers
     FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit'],
-    // Keep relative URLs but ensure they're safe
-    KEEP_CONTENT: false,
+    // Keep content when removing tags
+    KEEP_CONTENT: true,
     // Prevent DOM clobbering
     SANITIZE_DOM: true,
     // Allow data URIs for images (base64)
