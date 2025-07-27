@@ -48,7 +48,7 @@ export const Layout = ({ children }: LayoutProps) => {
       )}
       <div className={`transition-all duration-1000 ease-out ${showSplash ? 'opacity-0 pointer-events-none translate-y-2' : 'opacity-100 translate-y-0'}`}>
         <Navigation />
-        <main className="pt-20">
+        <main className="pt-16">
           {children}
         </main>
         <Footer />
