@@ -115,10 +115,7 @@ export const CategoriesSection = () => {
                     {category.description}
                   </p>
                   
-                  <div className="flex items-center justify-between">
-                    <span className="caption-text text-primary font-medium">
-                      {category.count} articles
-                    </span>
+                  <div className="flex items-center justify-end">
                     <span className="text-primary">→</span>
                   </div>
                 </CardContent>
