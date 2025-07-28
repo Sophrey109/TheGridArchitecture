@@ -42,9 +42,9 @@ const getTypeLabel = (type: string) => {
 };
 
 export const ArticleCard = ({ id, title, excerpt, type, types, date, imageUrl, tags, onTagClick, onTypeClick }: ArticleCardProps) => {
-  // Get all types to display (prioritize multiple types, fallback to single type)
-  const displayTypes = types && types.length > 0 ? types : [type];
-  const primaryType = displayTypes[0]; // Use first type for fallback image
+  // Use the main type as primary, and types array as subcategories
+  const primaryType = type;
+  const subcategories = types && types.length > 0 ? types : [];
   
   // Fallback images for different article types
   const getFallbackImage = (type: string) => {
@@ -71,19 +71,34 @@ export const ArticleCard = ({ id, title, excerpt, type, types, date, imageUrl, t
         </div>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="flex flex-wrap gap-1">
-              {displayTypes.map((typeItem, index) => (
+            <div className="flex flex-wrap gap-1 items-center">
+              {/* Primary type - larger badge */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onTypeClick?.(primaryType);
+                }}
+                className="inline-block"
+              >
+                <Badge variant={getTypeVariant(primaryType)} className="text-sm animate-scale-in hover:opacity-80 transition-opacity cursor-pointer">
+                  {getTypeLabel(primaryType)}
+                </Badge>
+              </button>
+              
+              {/* Subcategories - smaller badges */}
+              {subcategories.map((subcategory, index) => (
                 <button
                   key={index}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    onTypeClick?.(typeItem);
+                    onTypeClick?.(subcategory);
                   }}
                   className="inline-block"
                 >
-                  <Badge variant={getTypeVariant(typeItem)} className="text-xs animate-scale-in hover:opacity-80 transition-opacity cursor-pointer">
-                    {getTypeLabel(typeItem)}
+                  <Badge variant="outline" className="text-xs animate-scale-in hover:opacity-80 transition-opacity cursor-pointer text-muted-foreground">
+                    {getTypeLabel(subcategory)}
                   </Badge>
                 </button>
               ))}
