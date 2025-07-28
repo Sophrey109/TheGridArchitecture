@@ -84,7 +84,7 @@ export const FeaturedCarousel = () => {
     <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-top transition-all duration-700 scale-105"
+        className="absolute inset-0 bg-cover bg-[center_30%] transition-all duration-700 scale-105"
         style={{ backgroundImage: `url(${currentArticle.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop'})` }}
       >
         <div className="overlay-gradient" />
