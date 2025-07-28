@@ -118,14 +118,24 @@ export const ReadNextSection: React.FC<ReadNextSectionProps> = ({
                 </div>
               )}
               
-               {/* Article Type Badge */}
-               <div className="flex items-center gap-2 mb-2">
+               {/* Article Type Badges */}
+               <div className="flex flex-wrap items-center gap-2 mb-2">
+                 {/* Primary type */}
                  <Badge 
                    variant={getTypeVariant(article.article_type || article.Title, article.Content)}
                    className="text-xs"
                  >
                    {article.article_type || getTypeLabel(article.Title, article.Content)}
                  </Badge>
+                 
+                 {/* Subcategories */}
+                 {article.article_types && article.article_types.length > 0 && (
+                   article.article_types.map((subcategory, index) => (
+                     <Badge key={index} variant="outline" className="text-xs text-muted-foreground">
+                       {subcategory}
+                     </Badge>
+                   ))
+                 )}
                </div>
 
               {/* Article Title */}

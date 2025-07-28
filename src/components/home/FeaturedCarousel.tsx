@@ -24,6 +24,16 @@ const getCategory = (tags: string[] | null, articleType: string | null): string 
   return 'Article';
 };
 
+// Helper function to get type label
+const getTypeLabel = (type: string) => {
+  switch (type) {
+    case 'case-studies':
+      return 'Case Studies';
+    default:
+      return type.charAt(0).toUpperCase() + type.slice(1);
+  }
+};
+
 // Helper function to calculate read time
 const calculateReadTime = (content: string | null): string => {
   if (!content) return '5 min read';
@@ -94,10 +104,21 @@ export const FeaturedCarousel = () => {
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
-            <div className="flex items-center space-x-4 mb-6 animate-slide-in-up">
+            <div className="flex items-center flex-wrap gap-3 mb-6 animate-slide-in-up">
+              {/* Primary type */}
               <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-xl shadow-lg">
-                {getCategory(currentArticle.tags, currentArticle.article_type)}
+                {getTypeLabel(currentArticle.article_type || 'Article')}
               </span>
+              
+              {/* Subcategories */}
+              {currentArticle.article_types && currentArticle.article_types.length > 0 && (
+                currentArticle.article_types.map((subcategory, index) => (
+                  <span key={index} className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-lg border border-white/30">
+                    {getTypeLabel(subcategory)}
+                  </span>
+                ))
+              )}
+              
               <div className="flex items-center space-x-2 text-white/70">
                 <Calendar className="h-3 w-3" />
                 <span className="text-xs">
