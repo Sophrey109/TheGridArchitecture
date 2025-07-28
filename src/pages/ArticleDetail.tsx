@@ -123,26 +123,41 @@ const ArticleDetail = () => {
     }
   };
 
-  const getTypeVariant = (title: string, content: string | null) => {
-    const lowerTitle = title.toLowerCase();
-    const lowerContent = content?.toLowerCase() || '';
-    
-    if (lowerTitle.includes('opinion') || lowerContent.includes('opinion')) return 'default';
-    if (lowerTitle.includes('research') || lowerContent.includes('research')) return 'secondary';
-    if (lowerTitle.includes('news') || lowerContent.includes('news')) return 'destructive';
-    if (lowerTitle.includes('case') || lowerContent.includes('case study')) return 'outline';
-    return 'default';
+  // Helper functions for article types (matching ArticleCard)
+  const getTypeVariant = (type: string) => {
+    switch (type) {
+      case 'opinion':
+        return 'default';
+      case 'research':
+        return 'secondary';
+      case 'news':
+        return 'destructive';
+      case 'case-studies':
+        return 'outline';
+      default:
+        return 'default';
+    }
   };
 
-  const getTypeLabel = (title: string, content: string | null) => {
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'case-studies':
+        return 'Case Studies';
+      default:
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+  };
+
+  // Fallback type detection from content (for backward compatibility)
+  const getTypeFromContent = (title: string, content: string | null) => {
     const lowerTitle = title.toLowerCase();
     const lowerContent = content?.toLowerCase() || '';
     
-    if (lowerTitle.includes('opinion') || lowerContent.includes('opinion')) return 'Opinion';
-    if (lowerTitle.includes('research') || lowerContent.includes('research')) return 'Research';
-    if (lowerTitle.includes('news') || lowerContent.includes('news')) return 'News';
-    if (lowerTitle.includes('case') || lowerContent.includes('case study')) return 'Case Studies';
-    return 'Article';
+    if (lowerTitle.includes('opinion') || lowerContent.includes('opinion')) return 'opinion';
+    if (lowerTitle.includes('research') || lowerContent.includes('research')) return 'research';
+    if (lowerTitle.includes('news') || lowerContent.includes('news')) return 'news';
+    if (lowerTitle.includes('case') || lowerContent.includes('case study')) return 'case-studies';
+    return 'research';
   };
 
   const formatDate = (dateString: string | null): string => {
@@ -243,11 +258,19 @@ const ArticleDetail = () => {
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <Link to={`/articles?type=${(article.article_type || getTypeLabel(article.Title, article.Content)).toLowerCase().replace(' ', '-')}`}>
-                    <Badge variant={getTypeVariant(article.article_type || article.Title, article.Content)} className="cursor-pointer hover:opacity-80 transition-opacity">
-                      {article.article_type || getTypeLabel(article.Title, article.Content)}
-                    </Badge>
-                  </Link>
+                  {/* Display multiple article types or fallback to single type */}
+                  <div className="flex flex-wrap gap-2">
+                    {(article.article_types && article.article_types.length > 0 
+                      ? article.article_types 
+                      : [article.article_type || getTypeFromContent(article.Title, article.Content)]
+                    ).map((typeItem, index) => (
+                      <Link key={index} to={`/articles?type=${typeItem.toLowerCase().replace(' ', '-')}`}>
+                        <Badge variant={getTypeVariant(typeItem)} className="cursor-pointer hover:opacity-80 transition-opacity">
+                          {getTypeLabel(typeItem)}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar className="mr-1 h-4 w-4" />
                     {formatDate(article['Published Date'])}

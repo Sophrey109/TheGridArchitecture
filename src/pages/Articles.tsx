@@ -172,6 +172,7 @@ const Articles = () => {
                     title={article.Title}
                     excerpt={getExcerpt(article.excerpt, article.Content)}
                     type={getArticleType(article)}
+                    types={article.article_types}
                     date={formatDate(article['Published Date'])}
                     imageUrl={article.image_url}
                     tags={article.tags}

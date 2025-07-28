@@ -8,7 +8,8 @@ interface ArticleCardProps {
   id: string;
   title: string;
   excerpt: string;
-  type: string; // Changed to accept any string type from database
+  type: string; // Single article type (for backward compatibility)
+  types?: string[]; // Multiple article types (new field)
   date: string;
   imageUrl?: string;
   tags?: string[];
@@ -40,7 +41,11 @@ const getTypeLabel = (type: string) => {
   }
 };
 
-export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, onTagClick, onTypeClick }: ArticleCardProps) => {
+export const ArticleCard = ({ id, title, excerpt, type, types, date, imageUrl, tags, onTagClick, onTypeClick }: ArticleCardProps) => {
+  // Get all types to display (prioritize multiple types, fallback to single type)
+  const displayTypes = types && types.length > 0 ? types : [type];
+  const primaryType = displayTypes[0]; // Use first type for fallback image
+  
   // Fallback images for different article types
   const getFallbackImage = (type: string) => {
     const fallbacks = {
@@ -52,7 +57,7 @@ export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, on
     return fallbacks[type as keyof typeof fallbacks] || fallbacks.research;
   };
 
-  const displayImage = imageUrl || getFallbackImage(type);
+  const displayImage = imageUrl || getFallbackImage(primaryType);
 
   return (
     <Link to={`/articles/${id}`}>
@@ -66,18 +71,23 @@ export const ArticleCard = ({ id, title, excerpt, type, date, imageUrl, tags, on
         </div>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onTypeClick?.(type);
-              }}
-              className="inline-block"
-            >
-              <Badge variant={getTypeVariant(type)} className="text-xs animate-scale-in hover:opacity-80 transition-opacity cursor-pointer">
-                {getTypeLabel(type)}
-              </Badge>
-            </button>
+            <div className="flex flex-wrap gap-1">
+              {displayTypes.map((typeItem, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onTypeClick?.(typeItem);
+                  }}
+                  className="inline-block"
+                >
+                  <Badge variant={getTypeVariant(typeItem)} className="text-xs animate-scale-in hover:opacity-80 transition-opacity cursor-pointer">
+                    {getTypeLabel(typeItem)}
+                  </Badge>
+                </button>
+              ))}
+            </div>
             <span className="caption-text text-xs text-muted-foreground">
               {date}
             </span>
