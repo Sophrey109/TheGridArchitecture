@@ -60,7 +60,7 @@ export const FeaturedCarousel = () => {
 
   if (isLoading) {
     return (
-      <section className="relative h-[75vh] min-h-[650px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10 animate-pulse">
+      <section className="relative h-[50vh] min-h-[400px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10 animate-pulse">
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-muted-foreground">Loading featured articles...</div>
         </div>
@@ -70,7 +70,7 @@ export const FeaturedCarousel = () => {
 
   if (error || !articles || articles.length === 0) {
     return (
-      <section className="relative h-[75vh] min-h-[650px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10">
+      <section className="relative h-[50vh] min-h-[400px] overflow-hidden bg-gradient-to-r from-primary/20 to-primary/10">
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-muted-foreground">No featured articles available.</div>
         </div>
@@ -81,7 +81,7 @@ export const FeaturedCarousel = () => {
   const currentArticle = articles[currentSlide];
 
   return (
-    <section className="relative h-[75vh] min-h-[650px] overflow-hidden">
+    <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105"
