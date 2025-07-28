@@ -28,7 +28,7 @@ const categories: Category[] = [
     description: 'Latest projects and architectural innovations',
     icon: Building2,
     count: 245,
-    link: '/articles?category=architecture',
+    link: '/search?q=architecture',
     color: 'bg-blue-100 text-blue-600'
   },
   {
@@ -36,7 +36,7 @@ const categories: Category[] = [
     description: 'Building Information Modeling tools and workflows',
     icon: Laptop,
     count: 128,
-    link: '/articles?category=bim',
+    link: '/search?q=BIM',
     color: 'bg-green-100 text-green-600'
   },
   {
@@ -44,7 +44,7 @@ const categories: Category[] = [
     description: 'Creative solutions and design thinking',
     icon: Lightbulb,
     count: 189,
-    link: '/articles?category=innovation',
+    link: '/search?q=design innovation',
     color: 'bg-yellow-100 text-yellow-600'
   },
   {
@@ -68,7 +68,7 @@ const categories: Category[] = [
     description: 'Design competitions and awards',
     icon: Trophy,
     count: 34,
-    link: '/competitions',
+    link: '/search?q=competitions',
     color: 'bg-orange-100 text-orange-600'
   },
   {
@@ -76,7 +76,7 @@ const categories: Category[] = [
     description: 'Shows, exhibitions, and cultural events',
     icon: Calendar,
     count: 67,
-    link: '/exhibitions',
+    link: '/search?q=exhibitions',
     color: 'bg-teal-100 text-teal-600'
   },
   {
@@ -84,7 +84,7 @@ const categories: Category[] = [
     description: 'Expert interviews and thought leadership',
     icon: Users,
     count: 112,
-    link: '/articles?category=insights',
+    link: '/search?q=industry insights',
     color: 'bg-indigo-100 text-indigo-600'
   }
 ];
