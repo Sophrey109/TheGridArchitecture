@@ -115,9 +115,6 @@ export const CategoriesSection = () => {
                     {category.description}
                   </p>
                   
-                  <div className="flex items-center justify-end">
-                    <span className="text-primary">→</span>
-                  </div>
                 </CardContent>
               </Card>
             </Link>
