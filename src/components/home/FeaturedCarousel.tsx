@@ -84,7 +84,7 @@ export const FeaturedCarousel = () => {
     <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105"
+        className="absolute inset-0 bg-cover bg-top transition-all duration-700 scale-105"
         style={{ backgroundImage: `url(${currentArticle.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop'})` }}
       >
         <div className="overlay-gradient" />
@@ -99,8 +99,8 @@ export const FeaturedCarousel = () => {
                 {getCategory(currentArticle.tags, currentArticle.article_type)}
               </span>
               <div className="flex items-center space-x-2 text-white/70">
-                <Calendar className="h-4 w-4" />
-                <span className="small-text">
+                <Calendar className="h-3 w-3" />
+                <span className="text-xs">
                   {currentArticle['Published Date'] 
                     ? new Date(currentArticle['Published Date']).toLocaleDateString()
                     : 'Recent'
@@ -109,25 +109,25 @@ export const FeaturedCarousel = () => {
               </div>
             </div>
             
-            <h1 className="hero-text text-white mb-6 animate-slide-in-up drop-shadow-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-up drop-shadow-2xl">
               {currentArticle.Title}
             </h1>
             
-            <p className="subtitle text-white/90 mb-10 animate-fade-in-scale">
+            <p className="text-base md:text-lg text-white/90 mb-6 animate-fade-in-scale max-w-2xl">
               {getExcerpt(currentArticle.Content, currentArticle.excerpt)}
             </p>
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-fade-in-scale">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 animate-fade-in-scale">
               <Link to={`/articles/${currentArticle.id}`}>
-                <Button variant="glass" size="lg" className="bg-white/20 text-white border-white/30 hover:bg-white/30 hover:scale-105 shadow-xl">
+                <Button variant="glass" size="default" className="bg-white/20 text-white border-white/30 hover:bg-white/30 hover:scale-105 shadow-xl">
                   Read Full Article
                 </Button>
               </Link>
               <div className="flex items-center space-x-3 text-white/70">
-                <Clock className="h-4 w-4" />
-                <span className="small-text">{calculateReadTime(currentArticle.Content)}</span>
-                <span className="small-text">•</span>
-                <span className="small-text">by {currentArticle.Author || 'Anonymous'}</span>
+                <Clock className="h-3 w-3" />
+                <span className="text-xs">{calculateReadTime(currentArticle.Content)}</span>
+                <span className="text-xs">•</span>
+                <span className="text-xs">by {currentArticle.Author || 'Anonymous'}</span>
               </div>
             </div>
           </div>
