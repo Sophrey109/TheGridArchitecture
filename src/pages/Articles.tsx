@@ -9,8 +9,28 @@ import { useArticles } from '@/hooks/useArticles';
 const getExcerpt = (excerpt: string | null, content: string | null): string => {
   if (excerpt) return excerpt;
   if (!content) return "No content available.";
-  const plainText = content.replace(/<[^>]*>/g, '');
-  return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
+  
+  // Better HTML content processing
+  let cleanText = content;
+  
+  // Remove HTML DOCTYPE, head, and style sections
+  cleanText = cleanText.replace(/<!DOCTYPE[^>]*>/gi, '');
+  cleanText = cleanText.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
+  cleanText = cleanText.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+  cleanText = cleanText.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  
+  // Remove all HTML tags
+  cleanText = cleanText.replace(/<[^>]*>/g, '');
+  
+  // Clean up whitespace and decode HTML entities
+  cleanText = cleanText.replace(/\s+/g, ' ').trim();
+  cleanText = cleanText.replace(/&nbsp;/g, ' ');
+  cleanText = cleanText.replace(/&amp;/g, '&');
+  cleanText = cleanText.replace(/&lt;/g, '<');
+  cleanText = cleanText.replace(/&gt;/g, '>');
+  
+  // Return truncated text
+  return cleanText.length > 150 ? cleanText.substring(0, 150) + '...' : cleanText;
 };
 
 // Helper function to get article type, fallback to determined type if not set
