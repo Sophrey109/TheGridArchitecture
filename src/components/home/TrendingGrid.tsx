@@ -142,12 +142,12 @@ export const TrendingGrid = () => {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium">
+                <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full">
                   {article.article_type || 'Article'}
                 </span>
                 {article.article_types && article.article_types.length > 0 && (
                   article.article_types.map((subcategory, index) => (
-                    <span key={index} className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20">
+                    <span key={index} className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full">
                       {subcategory}
                     </span>
                   ))

@@ -106,14 +106,14 @@ export const FeaturedCarousel = () => {
           <div className="max-w-3xl">
             <div className="flex items-center flex-wrap gap-3 mb-6 animate-slide-in-up">
               {/* Primary type */}
-              <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-xl shadow-lg">
+              <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg">
                 {getTypeLabel(currentArticle.article_type || 'Article')}
               </span>
               
               {/* Subcategories */}
               {currentArticle.article_types && currentArticle.article_types.length > 0 && (
                 currentArticle.article_types.map((subcategory, index) => (
-                  <span key={index} className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-lg border border-white/30">
+                  <span key={index} className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30">
                     {getTypeLabel(subcategory)}
                   </span>
                 ))
