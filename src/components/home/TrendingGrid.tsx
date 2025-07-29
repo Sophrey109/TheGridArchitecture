@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useFeaturedArticles } from '@/hooks/useArticles';
@@ -28,6 +28,7 @@ const formatDate = (dateString: string | null): string => {
 
 export const TrendingGrid = () => {
   const { data: articles, isLoading, error, refetch } = useFeaturedArticles();
+  const navigate = useNavigate();
 
   // Set up real-time updates
   useEffect(() => {
@@ -142,14 +143,29 @@ export const TrendingGrid = () => {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                <span className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate(`/articles?type=${article.article_type || 'Article'}`);
+                  }}
+                  className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full hover:opacity-90 transition-opacity cursor-pointer"
+                >
                   {article.article_type || 'Article'}
-                </span>
+                </button>
                 {article.article_types && article.article_types.length > 0 && (
                   article.article_types.map((subcategory, index) => (
-                    <span key={index} className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full">
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(`/articles?type=${subcategory}`);
+                      }}
+                      className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full hover:bg-white transition-colors cursor-pointer"
+                    >
                       {subcategory}
-                    </span>
+                    </button>
                   ))
                 )}
               </div>

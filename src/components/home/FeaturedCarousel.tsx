@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -46,6 +46,7 @@ const calculateReadTime = (content: string | null): string => {
 export const FeaturedCarousel = () => {
   const { data: articles, isLoading, error } = useBannerFeaturedArticles();
   const [currentSlide, setCurrentSlide] = React.useState(0);
+  const navigate = useNavigate();
 
   // Auto-scroll every 30 seconds
   useEffect(() => {
@@ -106,16 +107,23 @@ export const FeaturedCarousel = () => {
           <div className="max-w-3xl">
             <div className="flex items-center flex-wrap gap-3 mb-6 animate-slide-in-up">
               {/* Primary type */}
-              <span className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg">
+              <button
+                onClick={() => navigate(`/articles?type=${currentArticle.article_type || 'Article'}`)}
+                className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
+              >
                 {getTypeLabel(currentArticle.article_type || 'Article')}
-              </span>
+              </button>
               
               {/* Subcategories */}
               {currentArticle.article_types && currentArticle.article_types.length > 0 && (
                 currentArticle.article_types.map((subcategory, index) => (
-                  <span key={index} className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30">
+                  <button
+                    key={index}
+                    onClick={() => navigate(`/articles?type=${subcategory}`)}
+                    className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30 hover:bg-white/30 transition-colors cursor-pointer"
+                  >
                     {getTypeLabel(subcategory)}
-                  </span>
+                  </button>
                 ))
               )}
               

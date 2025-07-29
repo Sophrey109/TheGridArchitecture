@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { FilterBar } from '@/components/articles/FilterBar';
 import { ArticleCard } from '@/components/articles/ArticleCard';
@@ -50,10 +51,21 @@ const formatDate = (dateString: string | null): string => {
 };
 
 const Articles = () => {
+  const [searchParams] = useSearchParams();
   const [selectedType, setSelectedType] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const { data: articles, isLoading, error } = useArticles();
+
+  // Handle URL parameters for filtering
+  useEffect(() => {
+    const typeParam = searchParams.get('type');
+    if (typeParam) {
+      setSelectedType(typeParam);
+      setSelectedYear('all');
+      setSelectedTag('');
+    }
+  }, [searchParams]);
 
   const handleClearFilters = () => {
     setSelectedType('all');
@@ -80,7 +92,10 @@ const Articles = () => {
       const articleType = getArticleType(article);
       const formattedDate = formatDate(article['Published Date']);
       
-      const typeMatch = selectedType === 'all' || articleType === selectedType;
+      // Check both primary type and subcategories
+      const typeMatch = selectedType === 'all' || 
+        articleType === selectedType || 
+        (article.article_types && article.article_types.includes(selectedType));
       const yearMatch = selectedYear === 'all' || formattedDate.includes(selectedYear);
       const tagMatch = !selectedTag || (article.tags && article.tags.includes(selectedTag));
       
