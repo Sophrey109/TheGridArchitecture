@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Mail, Instagram, icons } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useSocialLinks } from '@/hooks/useSocialLinks';
 
 export const Footer = () => {
+  const { data: socialLinks, isLoading } = useSocialLinks();
   const footerSections = [
     {
       title: 'Content',
@@ -92,18 +94,23 @@ export const Footer = () => {
           
           {/* Social Links */}
           <div className="flex space-x-2">
-            <Button variant="glass" size="icon" className="hover:text-primary transition-all duration-200 hover:scale-110 rounded-xl">
-              <Twitter className="h-4 w-4" />
-            </Button>
-            <Button variant="glass" size="icon" className="hover:text-primary transition-all duration-200 hover:scale-110 rounded-xl">
-              <Linkedin className="h-4 w-4" />
-            </Button>
-            <Button variant="glass" size="icon" className="hover:text-primary transition-all duration-200 hover:scale-110 rounded-xl">
-              <Instagram className="h-4 w-4" />
-            </Button>
-            <Button variant="glass" size="icon" className="hover:text-primary transition-all duration-200 hover:scale-110 rounded-xl">
-              <Mail className="h-4 w-4" />
-            </Button>
+            {!isLoading && socialLinks?.map((socialLink) => {
+              // Get the icon component dynamically
+              const IconComponent = icons[socialLink.icon as keyof typeof icons] || Mail;
+              
+              return (
+                <Button 
+                  key={socialLink.id}
+                  variant="glass" 
+                  size="icon" 
+                  className="hover:text-primary transition-all duration-200 hover:scale-110 rounded-xl"
+                  onClick={() => socialLink.url && window.open(socialLink.url, '_blank')}
+                  disabled={!socialLink.url}
+                >
+                  <IconComponent className="h-4 w-4" />
+                </Button>
+              );
+            })}
           </div>
         </div>
       </div>
