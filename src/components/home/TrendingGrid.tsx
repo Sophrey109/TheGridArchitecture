@@ -79,9 +79,7 @@ export const TrendingGrid = () => {
         </div>
         <div className="editorial-grid">
           {[...Array(6)].map((_, index) => (
-            <Card key={index} className={`article-card overflow-hidden ${
-              index === 0 ? 'md:col-span-2 md:row-span-2' : ''
-            }`}>
+            <Card key={index} className="article-card overflow-hidden">
               <div className="relative aspect-[4/3] bg-muted animate-pulse" />
               <CardContent className="p-6">
                 <div className="h-6 bg-muted rounded animate-pulse mb-3" />
@@ -133,9 +131,7 @@ export const TrendingGrid = () => {
 
       <div className="editorial-grid">
         {recentArticles.map((article, index) => (
-          <Card key={article.id} className={`article-card group overflow-hidden ${
-            index === 0 ? 'md:col-span-2 md:row-span-2' : ''
-          }`}>
+          <Card key={article.id} className="article-card group overflow-hidden">
             <div className="relative aspect-[4/3] overflow-hidden">
               <img
                 src={article.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop'}
@@ -181,7 +177,7 @@ export const TrendingGrid = () => {
             
             <CardContent className="p-6">
               <Link to={`/articles/${article.id}`} className="group">
-                <h3 className={`${index === 0 ? 'article-title' : 'section-title'} mb-3 group-hover:text-primary transition-colors`}>
+                <h3 className="section-title mb-3 group-hover:text-primary transition-colors">
                   {article.Title}
                 </h3>
               </Link>
