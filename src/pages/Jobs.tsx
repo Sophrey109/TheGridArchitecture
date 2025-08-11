@@ -8,19 +8,15 @@ import { Loader2 } from 'lucide-react';
 
 const Jobs = () => {
   const [selectedDiscipline, setSelectedDiscipline] = useState('all');
-  const [selectedTitle, setSelectedTitle] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
-  const [selectedCompany, setSelectedCompany] = useState('all');
   
   const { data: jobs, isLoading, error } = useJobs();
 
   const handleClearFilters = () => {
     setSelectedDiscipline('all');
-    setSelectedTitle('all');
     setSelectedLocation('all');
     setSelectedType('all');
-    setSelectedCompany('all');
   };
 
   return (
@@ -36,15 +32,11 @@ const Jobs = () => {
           
           <JobFilterBar
             selectedDiscipline={selectedDiscipline}
-            selectedTitle={selectedTitle}
             selectedLocation={selectedLocation}
             selectedType={selectedType}
-            selectedCompany={selectedCompany}
             onDisciplineChange={setSelectedDiscipline}
-            onTitleChange={setSelectedTitle}
             onLocationChange={setSelectedLocation}
             onTypeChange={setSelectedType}
-            onCompanyChange={setSelectedCompany}
             onClearFilters={handleClearFilters}
           />
           
@@ -76,14 +68,12 @@ const Jobs = () => {
             </div>
           )}
           
-          {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all' || selectedCompany !== 'all') && (
+          {(selectedDiscipline !== 'all' || selectedLocation !== 'all' || selectedType !== 'all') && (
             <div className="mt-4 text-sm text-muted-foreground text-center">
               <p>Active filters: 
                 {selectedDiscipline !== 'all' && ` Discipline: ${selectedDiscipline}`}
-                {selectedTitle !== 'all' && ` Title: ${selectedTitle}`}
                 {selectedLocation !== 'all' && ` Location: ${selectedLocation}`}
                 {selectedType !== 'all' && ` Type: ${selectedType}`}
-                {selectedCompany !== 'all' && ` Company: ${selectedCompany}`}
               </p>
             </div>
           )}

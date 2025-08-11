@@ -7,29 +7,21 @@ import { useJobFilters } from '@/hooks/useJobFilters';
 
 interface JobFilterBarProps {
   selectedDiscipline: string;
-  selectedTitle: string;
   selectedLocation: string;
   selectedType: string;
-  selectedCompany: string;
   onDisciplineChange: (discipline: string) => void;
-  onTitleChange: (title: string) => void;
   onLocationChange: (location: string) => void;
   onTypeChange: (type: string) => void;
-  onCompanyChange: (company: string) => void;
   onClearFilters: () => void;
 }
 
 export const JobFilterBar = ({ 
   selectedDiscipline, 
-  selectedTitle, 
   selectedLocation, 
   selectedType,
-  selectedCompany, 
   onDisciplineChange, 
-  onTitleChange, 
   onLocationChange, 
-  onTypeChange,
-  onCompanyChange, 
+  onTypeChange, 
   onClearFilters 
 }: JobFilterBarProps) => {
   const { data: filterOptions, isLoading } = useJobFilters();
@@ -44,7 +36,7 @@ export const JobFilterBar = ({
     { value: 'supporting-roles', label: 'Supporting Roles' }
   ];
 
-  const hasActiveFilters = selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all' || selectedCompany !== 'all';
+  const hasActiveFilters = selectedDiscipline !== 'all' || selectedLocation !== 'all' || selectedType !== 'all';
 
   if (isLoading) {
     return <div className="bg-card border-b border-border py-6">
@@ -61,7 +53,7 @@ export const JobFilterBar = ({
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <span className="body-text font-medium text-foreground">Filter by:</span>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 w-full sm:w-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full sm:w-auto">
               <Select value={selectedDiscipline} onValueChange={onDisciplineChange}>
                 <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Select discipline" />
@@ -70,19 +62,6 @@ export const JobFilterBar = ({
                   {disciplines.map((discipline) => (
                     <SelectItem key={discipline.value} value={discipline.value}>
                       {discipline.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedTitle} onValueChange={onTitleChange}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Select title" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filterOptions?.titles?.map((title) => (
-                    <SelectItem key={title.value} value={title.value}>
-                      {title.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -109,19 +88,6 @@ export const JobFilterBar = ({
                   {filterOptions?.types?.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedCompany} onValueChange={onCompanyChange}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Select company" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filterOptions?.companies?.map((company) => (
-                    <SelectItem key={company.value} value={company.value}>
-                      {company.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
