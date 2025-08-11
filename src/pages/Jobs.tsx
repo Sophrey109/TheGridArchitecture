@@ -11,6 +11,7 @@ const Jobs = () => {
   const [selectedTitle, setSelectedTitle] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedCompany, setSelectedCompany] = useState('all');
   
   const { data: jobs, isLoading, error } = useJobs();
 
@@ -19,6 +20,7 @@ const Jobs = () => {
     setSelectedTitle('all');
     setSelectedLocation('all');
     setSelectedType('all');
+    setSelectedCompany('all');
   };
 
   return (
@@ -37,10 +39,12 @@ const Jobs = () => {
             selectedTitle={selectedTitle}
             selectedLocation={selectedLocation}
             selectedType={selectedType}
+            selectedCompany={selectedCompany}
             onDisciplineChange={setSelectedDiscipline}
             onTitleChange={setSelectedTitle}
             onLocationChange={setSelectedLocation}
             onTypeChange={setSelectedType}
+            onCompanyChange={setSelectedCompany}
             onClearFilters={handleClearFilters}
           />
           
@@ -72,13 +76,14 @@ const Jobs = () => {
             </div>
           )}
           
-          {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all') && (
+          {(selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all' || selectedCompany !== 'all') && (
             <div className="mt-4 text-sm text-muted-foreground text-center">
               <p>Active filters: 
                 {selectedDiscipline !== 'all' && ` Discipline: ${selectedDiscipline}`}
                 {selectedTitle !== 'all' && ` Title: ${selectedTitle}`}
                 {selectedLocation !== 'all' && ` Location: ${selectedLocation}`}
                 {selectedType !== 'all' && ` Type: ${selectedType}`}
+                {selectedCompany !== 'all' && ` Company: ${selectedCompany}`}
               </p>
             </div>
           )}

@@ -3,16 +3,19 @@ import React from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+import { useJobFilters } from '@/hooks/useJobFilters';
 
 interface JobFilterBarProps {
   selectedDiscipline: string;
   selectedTitle: string;
   selectedLocation: string;
   selectedType: string;
+  selectedCompany: string;
   onDisciplineChange: (discipline: string) => void;
   onTitleChange: (title: string) => void;
   onLocationChange: (location: string) => void;
   onTypeChange: (type: string) => void;
+  onCompanyChange: (company: string) => void;
   onClearFilters: () => void;
 }
 
@@ -20,13 +23,16 @@ export const JobFilterBar = ({
   selectedDiscipline, 
   selectedTitle, 
   selectedLocation, 
-  selectedType, 
+  selectedType,
+  selectedCompany, 
   onDisciplineChange, 
   onTitleChange, 
   onLocationChange, 
-  onTypeChange, 
+  onTypeChange,
+  onCompanyChange, 
   onClearFilters 
 }: JobFilterBarProps) => {
+  const { data: filterOptions, isLoading } = useJobFilters();
   const disciplines = [
     { value: 'all', label: 'All Disciplines' },
     { value: 'architecture', label: 'Architecture' },
@@ -38,31 +44,15 @@ export const JobFilterBar = ({
     { value: 'supporting-roles', label: 'Supporting Roles' }
   ];
 
-  const titles = [
-    { value: 'all', label: 'All Titles' },
-    { value: 'Architectural Technician/Technologist', label: 'Architectural Technician/Technologist' },
-    { value: 'BIM Coordinator', label: 'BIM Coordinator' },
-    { value: 'Newly Qualified Architect', label: 'Newly Qualified Architect' },
-    { value: 'Part 1 Architectural Assistant', label: 'Part 1 Architectural Assistant' },
-    { value: 'Senior Architect/Senior Architectural Designer FTC', label: 'Senior Architect/Senior Architectural Designer FTC' }
-  ];
+  const hasActiveFilters = selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all' || selectedCompany !== 'all';
 
-  const locations = [
-    { value: 'all', label: 'All Locations' },
-    { value: 'remote', label: 'Remote' },
-    { value: 'office-based', label: 'Office Based' },
-    { value: 'hybrid', label: 'Hybrid' }
-  ];
-
-  const types = [
-    { value: 'all', label: 'All Types' },
-    { value: 'full-time', label: 'Full Time' },
-    { value: 'part-time', label: 'Part Time' },
-    { value: 'internship', label: 'Internship' },
-    { value: 'volunteer', label: 'Volunteer' }
-  ];
-
-  const hasActiveFilters = selectedDiscipline !== 'all' || selectedTitle !== 'all' || selectedLocation !== 'all' || selectedType !== 'all';
+  if (isLoading) {
+    return <div className="bg-card border-b border-border py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="animate-pulse">Loading filters...</div>
+      </div>
+    </div>;
+  }
 
   return (
     <div className="bg-card border-b border-border py-6">
@@ -71,7 +61,7 @@ export const JobFilterBar = ({
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <span className="body-text font-medium text-foreground">Filter by:</span>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full sm:w-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 w-full sm:w-auto">
               <Select value={selectedDiscipline} onValueChange={onDisciplineChange}>
                 <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Select discipline" />
@@ -90,7 +80,7 @@ export const JobFilterBar = ({
                   <SelectValue placeholder="Select title" />
                 </SelectTrigger>
                 <SelectContent>
-                  {titles.map((title) => (
+                  {filterOptions?.titles?.map((title) => (
                     <SelectItem key={title.value} value={title.value}>
                       {title.label}
                     </SelectItem>
@@ -103,7 +93,7 @@ export const JobFilterBar = ({
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {locations.map((location) => (
+                  {filterOptions?.locations?.map((location) => (
                     <SelectItem key={location.value} value={location.value}>
                       {location.label}
                     </SelectItem>
@@ -116,9 +106,22 @@ export const JobFilterBar = ({
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {types.map((type) => (
+                  {filterOptions?.types?.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedCompany} onValueChange={onCompanyChange}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Select company" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filterOptions?.companies?.map((company) => (
+                    <SelectItem key={company.value} value={company.value}>
+                      {company.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
