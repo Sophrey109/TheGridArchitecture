@@ -40,11 +40,11 @@ export const JobFilterBar = ({
 
   const titles = [
     { value: 'all', label: 'All Titles' },
-    { value: 'support-staff', label: 'Support Staff' },
-    { value: 'leadership-role', label: 'Leadership Role' },
-    { value: 'head-of-departments', label: 'Head of Departments' },
-    { value: 'senior', label: 'Senior' },
-    { value: 'manager', label: 'Manager' }
+    { value: 'Architectural Technician/Technologist', label: 'Architectural Technician/Technologist' },
+    { value: 'BIM Coordinator', label: 'BIM Coordinator' },
+    { value: 'Newly Qualified Architect', label: 'Newly Qualified Architect' },
+    { value: 'Part 1 Architectural Assistant', label: 'Part 1 Architectural Assistant' },
+    { value: 'Senior Architect/Senior Architectural Designer FTC', label: 'Senior Architect/Senior Architectural Designer FTC' }
   ];
 
   const locations = [
