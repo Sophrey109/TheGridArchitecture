@@ -25,16 +25,6 @@ export const JobFilterBar = ({
   onClearFilters 
 }: JobFilterBarProps) => {
   const { data: filterOptions, isLoading } = useJobFilters();
-  const disciplines = [
-    { value: 'all', label: 'All Disciplines' },
-    { value: 'architecture', label: 'Architecture' },
-    { value: 'bim', label: 'BIM' },
-    { value: 'interior-design', label: 'Interior Design' },
-    { value: 'landscape', label: 'Landscape' },
-    { value: 'engineering', label: 'Engineering' },
-    { value: 'product-design', label: 'Product Design' },
-    { value: 'supporting-roles', label: 'Supporting Roles' }
-  ];
 
   const hasActiveFilters = selectedDiscipline !== 'all' || selectedLocation !== 'all' || selectedType !== 'all';
 
@@ -59,7 +49,7 @@ export const JobFilterBar = ({
                   <SelectValue placeholder="Select discipline" />
                 </SelectTrigger>
                 <SelectContent>
-                  {disciplines.map((discipline) => (
+                  {filterOptions?.disciplines?.map((discipline) => (
                     <SelectItem key={discipline.value} value={discipline.value}>
                       {discipline.label}
                     </SelectItem>

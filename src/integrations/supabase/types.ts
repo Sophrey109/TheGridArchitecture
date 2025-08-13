@@ -110,11 +110,13 @@ export type Database = {
           "Date Posted": string | null
           deadline: string | null
           Description: string | null
+          Discipline: string | null
           "External Link": string | null
           id: number
           is_active: boolean | null
           "Job Title": string
           Location: string | null
+          Location1: string | null
           Salary: string | null
           Type: string | null
         }
@@ -124,11 +126,13 @@ export type Database = {
           "Date Posted"?: string | null
           deadline?: string | null
           Description?: string | null
+          Discipline?: string | null
           "External Link"?: string | null
           id?: number
           is_active?: boolean | null
           "Job Title": string
           Location?: string | null
+          Location1?: string | null
           Salary?: string | null
           Type?: string | null
         }
@@ -138,11 +142,13 @@ export type Database = {
           "Date Posted"?: string | null
           deadline?: string | null
           Description?: string | null
+          Discipline?: string | null
           "External Link"?: string | null
           id?: number
           is_active?: boolean | null
           "Job Title"?: string
           Location?: string | null
+          Location1?: string | null
           Salary?: string | null
           Type?: string | null
         }

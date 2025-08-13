@@ -11,7 +11,13 @@ export const useJobFilters = () => {
     queryKey: ['job-filters'],
     queryFn: async () => {
       // Fetch distinct values for each filter column
-      const [typesData, locationsData] = await Promise.all([
+      const [disciplinesData, typesData, locationsData] = await Promise.all([
+        supabase
+          .from('Job Adverts')
+          .select('"Discipline"')
+          .not('"Discipline"', 'is', null)
+          .order('"Discipline"'),
+        
         supabase
           .from('Job Adverts')
           .select('"Type"')
@@ -25,6 +31,7 @@ export const useJobFilters = () => {
           .order('"Location"')
       ]);
 
+      if (disciplinesData.error) throw disciplinesData.error;
       if (typesData.error) throw typesData.error;
       if (locationsData.error) throw locationsData.error;
 
@@ -38,6 +45,7 @@ export const useJobFilters = () => {
       };
 
       return {
+        disciplines: getUniqueOptions(disciplinesData.data || [], 'Discipline'),
         types: getUniqueOptions(typesData.data || [], 'Type'),
         locations: getUniqueOptions(locationsData.data || [], 'Location')
       };
