@@ -111,8 +111,8 @@ export const ArticleCard = ({ id, title, excerpt, type, types, date, imageUrl, t
             {title}
           </h3>
         </CardHeader>
-      <CardContent className="pt-0">
-        <p className="body-text text-muted-foreground line-clamp-3 mb-3">
+      <CardContent className="pt-0 px-4">
+        <p className="body-text text-muted-foreground line-clamp-3 mb-3 leading-relaxed">
           {excerpt}
         </p>
         {tags && tags.length > 0 && (

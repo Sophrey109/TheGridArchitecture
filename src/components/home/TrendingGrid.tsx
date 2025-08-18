@@ -175,14 +175,14 @@ export const TrendingGrid = () => {
               )}
             </div>
             
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <Link to={`/articles/${article.id}`} className="group">
-                <h3 className="section-title mb-3 group-hover:text-primary transition-colors">
+                <h3 className="section-title mb-3 group-hover:text-primary transition-colors leading-tight">
                   {article.Title}
                 </h3>
               </Link>
               
-              <p className="body-text text-muted-foreground mb-4 line-clamp-2">
+              <p className="body-text text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
                 {getExcerpt(article.excerpt, article.Content)}
               </p>
               

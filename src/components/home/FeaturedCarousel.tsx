@@ -138,11 +138,11 @@ export const FeaturedCarousel = () => {
               </div>
             </div>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-up drop-shadow-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-up drop-shadow-2xl leading-tight">
               {currentArticle.Title}
             </h1>
             
-            <p className="text-base md:text-lg text-white/90 mb-6 animate-fade-in-scale max-w-2xl">
+            <p className="text-base md:text-lg text-white/90 mb-6 animate-fade-in-scale max-w-2xl leading-relaxed">
               {getExcerpt(currentArticle.Content, currentArticle.excerpt)}
             </p>
             
