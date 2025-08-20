@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, X, Edit2, Save } from 'lucide-react';
+import { Upload, X, Edit2, Save, Folder, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Article } from '@/hooks/useArticles';
@@ -18,6 +20,9 @@ export const ImageUploadManager = ({ article, onUpdate }: ImageUploadManagerProp
   const [uploading, setUploading] = useState(false);
   const [editingCaption, setEditingCaption] = useState<number | null>(null);
   const [tempCaption, setTempCaption] = useState('');
+  const [storageFiles, setStorageFiles] = useState<any[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
+  const [loadingStorage, setLoadingStorage] = useState(false);
   const queryClient = useQueryClient();
 
   const images = article.carousel_images || [];
@@ -168,33 +173,218 @@ export const ImageUploadManager = ({ article, onUpdate }: ImageUploadManagerProp
     }
   };
 
+  // Load storage files
+  const loadStorageFiles = async () => {
+    setLoadingStorage(true);
+    try {
+      const { data, error } = await supabase.storage
+        .from('article-carousel')
+        .list('', {
+          limit: 100,
+          sortBy: { column: 'name', order: 'asc' }
+        });
+
+      if (error) throw error;
+
+      // Get public URLs for each file
+      const filesWithUrls = await Promise.all(
+        (data || [])
+          .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+          .map(async (file) => {
+            const { data: { publicUrl } } = supabase.storage
+              .from('article-carousel')
+              .getPublicUrl(file.name);
+            
+            return {
+              ...file,
+              publicUrl,
+              path: file.name
+            };
+          })
+      );
+
+      setStorageFiles(filesWithUrls);
+    } catch (error) {
+      console.error('Error loading storage files:', error);
+      toast.error('Failed to load storage files');
+    } finally {
+      setLoadingStorage(false);
+    }
+  };
+
+  // Load storage files on component mount
+  useEffect(() => {
+    loadStorageFiles();
+  }, []);
+
+  const toggleFileSelection = (filePath: string) => {
+    const newSelection = new Set(selectedFiles);
+    if (newSelection.has(filePath)) {
+      newSelection.delete(filePath);
+    } else {
+      newSelection.add(filePath);
+    }
+    setSelectedFiles(newSelection);
+  };
+
+  const addSelectedFiles = async () => {
+    if (selectedFiles.size === 0) {
+      toast.error('No files selected');
+      return;
+    }
+
+    if (images.length + selectedFiles.size > 10) {
+      toast.error(`Cannot add ${selectedFiles.size} files. Maximum 10 images total.`);
+      return;
+    }
+
+    try {
+      const selectedFileData = storageFiles.filter(file => selectedFiles.has(file.path));
+      const newImageUrls = selectedFileData.map(file => file.publicUrl);
+      const newCaptions = new Array(selectedFileData.length).fill('');
+
+      const updatedImages = [...images, ...newImageUrls];
+      const updatedCaptions = [...captions, ...newCaptions];
+
+      const { error } = await supabase
+        .from('Articles')
+        .update({
+          carousel_images: updatedImages,
+          carousel_captions: updatedCaptions
+        })
+        .eq('id', article.id);
+
+      if (error) throw error;
+
+      toast.success(`Added ${selectedFiles.size} images to carousel`);
+      setSelectedFiles(new Set());
+      onUpdate();
+    } catch (error) {
+      console.error('Error adding files:', error);
+      toast.error('Failed to add selected files');
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Upload Area */}
-      <Card>
-        <CardContent className="p-6">
-          <div
-            {...getRootProps()}
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              isDragActive
-                ? 'border-primary bg-primary/5'
-                : 'border-muted-foreground/25 hover:border-primary/50'
-            }`}
-          >
-            <input {...getInputProps()} />
-            <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-semibold mb-2">Upload Carousel Images</h3>
-            <p className="text-muted-foreground mb-4">
-              {isDragActive
-                ? 'Drop the image here...'
-                : `Drag & drop an image here, or click to select (${images.length}/10)`}
-            </p>
-            <Button disabled={uploading || images.length >= 10}>
-              {uploading ? 'Uploading...' : images.length >= 10 ? 'Max images reached' : 'Select Image'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="upload" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="upload">Upload New Images</TabsTrigger>
+          <TabsTrigger value="storage">Import from Storage</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="upload" className="space-y-6">
+          {/* Upload Area */}
+          <Card>
+            <CardContent className="p-6">
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                  isDragActive
+                    ? 'border-primary bg-primary/5'
+                    : 'border-muted-foreground/25 hover:border-primary/50'
+                }`}
+              >
+                <input {...getInputProps()} />
+                <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-semibold mb-2">Upload Carousel Images</h3>
+                <p className="text-muted-foreground mb-4">
+                  {isDragActive
+                    ? 'Drop the image here...'
+                    : `Drag & drop an image here, or click to select (${images.length}/10)`}
+                </p>
+                <Button disabled={uploading || images.length >= 10}>
+                  {uploading ? 'Uploading...' : images.length >= 10 ? 'Max images reached' : 'Select Image'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="storage" className="space-y-6">
+          {/* Storage Browser */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Folder className="h-5 w-5" />
+                Storage Browser
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={loadStorageFiles}
+                  disabled={loadingStorage}
+                >
+                  Refresh
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {loadingStorage ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-muted-foreground">Loading storage files...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center mb-4">
+                    <p className="text-sm text-muted-foreground">
+                      {storageFiles.length} files found | {selectedFiles.size} selected
+                    </p>
+                    <Button
+                      onClick={addSelectedFiles}
+                      disabled={selectedFiles.size === 0 || images.length + selectedFiles.size > 10}
+                      className="flex items-center gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Selected ({selectedFiles.size})
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+                    {storageFiles.map((file) => (
+                      <div
+                        key={file.path}
+                        className={`relative border rounded-lg overflow-hidden cursor-pointer transition-all ${
+                          selectedFiles.has(file.path)
+                            ? 'ring-2 ring-primary border-primary'
+                            : 'hover:border-primary/50'
+                        }`}
+                        onClick={() => toggleFileSelection(file.path)}
+                      >
+                        <div className="aspect-square relative">
+                          <img
+                            src={file.publicUrl}
+                            alt={file.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute top-2 right-2">
+                            <Checkbox
+                              checked={selectedFiles.has(file.path)}
+                              onChange={() => toggleFileSelection(file.path)}
+                            />
+                          </div>
+                        </div>
+                        <div className="p-2">
+                          <p className="text-xs text-muted-foreground truncate">
+                            {file.name}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {storageFiles.length === 0 && (
+                    <div className="text-center py-8">
+                      <Folder className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-muted-foreground">No images found in storage</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Images Grid */}
       {images.length > 0 && (
