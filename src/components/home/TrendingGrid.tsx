@@ -131,77 +131,77 @@ export const TrendingGrid = () => {
 
       <div className="editorial-grid">
         {recentArticles.map((article, index) => (
-          <Card key={article.id} className="article-card group overflow-hidden">
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <img
-                src={article.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop'}
-                alt={article.Title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    navigate(`/articles?type=${article.article_type || 'Article'}`);
-                  }}
-                  className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full hover:opacity-90 transition-opacity cursor-pointer"
-                >
-                  {article.article_type || 'Article'}
-                </button>
-                {article.article_types && article.article_types.length > 0 && (
-                  article.article_types.map((subcategory, index) => (
-                    <button
-                      key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        navigate(`/articles?type=${subcategory}`);
-                      }}
-                      className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full hover:bg-white transition-colors cursor-pointer"
-                    >
-                      {subcategory}
-                    </button>
-                  ))
+          <Link key={article.id} to={`/articles/${article.id}`} className="block">
+            <Card className="article-card group overflow-hidden cursor-pointer">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img
+                  src={article.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop'}
+                  alt={article.Title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate(`/articles?type=${article.article_type || 'Article'}`);
+                    }}
+                    className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full hover:opacity-90 transition-opacity cursor-pointer relative z-10"
+                  >
+                    {article.article_type || 'Article'}
+                  </button>
+                  {article.article_types && article.article_types.length > 0 && (
+                    article.article_types.map((subcategory, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigate(`/articles?type=${subcategory}`);
+                        }}
+                        className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full hover:bg-white transition-colors cursor-pointer relative z-10"
+                      >
+                        {subcategory}
+                      </button>
+                    ))
+                  )}
+                </div>
+                {index === 0 && (
+                  <div className="absolute top-4 right-4">
+                    <div className="flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded">
+                      <TrendingUp className="h-4 w-4" />
+                      <span className="text-sm font-medium">Latest</span>
+                    </div>
+                  </div>
                 )}
               </div>
-              {index === 0 && (
-                <div className="absolute top-4 right-4">
-                  <div className="flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded">
-                    <TrendingUp className="h-4 w-4" />
-                    <span className="text-sm font-medium">Latest</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <CardContent className="p-6">
-              <Link to={`/articles/${article.id}`} className="group">
+              
+              <CardContent className="p-6">
                 <h3 className="section-title mb-3 group-hover:text-primary transition-colors">
                   {article.Title}
                 </h3>
-              </Link>
-              
-              <p className="body-text text-muted-foreground mb-4 line-clamp-2">
-                {getExcerpt(article.excerpt, article.Content)}
-              </p>
-              
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDate(article['Published Date'])}</span>
-                  </div>
-                  {article.Author && (
+                
+                <p className="body-text text-muted-foreground mb-4 line-clamp-2">
+                  {getExcerpt(article.excerpt, article.Content)}
+                </p>
+                
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-1">
-                      <Clock className="h-4 w-4" />
-                      <span>By {article.Author}</span>
+                      <Calendar className="h-4 w-4" />
+                      <span>{formatDate(article['Published Date'])}</span>
                     </div>
-                  )}
+                    {article.Author && (
+                      <div className="flex items-center space-x-1">
+                        <Clock className="h-4 w-4" />
+                        <span>By {article.Author}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </section>
