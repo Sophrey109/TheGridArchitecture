@@ -307,7 +307,7 @@ export const ImageUploadManager = ({ article, onUpdate }: ImageUploadManagerProp
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Folder className="h-5 w-5" />
-                Storage Browser
+                Bulk Import from Storage
                 <Button
                   variant="outline"
                   size="sm"
@@ -317,6 +317,9 @@ export const ImageUploadManager = ({ article, onUpdate }: ImageUploadManagerProp
                   Refresh
                 </Button>
               </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Select multiple images below and click "Add Selected" to import them all at once
+              </p>
             </CardHeader>
             <CardContent>
               {loadingStorage ? (
