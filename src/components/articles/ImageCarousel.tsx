@@ -37,12 +37,12 @@ export const ImageCarousel = ({ articleId }: ImageCarouselProps) => {
           <h2 className="section-title mb-8 text-center">Gallery</h2>
           
           {/* Main Carousel */}
-          <div className="relative max-w-4xl mx-auto mb-8">
-            <div className="relative aspect-video overflow-hidden rounded-lg shadow-lg">
+          <div className="relative max-w-5xl mx-auto mb-8">
+            <div className="relative overflow-hidden rounded-lg shadow-lg bg-muted/20">
               <img
                 src={images[currentIndex].image_url}
                 alt={images[currentIndex].caption || `Gallery image ${currentIndex + 1}`}
-                className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
+                className="w-full h-auto max-h-[70vh] object-contain cursor-pointer transition-transform duration-300 hover:scale-105 mx-auto block"
                 onClick={() => openModal(currentIndex)}
               />
               
