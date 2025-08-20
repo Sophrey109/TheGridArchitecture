@@ -8,10 +8,8 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
 import { ImageCarousel } from '@/components/articles/ImageCarousel';
-import { ImageSelector } from '@/components/articles/ImageSelector';
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
-import { Switch } from '@/components/ui/switch';
 
 interface TableOfContentsItem {
   id: string;
@@ -27,7 +25,6 @@ const ArticleDetail = () => {
   const [error, setError] = useState<string | null>(null);
   const [tableOfContents, setTableOfContents] = useState<TableOfContentsItem[]>([]);
   const [processedContent, setProcessedContent] = useState<string>('');
-  const [showAdmin, setShowAdmin] = useState(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -127,21 +124,6 @@ const ArticleDetail = () => {
     }
   };
 
-  const toggleCarousel = async (enabled: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('Articles')
-        .update({ show_image_carousel: enabled })
-        .eq('id', id);
-
-      if (error) throw error;
-      
-      setArticle(prev => prev ? { ...prev, show_image_carousel: enabled } : null);
-    } catch (error) {
-      console.error('Error updating carousel setting:', error);
-    }
-  };
-
   // Helper functions for article types (matching ArticleCard)
   const getTypeVariant = (type: string) => {
     switch (type) {
@@ -230,22 +212,15 @@ const ArticleDetail = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          {/* Back button and Admin Toggle */}
-          <div className="flex justify-between items-center mb-6">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/articles')}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Articles
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowAdmin(!showAdmin)}
-            >
-              {showAdmin ? 'Hide' : 'Show'} Admin
-            </Button>
-          </div>
+          {/* Back button */}
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/articles')}
+            className="mb-6"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Articles
+          </Button>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Table of Contents - Sidebar */}
@@ -339,31 +314,6 @@ const ArticleDetail = () => {
               />
             </div>
           </div>
-
-          {/* Admin Panel */}
-          {showAdmin && (
-            <div className="max-w-6xl mx-auto mt-12 space-y-6">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Article Settings</h3>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    checked={article.show_image_carousel || false}
-                    onCheckedChange={toggleCarousel}
-                  />
-                  <label className="text-sm font-medium">
-                    Show Image Carousel ({article.show_image_carousel ? 'On' : 'Off'})
-                  </label>
-                </div>
-              </Card>
-
-              {article.show_image_carousel && (
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Add Images to Carousel</h3>
-                  <ImageSelector articleId={article.id} />
-                </Card>
-              )}
-            </div>
-          )}
 
           {/* Image Carousel Section */}
           {article.show_image_carousel && (
