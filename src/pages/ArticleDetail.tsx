@@ -8,7 +8,7 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
 import { ImageCarousel } from '@/components/articles/ImageCarousel';
-import { ImageUploadManager } from '@/components/articles/ImageUploadManager';
+import { ImageSelector } from '@/components/articles/ImageSelector';
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
 import { Switch } from '@/components/ui/switch';
@@ -358,8 +358,8 @@ const ArticleDetail = () => {
 
               {article.show_image_carousel && (
                 <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Manage Carousel Images</h3>
-                  <ImageUploadManager articleId={article.id} />
+                  <h3 className="text-lg font-semibold mb-4">Add Images to Carousel</h3>
+                  <ImageSelector articleId={article.id} />
                 </Card>
               )}
             </div>
