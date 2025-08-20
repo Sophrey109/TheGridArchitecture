@@ -306,6 +306,35 @@ const ArticleDetail = () => {
                     ))}
                   </div>
                 )}
+
+                {/* Image Upload Manager - For editing carousel images */}
+                <Card className="mb-8 bg-blue-50 border-blue-200">
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold mb-4 text-blue-900">🖼️ Manage Carousel Images</h2>
+                    <ImageUploadManager 
+                      article={article} 
+                      onUpdate={() => {
+                        // Refresh article data after image updates
+                        const fetchArticle = async () => {
+                          try {
+                            const { data, error } = await supabase
+                              .from('Articles')
+                              .select('*')
+                              .eq('id', article.id)
+                              .eq('is_published', true)
+                              .single();
+
+                            if (error) throw error;
+                            setArticle(data);
+                          } catch (err) {
+                            console.error('Error refreshing article:', err);
+                          }
+                        };
+                        fetchArticle();
+                      }} 
+                    />
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Article content */}
@@ -320,37 +349,6 @@ const ArticleDetail = () => {
           {article.show_image_carousel && (
             <ImageCarousel article={article} />
           )}
-
-          {/* Image Upload Manager - For editing carousel images */}
-          <div className="max-w-6xl mx-auto mt-12">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-6">Manage Carousel Images</h2>
-                <ImageUploadManager 
-                  article={article} 
-                  onUpdate={() => {
-                    // Refresh article data after image updates
-                    const fetchArticle = async () => {
-                      try {
-                        const { data, error } = await supabase
-                          .from('Articles')
-                          .select('*')
-                          .eq('id', article.id)
-                          .eq('is_published', true)
-                          .single();
-
-                        if (error) throw error;
-                        setArticle(data);
-                      } catch (err) {
-                        console.error('Error refreshing article:', err);
-                      }
-                    };
-                    fetchArticle();
-                  }} 
-                />
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Read Next Section */}
           <div className="max-w-6xl mx-auto mt-12">
