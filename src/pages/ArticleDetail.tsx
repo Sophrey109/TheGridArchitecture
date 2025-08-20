@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
+import { ImageCarousel } from '@/components/articles/ImageCarousel';
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
 
@@ -312,16 +313,19 @@ const ArticleDetail = () => {
                 dangerouslySetInnerHTML={createSafeHTML(processedContent || article.Content || '')}
               />
             </div>
+          </div>
 
-            {/* Read Next Section - Right Sidebar */}
-            <div className="lg:col-span-1 order-3">
-              <div className="sticky top-8">
-                <ReadNextSection 
-                  currentArticleId={article.id}
-                  relatedArticleIds={article.related_articles || []}
-                />
-              </div>
-            </div>
+          {/* Image Carousel Section */}
+          {article.show_image_carousel && (
+            <ImageCarousel articleId={article.id} />
+          )}
+
+          {/* Read Next Section */}
+          <div className="max-w-6xl mx-auto mt-12">
+            <ReadNextSection 
+              currentArticleId={article.id}
+              relatedArticleIds={article.related_articles || []}
+            />
           </div>
         </div>
       </div>

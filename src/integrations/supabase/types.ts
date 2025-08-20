@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -52,6 +52,44 @@ export type Database = {
           },
         ]
       }
+      article_carousel_images: {
+        Row: {
+          article_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          article_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          article_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_carousel_images_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "Articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Articles: {
         Row: {
           article_type: string | null
@@ -66,6 +104,7 @@ export type Database = {
           is_published: boolean | null
           "Published Date": string | null
           related_articles: string[] | null
+          show_image_carousel: boolean | null
           tags: string[] | null
           Title: string
         }
@@ -82,6 +121,7 @@ export type Database = {
           is_published?: boolean | null
           "Published Date"?: string | null
           related_articles?: string[] | null
+          show_image_carousel?: boolean | null
           tags?: string[] | null
           Title: string
         }
@@ -98,6 +138,7 @@ export type Database = {
           is_published?: boolean | null
           "Published Date"?: string | null
           related_articles?: string[] | null
+          show_image_carousel?: boolean | null
           tags?: string[] | null
           Title?: string
         }

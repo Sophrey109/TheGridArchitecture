@@ -14,6 +14,17 @@ export interface Article {
   related_articles: string[] | null;
   article_type: string | null;
   article_types: string[] | null;
+  show_image_carousel: boolean | null;
+}
+
+export interface CarouselImage {
+  id: string;
+  article_id: string;
+  image_url: string;
+  caption: string | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export const useArticles = () => {
@@ -64,5 +75,40 @@ export const useBannerFeaturedArticles = () => {
       if (error) throw error;
       return data as Article[];
     },
+  });
+};
+
+export const useArticleCarouselImages = (articleId: string) => {
+  return useQuery({
+    queryKey: ['article-carousel-images', articleId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('article_carousel_images')
+        .select('*')
+        .eq('article_id', articleId)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      return data as CarouselImage[];
+    },
+    enabled: !!articleId,
+  });
+};
+
+export const useArticleById = (id: string) => {
+  return useQuery({
+    queryKey: ['article', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('Articles')
+        .select('*')
+        .eq('id', id)
+        .eq('is_published', true)
+        .single();
+
+      if (error) throw error;
+      return data as Article;
+    },
+    enabled: !!id,
   });
 };
