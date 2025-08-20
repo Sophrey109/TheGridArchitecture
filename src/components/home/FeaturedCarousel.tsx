@@ -93,13 +93,15 @@ export const FeaturedCarousel = () => {
 
   return (
     <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-[center_30%] transition-all duration-700 scale-105"
-        style={{ backgroundImage: `url(${currentArticle.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop'})` }}
-      >
-        <div className="overlay-gradient" />
-      </div>
+      {/* Background Image - Make it clickable */}
+      <Link to={`/articles/${currentArticle.id}`} className="absolute inset-0 cursor-pointer">
+        <div 
+          className="absolute inset-0 bg-cover bg-[center_30%] transition-all duration-700 scale-105 hover:scale-110"
+          style={{ backgroundImage: `url(${currentArticle.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=800&fit=crop'})` }}
+        >
+          <div className="overlay-gradient" />
+        </div>
+      </Link>
 
       {/* Content */}
       <div className="relative z-10 h-full flex items-center">
@@ -109,7 +111,7 @@ export const FeaturedCarousel = () => {
               {/* Primary type */}
               <button
                 onClick={() => navigate(`/articles?type=${currentArticle.article_type || 'Article'}`)}
-                className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
+                className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer relative z-20"
               >
                 {getTypeLabel(currentArticle.article_type || 'Article')}
               </button>
@@ -120,7 +122,7 @@ export const FeaturedCarousel = () => {
                   <button
                     key={index}
                     onClick={() => navigate(`/articles?type=${subcategory}`)}
-                    className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30 hover:bg-white/30 transition-colors cursor-pointer"
+                    className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30 hover:bg-white/30 transition-colors cursor-pointer relative z-20"
                   >
                     {getTypeLabel(subcategory)}
                   </button>
@@ -138,17 +140,23 @@ export const FeaturedCarousel = () => {
               </div>
             </div>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-up drop-shadow-2xl">
-              {currentArticle.Title}
-            </h1>
+            {/* Make title clickable */}
+            <Link to={`/articles/${currentArticle.id}`} className="block group">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-up drop-shadow-2xl group-hover:text-white/90 transition-colors cursor-pointer">
+                {currentArticle.Title}
+              </h1>
+            </Link>
             
-            <p className="text-base md:text-lg text-white/90 mb-6 animate-fade-in-scale max-w-2xl">
-              {getExcerpt(currentArticle.Content, currentArticle.excerpt)}
-            </p>
+            {/* Make excerpt clickable */}
+            <Link to={`/articles/${currentArticle.id}`} className="block group mb-6">
+              <p className="text-base md:text-lg text-white/90 animate-fade-in-scale max-w-2xl group-hover:text-white/80 transition-colors cursor-pointer">
+                {getExcerpt(currentArticle.Content, currentArticle.excerpt)}
+              </p>
+            </Link>
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 animate-fade-in-scale">
               <Link to={`/articles/${currentArticle.id}`}>
-                <Button variant="glass" size="default" className="bg-white/20 text-white border-white/30 hover:bg-white/30 hover:scale-105 shadow-xl">
+                <Button variant="glass" size="default" className="bg-white/20 text-white border-white/30 hover:bg-white/30 hover:scale-105 shadow-xl relative z-20">
                   Read Full Article
                 </Button>
               </Link>
