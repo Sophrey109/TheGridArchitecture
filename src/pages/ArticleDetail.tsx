@@ -317,7 +317,7 @@ const ArticleDetail = () => {
 
           {/* Image Carousel Section */}
           {article.show_image_carousel && (
-            <ImageCarousel articleId={article.id} />
+            <ImageCarousel article={article} />
           )}
 
           {/* Read Next Section */}

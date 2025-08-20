@@ -6,22 +6,29 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { useArticleCarouselImages, CarouselImage } from '@/hooks/useArticles';
+import { Article } from '@/hooks/useArticles';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface ImageUploadManagerProps {
-  articleId: string;
+  article: Article;
+  onUpdate: () => void;
 }
 
-export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
-  const { data: images, isLoading, refetch } = useArticleCarouselImages(articleId);
+export const ImageUploadManager = ({ article, onUpdate }: ImageUploadManagerProps) => {
   const [uploading, setUploading] = useState(false);
-  const [editingCaption, setEditingCaption] = useState<string | null>(null);
+  const [editingCaption, setEditingCaption] = useState<number | null>(null);
   const [tempCaption, setTempCaption] = useState('');
   const queryClient = useQueryClient();
 
+  const images = article.carousel_images || [];
+  const captions = article.carousel_captions || [];
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
+    if (images.length >= 10) {
+      toast.error('Maximum 10 images allowed per article');
+      return;
+    }
 
     setUploading(true);
     const file = acceptedFiles[0];
@@ -30,7 +37,7 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
       // Upload to Supabase storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `${articleId}/${fileName}`;
+      const filePath = `${article.id}/${fileName}`;
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('article-carousel')
@@ -43,26 +50,29 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
         .from('article-carousel')
         .getPublicUrl(filePath);
 
-      // Insert into database
+      // Update the article with new image
+      const newImages = [...images, publicUrl];
+      const newCaptions = [...captions, ''];
+
       const { error: dbError } = await supabase
-        .from('article_carousel_images')
-        .insert({
-          article_id: articleId,
-          image_url: publicUrl,
-          sort_order: (images?.length || 0) + 1
-        });
+        .from('Articles')
+        .update({
+          carousel_images: newImages,
+          carousel_captions: newCaptions
+        })
+        .eq('id', article.id);
 
       if (dbError) throw dbError;
 
       toast.success('Image uploaded successfully!');
-      refetch();
+      onUpdate();
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Failed to upload image');
     } finally {
       setUploading(false);
     }
-  }, [articleId, images?.length, refetch]);
+  }, [article.id, images, captions, onUpdate]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -72,9 +82,11 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
     multiple: false
   });
 
-  const deleteImage = async (imageId: string, imageUrl: string) => {
+  const deleteImage = async (index: number) => {
     try {
-      // Extract file path from URL
+      const imageUrl = images[index];
+      
+      // Extract file path from URL for storage deletion
       const urlParts = imageUrl.split('/');
       const filePath = urlParts.slice(-2).join('/'); // Get articleId/filename
 
@@ -83,61 +95,78 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
         .from('article-carousel')
         .remove([filePath]);
 
-      if (storageError) throw storageError;
+      if (storageError) console.warn('Storage deletion failed:', storageError);
 
-      // Delete from database
+      // Update arrays by removing the item at index
+      const newImages = images.filter((_, i) => i !== index);
+      const newCaptions = captions.filter((_, i) => i !== index);
+
       const { error: dbError } = await supabase
-        .from('article_carousel_images')
-        .delete()
-        .eq('id', imageId);
+        .from('Articles')
+        .update({
+          carousel_images: newImages,
+          carousel_captions: newCaptions
+        })
+        .eq('id', article.id);
 
       if (dbError) throw dbError;
 
       toast.success('Image deleted successfully!');
-      refetch();
+      onUpdate();
     } catch (error) {
       console.error('Delete error:', error);
       toast.error('Failed to delete image');
     }
   };
 
-  const updateCaption = async (imageId: string, caption: string) => {
+  const updateCaption = async (index: number, caption: string) => {
     try {
+      const newCaptions = [...captions];
+      newCaptions[index] = caption;
+
       const { error } = await supabase
-        .from('article_carousel_images')
-        .update({ caption })
-        .eq('id', imageId);
+        .from('Articles')
+        .update({ carousel_captions: newCaptions })
+        .eq('id', article.id);
 
       if (error) throw error;
 
       toast.success('Caption updated successfully!');
       setEditingCaption(null);
-      refetch();
+      onUpdate();
     } catch (error) {
       console.error('Update error:', error);
       toast.error('Failed to update caption');
     }
   };
 
-  const updateSortOrder = async (imageId: string, newOrder: number) => {
+  const moveImage = async (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= images.length) return;
+
     try {
+      const newImages = [...images];
+      const newCaptions = [...captions];
+      
+      // Swap elements
+      [newImages[fromIndex], newImages[toIndex]] = [newImages[toIndex], newImages[fromIndex]];
+      [newCaptions[fromIndex], newCaptions[toIndex]] = [newCaptions[toIndex], newCaptions[fromIndex]];
+
       const { error } = await supabase
-        .from('article_carousel_images')
-        .update({ sort_order: newOrder })
-        .eq('id', imageId);
+        .from('Articles')
+        .update({
+          carousel_images: newImages,
+          carousel_captions: newCaptions
+        })
+        .eq('id', article.id);
 
       if (error) throw error;
 
-      refetch();
+      onUpdate();
     } catch (error) {
-      console.error('Sort error:', error);
-      toast.error('Failed to update image order');
+      console.error('Move error:', error);
+      toast.error('Failed to reorder images');
     }
   };
-
-  if (isLoading) {
-    return <div className="p-6">Loading images...</div>;
-  }
 
   return (
     <div className="space-y-6">
@@ -158,31 +187,31 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
             <p className="text-muted-foreground mb-4">
               {isDragActive
                 ? 'Drop the image here...'
-                : 'Drag & drop an image here, or click to select'}
+                : `Drag & drop an image here, or click to select (${images.length}/10)`}
             </p>
-            <Button disabled={uploading}>
-              {uploading ? 'Uploading...' : 'Select Image'}
+            <Button disabled={uploading || images.length >= 10}>
+              {uploading ? 'Uploading...' : images.length >= 10 ? 'Max images reached' : 'Select Image'}
             </Button>
           </div>
         </CardContent>
       </Card>
 
       {/* Images Grid */}
-      {images && images.length > 0 && (
+      {images.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {images.map((image, index) => (
-            <Card key={image.id} className="overflow-hidden">
+          {images.map((imageUrl, index) => (
+            <Card key={index} className="overflow-hidden">
               <div className="relative aspect-video">
                 <img
-                  src={image.image_url}
-                  alt={image.caption || `Carousel image ${index + 1}`}
+                  src={imageUrl}
+                  alt={captions[index] || `Carousel image ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <Button
                   variant="destructive"
                   size="icon"
                   className="absolute top-2 right-2 h-8 w-8"
-                  onClick={() => deleteImage(image.id, image.image_url)}
+                  onClick={() => deleteImage(index)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -190,13 +219,13 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">
-                    Position: {image.sort_order}
+                    Position: {index + 1}
                   </span>
                   <div className="flex gap-1">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => updateSortOrder(image.id, image.sort_order - 1)}
+                      onClick={() => moveImage(index, index - 1)}
                       disabled={index === 0}
                     >
                       ↑
@@ -204,7 +233,7 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => updateSortOrder(image.id, image.sort_order + 1)}
+                      onClick={() => moveImage(index, index + 1)}
                       disabled={index === images.length - 1}
                     >
                       ↓
@@ -212,7 +241,7 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
                   </div>
                 </div>
                 
-                {editingCaption === image.id ? (
+                {editingCaption === index ? (
                   <div className="space-y-2">
                     <Input
                       value={tempCaption}
@@ -223,7 +252,7 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
                     <div className="flex gap-2">
                       <Button
                         size="sm"
-                        onClick={() => updateCaption(image.id, tempCaption)}
+                        onClick={() => updateCaption(index, tempCaption)}
                       >
                         <Save className="h-3 w-3 mr-1" />
                         Save
@@ -244,14 +273,14 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
                 ) : (
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground flex-1">
-                      {image.caption || 'No caption'}
+                      {captions[index] || 'No caption'}
                     </p>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        setEditingCaption(image.id);
-                        setTempCaption(image.caption || '');
+                        setEditingCaption(index);
+                        setTempCaption(captions[index] || '');
                       }}
                     >
                       <Edit2 className="h-3 w-3" />
@@ -264,7 +293,7 @@ export const ImageUploadManager = ({ articleId }: ImageUploadManagerProps) => {
         </div>
       )}
 
-      {(!images || images.length === 0) && (
+      {images.length === 0 && (
         <Card>
           <CardContent className="p-6 text-center">
             <p className="text-muted-foreground">No carousel images uploaded yet.</p>
