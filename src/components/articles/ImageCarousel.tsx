@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Article } from '@/hooks/useArticles';
+import { useArticleCarouselImages, CarouselImage } from '@/hooks/useArticles';
 
 interface ImageCarouselProps {
-  article: Article;
+  articleId: string;
 }
 
-export const ImageCarousel = ({ article }: ImageCarouselProps) => {
+export const ImageCarousel = ({ articleId }: ImageCarouselProps) => {
+  const { data: images, isLoading } = useArticleCarouselImages(articleId);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const images = article.carousel_images || [];
-  const captions = article.carousel_captions || [];
-
-  if (!article.show_image_carousel || images.length === 0) {
+  if (isLoading || !images || images.length === 0) {
     return null;
   }
 
@@ -42,8 +40,8 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
           <div className="relative max-w-5xl mx-auto mb-8">
             <div className="relative overflow-hidden rounded-lg shadow-lg bg-muted/20">
               <img
-                src={images[currentIndex]}
-                alt={captions[currentIndex] || `Gallery image ${currentIndex + 1}`}
+                src={images[currentIndex].image_url}
+                alt={images[currentIndex].caption || `Gallery image ${currentIndex + 1}`}
                 className="w-full h-auto max-h-[70vh] object-contain cursor-pointer transition-transform duration-300 hover:scale-105 mx-auto block"
                 onClick={() => openModal(currentIndex)}
               />
@@ -79,9 +77,9 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
             </div>
             
             {/* Caption */}
-            {captions[currentIndex] && (
+            {images[currentIndex].caption && (
               <p className="text-center text-muted-foreground mt-4 italic">
-                {captions[currentIndex]}
+                {images[currentIndex].caption}
               </p>
             )}
           </div>
@@ -89,9 +87,9 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
           {/* Thumbnail Navigation */}
           {images.length > 1 && (
             <div className="flex justify-center space-x-2 overflow-x-auto pb-4">
-              {images.map((imageUrl, index) => (
+              {images.map((image, index) => (
                 <button
-                  key={index}
+                  key={image.id}
                   onClick={() => setCurrentIndex(index)}
                   className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden transition-all duration-200 ${
                     index === currentIndex 
@@ -100,7 +98,7 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
                   }`}
                 >
                   <img
-                    src={imageUrl}
+                    src={image.image_url}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -125,8 +123,8 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
             </Button>
             
             <img
-              src={images[currentIndex]}
-              alt={captions[currentIndex] || `Gallery image ${currentIndex + 1}`}
+              src={images[currentIndex].image_url}
+              alt={images[currentIndex].caption || `Gallery image ${currentIndex + 1}`}
               className="max-w-full max-h-full object-contain"
             />
             
@@ -153,9 +151,9 @@ export const ImageCarousel = ({ article }: ImageCarouselProps) => {
             )}
             
             {/* Modal Caption */}
-            {captions[currentIndex] && (
+            {images[currentIndex].caption && (
               <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white px-6 py-3 rounded-lg max-w-2xl text-center">
-                <p className="text-lg">{captions[currentIndex]}</p>
+                <p className="text-lg">{images[currentIndex].caption}</p>
               </div>
             )}
             

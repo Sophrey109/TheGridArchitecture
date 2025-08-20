@@ -8,7 +8,6 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
 import { ImageCarousel } from '@/components/articles/ImageCarousel';
-import { ImageUploadManager } from '@/components/articles/ImageUploadManager';
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
 
@@ -306,35 +305,6 @@ const ArticleDetail = () => {
                     ))}
                   </div>
                 )}
-
-                {/* Image Upload Manager - For editing carousel images */}
-                <Card className="mb-8 bg-blue-50 border-blue-200">
-                  <CardContent className="p-6">
-                    <h2 className="text-xl font-bold mb-4 text-blue-900">🖼️ Manage Carousel Images</h2>
-                    <ImageUploadManager 
-                      article={article} 
-                      onUpdate={() => {
-                        // Refresh article data after image updates
-                        const fetchArticle = async () => {
-                          try {
-                            const { data, error } = await supabase
-                              .from('Articles')
-                              .select('*')
-                              .eq('id', article.id)
-                              .eq('is_published', true)
-                              .single();
-
-                            if (error) throw error;
-                            setArticle(data);
-                          } catch (err) {
-                            console.error('Error refreshing article:', err);
-                          }
-                        };
-                        fetchArticle();
-                      }} 
-                    />
-                  </CardContent>
-                </Card>
               </div>
 
               {/* Article content */}
@@ -347,7 +317,7 @@ const ArticleDetail = () => {
 
           {/* Image Carousel Section */}
           {article.show_image_carousel && (
-            <ImageCarousel article={article} />
+            <ImageCarousel articleId={article.id} />
           )}
 
           {/* Read Next Section */}

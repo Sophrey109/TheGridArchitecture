@@ -52,13 +52,49 @@ export type Database = {
           },
         ]
       }
+      article_carousel_images: {
+        Row: {
+          article_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          article_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          article_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_carousel_images_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "Articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Articles: {
         Row: {
           article_type: string | null
           article_types: string[] | null
           Author: string | null
-          carousel_captions: string[] | null
-          carousel_images: string[] | null
           Content: string | null
           excerpt: string | null
           featured_in_banner: boolean | null
@@ -76,8 +112,6 @@ export type Database = {
           article_type?: string | null
           article_types?: string[] | null
           Author?: string | null
-          carousel_captions?: string[] | null
-          carousel_images?: string[] | null
           Content?: string | null
           excerpt?: string | null
           featured_in_banner?: boolean | null
@@ -95,8 +129,6 @@ export type Database = {
           article_type?: string | null
           article_types?: string[] | null
           Author?: string | null
-          carousel_captions?: string[] | null
-          carousel_images?: string[] | null
           Content?: string | null
           excerpt?: string | null
           featured_in_banner?: boolean | null
