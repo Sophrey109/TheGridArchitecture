@@ -59,7 +59,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string
-          sort_order: number | null
+          sort_order: number
           updated_at: string
         }
         Insert: {
@@ -68,7 +68,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url: string
-          sort_order?: number | null
+          sort_order?: number
           updated_at?: string
         }
         Update: {
@@ -77,7 +77,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string
-          sort_order?: number | null
+          sort_order?: number
           updated_at?: string
         }
         Relationships: [
@@ -95,6 +95,7 @@ export type Database = {
           article_type: string | null
           article_types: string[] | null
           Author: string | null
+          carousel_images: string[] | null
           Content: string | null
           excerpt: string | null
           featured_in_banner: boolean | null
@@ -112,6 +113,7 @@ export type Database = {
           article_type?: string | null
           article_types?: string[] | null
           Author?: string | null
+          carousel_images?: string[] | null
           Content?: string | null
           excerpt?: string | null
           featured_in_banner?: boolean | null
@@ -129,6 +131,7 @@ export type Database = {
           article_type?: string | null
           article_types?: string[] | null
           Author?: string | null
+          carousel_images?: string[] | null
           Content?: string | null
           excerpt?: string | null
           featured_in_banner?: boolean | null
