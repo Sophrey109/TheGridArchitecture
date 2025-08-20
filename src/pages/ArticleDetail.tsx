@@ -8,6 +8,7 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
 import { ImageCarousel } from '@/components/articles/ImageCarousel';
+import { ImageUploadManager } from '@/components/articles/ImageUploadManager';
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
 
@@ -319,6 +320,37 @@ const ArticleDetail = () => {
           {article.show_image_carousel && (
             <ImageCarousel article={article} />
           )}
+
+          {/* Image Upload Manager - For editing carousel images */}
+          <div className="max-w-6xl mx-auto mt-12">
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold mb-6">Manage Carousel Images</h2>
+                <ImageUploadManager 
+                  article={article} 
+                  onUpdate={() => {
+                    // Refresh article data after image updates
+                    const fetchArticle = async () => {
+                      try {
+                        const { data, error } = await supabase
+                          .from('Articles')
+                          .select('*')
+                          .eq('id', article.id)
+                          .eq('is_published', true)
+                          .single();
+
+                        if (error) throw error;
+                        setArticle(data);
+                      } catch (err) {
+                        console.error('Error refreshing article:', err);
+                      }
+                    };
+                    fetchArticle();
+                  }} 
+                />
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Read Next Section */}
           <div className="max-w-6xl mx-auto mt-12">
