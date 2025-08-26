@@ -103,6 +103,36 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          article_id: string
+          content: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       "Job Adverts": {
         Row: {
           Company: string | null

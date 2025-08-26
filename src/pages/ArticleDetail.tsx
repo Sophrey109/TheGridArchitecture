@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
-import { ReadNextSection } from '@/components/articles/ReadNextSection';
+import { CommentsSection } from '@/components/articles/CommentsSection';
 import { RelatedArticlesSidebar } from '@/components/articles/RelatedArticlesSidebar';
 
 import { Layout } from '@/components/Layout';
@@ -324,12 +324,9 @@ const ArticleDetail = () => {
           </div>
 
 
-          {/* Read Next Section */}
+          {/* Comments Section */}
           <div className="max-w-6xl mx-auto mt-12">
-            <ReadNextSection 
-              currentArticleId={article.id}
-              relatedArticleIds={article.related_articles || []}
-            />
+            <CommentsSection articleId={article.id} />
           </div>
         </div>
       </div>
