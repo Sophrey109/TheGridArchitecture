@@ -106,16 +106,21 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
         <CardTitle className="text-lg">Related Articles</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {relatedArticles.map((article) => (
             <Link
               key={article.id}
               to={`/articles/${article.id}`}
               className="block group"
             >
-              <div className="flex gap-3 items-start border-b border-border/50 pb-3 last:border-b-0 last:pb-0">
-                {/* Small image */}
-                <div className="w-16 h-12 bg-muted rounded flex-shrink-0 overflow-hidden">
+              <div className="border-b border-border/50 pb-4 last:border-b-0 last:pb-0">
+                {/* Title */}
+                <h4 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors mb-2 line-clamp-3">
+                  {article.Title}
+                </h4>
+                
+                {/* Image underneath title */}
+                <div className="w-full h-24 bg-muted rounded overflow-hidden">
                   {article.image_url ? (
                     <img
                       src={article.image_url}
@@ -127,13 +132,6 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
                       <span className="text-xs text-muted-foreground">No image</span>
                     </div>
                   )}
-                </div>
-                
-                {/* Title */}
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors line-clamp-3">
-                    {article.Title}
-                  </h4>
                 </div>
               </div>
             </Link>
