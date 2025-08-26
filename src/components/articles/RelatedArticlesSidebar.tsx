@@ -116,7 +116,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
 
   if (isLoading) {
     return (
-      <Card className="sticky top-8">
+      <Card className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
         <CardHeader>
           <CardTitle className="text-lg">Related Articles</CardTitle>
         </CardHeader>
@@ -140,7 +140,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
   }
 
   return (
-    <Card className="sticky top-8">
+    <Card className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
       <CardHeader>
         <CardTitle className="text-lg">Related Articles</CardTitle>
       </CardHeader>
