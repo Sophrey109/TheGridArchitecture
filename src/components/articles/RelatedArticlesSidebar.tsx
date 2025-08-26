@@ -18,7 +18,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
       // Get related articles by tags and article types
       const { data, error } = await supabase
         .from('Articles')
-        .select('id, Title, excerpt, "Published Date", article_type, article_types, tags')
+        .select('id, Title, image_url, "Published Date", article_type, article_types')
         .eq('is_published', true)
         .neq('id', currentArticle.id);
 
@@ -106,35 +106,34 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
         <CardTitle className="text-lg">Related Articles</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {relatedArticles.map((article) => (
             <Link
               key={article.id}
               to={`/articles/${article.id}`}
               className="block group"
             >
-              <div className="border-b border-border/50 pb-4 last:border-b-0 last:pb-0">
-                <h4 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors mb-2 line-clamp-2">
-                  {article.Title}
-                </h4>
-                
-                {article.excerpt && (
-                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
-                    {article.excerpt}
-                  </p>
-                )}
-
-                <div className="flex items-center gap-2 mb-2">
-                  {article.article_type && (
-                    <Badge variant={getTypeVariant(article.article_type)} className="text-xs h-5">
-                      {article.article_type}
-                    </Badge>
+              <div className="flex gap-3 items-start border-b border-border/50 pb-3 last:border-b-0 last:pb-0">
+                {/* Small image */}
+                <div className="w-16 h-12 bg-muted rounded flex-shrink-0 overflow-hidden">
+                  {article.image_url ? (
+                    <img
+                      src={article.image_url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <span className="text-xs text-muted-foreground">No image</span>
+                    </div>
                   )}
                 </div>
-
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <Calendar className="mr-1 h-3 w-3" />
-                  {formatDate(article['Published Date'])}
+                
+                {/* Title */}
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors line-clamp-3">
+                    {article.Title}
+                  </h4>
                 </div>
               </div>
             </Link>

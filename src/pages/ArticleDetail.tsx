@@ -256,7 +256,7 @@ const ArticleDetail = () => {
             )}
 
             {/* Main content */}
-            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-4' : 'lg:col-span-5'} order-1 lg:order-2`}>
+            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'} order-1 lg:order-2`}>
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -316,7 +316,7 @@ const ArticleDetail = () => {
             </div>
 
             {/* Related Articles - Right Sidebar */}
-            <div className="lg:col-span-1 order-3">
+            <div className="lg:col-span-2 order-3">
               <RelatedArticlesSidebar currentArticle={article} />
             </div>
           </div>
