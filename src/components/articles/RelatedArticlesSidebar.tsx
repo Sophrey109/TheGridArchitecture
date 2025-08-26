@@ -106,30 +106,32 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
         <CardTitle className="text-lg">Related Articles</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-6">
           {relatedArticles.map((article) => (
             <Link
               key={article.id}
               to={`/articles/${article.id}`}
               className="block group"
             >
-              <div className="border-b border-border/50 pb-4 last:border-b-0 last:pb-0">
+              <div className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                 {/* Title */}
-                <h4 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors mb-2 line-clamp-3">
-                  {article.Title}
-                </h4>
+                <div className="p-4 pb-2">
+                  <h4 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors line-clamp-3">
+                    {article.Title}
+                  </h4>
+                </div>
                 
-                {/* Image underneath title */}
-                <div className="w-full h-24 bg-muted rounded overflow-hidden">
+                {/* Large image */}
+                <div className="w-full h-48 bg-muted overflow-hidden">
                   {article.image_url ? (
                     <img
                       src={article.image_url}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <span className="text-xs text-muted-foreground">No image</span>
+                      <span className="text-sm text-muted-foreground">No image</span>
                     </div>
                   )}
                 </div>
