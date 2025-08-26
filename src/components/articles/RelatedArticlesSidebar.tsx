@@ -116,13 +116,13 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
 
   if (isLoading) {
     return (
-      <Card className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <Card>
         <CardHeader>
           <CardTitle className="text-lg">Related Articles</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(5)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="h-4 bg-muted rounded mb-2"></div>
                 <div className="h-3 bg-muted rounded w-3/4 mb-1"></div>
@@ -140,7 +140,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
   }
 
   return (
-    <Card className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <Card>
       <CardHeader>
         <CardTitle className="text-lg">Related Articles</CardTitle>
       </CardHeader>
