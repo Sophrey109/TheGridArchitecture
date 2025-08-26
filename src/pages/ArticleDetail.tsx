@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { CommentsSection } from '@/components/articles/CommentsSection';
+import { SaveArticleButton } from '@/components/SaveArticleButton';
 import { RelatedArticlesSidebar } from '@/components/articles/RelatedArticlesSidebar';
 
 import { Layout } from '@/components/Layout';
@@ -261,30 +262,35 @@ const ArticleDetail = () => {
             <div className={`${tableOfContents.length > 0 ? 'lg:col-span-6' : 'lg:col-span-8'} order-1 ${tableOfContents.length > 0 ? 'lg:order-2' : 'lg:order-1'}`}>
               {/* Article header */}
               <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  {/* Display multiple article types or fallback to single type */}
-                  <div className="flex flex-wrap gap-2">
-                    {(article.article_types && article.article_types.length > 0 
-                      ? article.article_types 
-                      : [article.article_type || getTypeFromContent(article.Title, article.Content)]
-                    ).map((typeItem, index) => (
-                      <Link key={index} to={`/articles?type=${typeItem.toLowerCase().replace(' ', '-')}`}>
-                        <Badge variant={getTypeVariant(typeItem)} className="cursor-pointer hover:opacity-80 transition-opacity">
-                          {getTypeLabel(typeItem)}
-                        </Badge>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar className="mr-1 h-4 w-4" />
-                    {formatDate(article['Published Date'])}
-                  </div>
-                  {article.Author && (
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <User className="mr-1 h-4 w-4" />
-                      {article.Author}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-4">
+                    {/* Display multiple article types or fallback to single type */}
+                    <div className="flex flex-wrap gap-2">
+                      {(article.article_types && article.article_types.length > 0 
+                        ? article.article_types 
+                        : [article.article_type || getTypeFromContent(article.Title, article.Content)]
+                      ).map((typeItem, index) => (
+                        <Link key={index} to={`/articles?type=${typeItem.toLowerCase().replace(' ', '-')}`}>
+                          <Badge variant={getTypeVariant(typeItem)} className="cursor-pointer hover:opacity-80 transition-opacity">
+                            {getTypeLabel(typeItem)}
+                          </Badge>
+                        </Link>
+                      ))}
                     </div>
-                  )}
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Calendar className="mr-1 h-4 w-4" />
+                      {formatDate(article['Published Date'])}
+                    </div>
+                    {article.Author && (
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <User className="mr-1 h-4 w-4" />
+                        {article.Author}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Save Article Button */}
+                  <SaveArticleButton articleId={article.id} showText />
                 </div>
 
                 <h1 className="text-4xl font-bold mb-4">{article.Title}</h1>

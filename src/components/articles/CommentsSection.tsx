@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MessageCircle, Send, Edit, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -16,6 +16,12 @@ interface Comment {
   created_at: string;
   updated_at: string;
   is_approved: boolean;
+  profile?: {
+    id: string;
+    full_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+  } | null;
 }
 
 interface CommentsSectionProps {
@@ -29,7 +35,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch comments
+  // Fetch comments and profiles separately
   const { data: comments, isLoading } = useQuery({
     queryKey: ['comments', articleId],
     queryFn: async () => {
@@ -40,7 +46,23 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as Comment[];
+
+      // Fetch profiles for all comment authors
+      if (data && data.length > 0) {
+        const userIds = [...new Set(data.map(comment => comment.user_id))];
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, username, avatar_url')
+          .in('id', userIds);
+
+        // Map profiles to comments
+        return data.map(comment => ({
+          ...comment,
+          profile: profiles?.find(p => p.id === comment.user_id) || null
+        })) as Comment[];
+      }
+
+      return (data || []) as Comment[];
     },
   });
 
@@ -246,12 +268,18 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-3">
                     <Avatar className="h-8 w-8">
+                      <AvatarImage src={comment.profile?.avatar_url || ''} />
                       <AvatarFallback>
-                        {comment.user_id.substring(0, 2).toUpperCase()}
+                        {comment.profile?.full_name 
+                          ? comment.profile.full_name.charAt(0).toUpperCase()
+                          : comment.user_id.substring(0, 2).toUpperCase()
+                        }
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">Anonymous User</p>
+                      <p className="text-sm font-medium">
+                        {comment.profile?.full_name || comment.profile?.username || 'Anonymous User'}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         {formatDate(comment.created_at)}
                         {comment.updated_at !== comment.created_at && ' (edited)'}
