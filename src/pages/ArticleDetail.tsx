@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Article } from '@/hooks/useArticles';
 import { ReadNextSection } from '@/components/articles/ReadNextSection';
+import { RelatedArticlesSidebar } from '@/components/articles/RelatedArticlesSidebar';
 
 import { Layout } from '@/components/Layout';
 import { createSafeHTML } from '@/lib/sanitize';
@@ -222,8 +223,8 @@ const ArticleDetail = () => {
             Back to Articles
           </Button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Table of Contents - Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+            {/* Table of Contents - Left Sidebar */}
             {tableOfContents.length > 0 && (
               <div className="lg:col-span-1 order-2 lg:order-1">
                 <Card className="sticky top-8 bg-card/50 backdrop-blur-sm border-border/50">
@@ -255,7 +256,7 @@ const ArticleDetail = () => {
             )}
 
             {/* Main content */}
-            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-3'} order-1 lg:order-2`}>
+            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-4' : 'lg:col-span-5'} order-1 lg:order-2`}>
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -312,6 +313,11 @@ const ArticleDetail = () => {
                 className="article-content"
                 dangerouslySetInnerHTML={createSafeHTML(processedContent || article.Content || '')}
               />
+            </div>
+
+            {/* Related Articles - Right Sidebar */}
+            <div className="lg:col-span-1 order-3">
+              <RelatedArticlesSidebar currentArticle={article} />
             </div>
           </div>
 
