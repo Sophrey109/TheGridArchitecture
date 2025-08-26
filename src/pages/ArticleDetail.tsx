@@ -226,29 +226,31 @@ const ArticleDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
             {/* Table of Contents - Left Sidebar */}
             {tableOfContents.length > 0 && (
-              <div className="lg:col-span-1 order-2 lg:order-1">
+              <div className="lg:col-span-2 order-2 lg:order-1">
                 <Card className="sticky top-8 bg-card/50 backdrop-blur-sm border-border/50">
                   <CardContent className="p-6">
                     <h3 className="font-bold text-sm text-foreground mb-4 text-left">
                       Table of Contents
                     </h3>
                     <nav className="text-left">
-                      <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                      <ul className="space-y-2 text-sm">
                         {tableOfContents.map((item) => (
-                          <button
-                            key={item.id}
-                            onClick={() => scrollToHeading(item.id)}
-                            className={`transition-colors duration-200 hover:text-primary underline-offset-4 hover:underline text-left ${
-                              item.level === 1 ? 'font-semibold text-foreground' : 
-                              item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
-                              item.level === 3 ? 'text-muted-foreground hover:text-foreground' : 
-                              'text-muted-foreground/80 hover:text-foreground'
-                            }`}
-                          >
-                            {item.text}
-                          </button>
+                          <li key={item.id} className="flex items-start">
+                            <span className="text-muted-foreground mr-2 mt-1.5 text-xs">•</span>
+                            <button
+                              onClick={() => scrollToHeading(item.id)}
+                              className={`transition-colors duration-200 hover:text-primary underline-offset-4 hover:underline text-left flex-1 ${
+                                item.level === 1 ? 'font-semibold text-foreground' : 
+                                item.level === 2 ? 'font-medium text-muted-foreground hover:text-foreground' : 
+                                item.level === 3 ? 'text-muted-foreground hover:text-foreground' : 
+                                'text-muted-foreground/80 hover:text-foreground'
+                              }`}
+                            >
+                              {item.text}
+                            </button>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </nav>
                   </CardContent>
                 </Card>
@@ -256,7 +258,7 @@ const ArticleDetail = () => {
             )}
 
             {/* Main content */}
-            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'} order-1 lg:order-2`}>
+            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-2' : 'lg:col-span-4'} order-1 lg:order-2`}>
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
