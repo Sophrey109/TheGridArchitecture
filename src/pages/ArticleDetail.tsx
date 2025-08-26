@@ -223,7 +223,7 @@ const ArticleDetail = () => {
             Back to Articles
           </Button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
             {/* Table of Contents - Left Sidebar */}
             {tableOfContents.length > 0 && (
               <div className="lg:col-span-2 order-2 lg:order-1">
@@ -258,7 +258,7 @@ const ArticleDetail = () => {
             )}
 
             {/* Main content */}
-            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-2' : 'lg:col-span-4'} order-1 ${tableOfContents.length > 0 ? 'lg:order-2' : 'lg:order-1'}`}>
+            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-6' : 'lg:col-span-8'} order-1 ${tableOfContents.length > 0 ? 'lg:order-2' : 'lg:order-1'}`}>
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
