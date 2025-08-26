@@ -161,7 +161,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
                 </div>
                 
                 {/* Large image */}
-                <div className="w-full h-48 bg-muted overflow-hidden">
+                <div className="w-full aspect-square bg-muted overflow-hidden">
                   {article.image_url ? (
                     <img
                       src={article.image_url}
