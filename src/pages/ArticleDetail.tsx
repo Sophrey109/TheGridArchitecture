@@ -258,7 +258,7 @@ const ArticleDetail = () => {
             )}
 
             {/* Main content */}
-            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-2' : 'lg:col-span-4'} order-1 lg:order-2`}>
+            <div className={`${tableOfContents.length > 0 ? 'lg:col-span-2' : 'lg:col-span-4'} order-1 ${tableOfContents.length > 0 ? 'lg:order-2' : 'lg:order-1'}`}>
               {/* Article header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
