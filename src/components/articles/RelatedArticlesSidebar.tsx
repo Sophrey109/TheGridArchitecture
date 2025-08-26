@@ -24,29 +24,22 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
 
       if (error) throw error;
 
-      // Sort articles by relevance
+      // Sort articles by relevance - prioritize article_types matches first
       const articles = data || [];
-      const currentTags = currentArticle.tags || [];
       const currentArticleTypes = currentArticle.article_types || [];
       const currentArticleType = currentArticle.article_type;
 
       const scored = articles.map(article => {
         let score = 0;
-        const articleTags = article.tags || [];
         const articleTypes = article.article_types || [];
 
-        // Higher score for matching tags with article_types
+        // Highest score for matching article_types (array) - these go at top
         currentArticleTypes.forEach(type => {
-          if (articleTags.includes(type)) score += 10;
+          if (articleTypes.includes(type)) score += 100;
         });
 
-        // Medium score for matching article_type
-        if (article.article_type === currentArticleType) score += 5;
-        if (articleTypes.includes(currentArticleType)) score += 5;
-
-        // Lower score for matching regular tags
-        const tagMatches = currentTags.filter(tag => articleTags.includes(tag)).length;
-        score += tagMatches * 2;
+        // Lower score for matching article_type (single value) - these go at bottom
+        if (article.article_type === currentArticleType) score += 10;
 
         return { ...article, score };
       });
