@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 export const sanitizeHTML = (html: string): string => {
   if (!html) return '';
   
-  // Configure DOMPurify to allow common formatting tags while removing dangerous elements
+  // Configure DOMPurify with secure settings
   const clean = DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [
       'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'span', 'div',
@@ -19,21 +19,34 @@ export const sanitizeHTML = (html: string): string => {
     ],
     ALLOWED_ATTR: [
       'href', 'title', 'alt', 'src', 'width', 'height',
-      'class', 'id', 'style', 'target', 'rel'
+      'class', 'id', 'rel', 'target'
     ],
     ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-    // Remove script tags and on* event handlers
-    FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button'],
-    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit'],
+    // Remove dangerous tags and attributes
+    FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'iframe', 'frame', 'frameset'],
+    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'style'],
     // Keep content when removing tags
     KEEP_CONTENT: true,
     // Prevent DOM clobbering
     SANITIZE_DOM: true,
-    // Allow data URIs for images (base64)
+    // Disable data attributes for security
     ALLOW_DATA_ATTR: false
   });
+
+  // Add security attributes to external links
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = clean;
   
-  return clean;
+  const links = tempDiv.querySelectorAll('a[href]');
+  links.forEach((link) => {
+    const href = link.getAttribute('href');
+    if (href && (href.startsWith('http://') || href.startsWith('https://')) && !href.includes(window.location.hostname)) {
+      link.setAttribute('rel', 'noopener noreferrer');
+      link.setAttribute('target', '_blank');
+    }
+  });
+
+  return tempDiv.innerHTML;
 };
 
 /**

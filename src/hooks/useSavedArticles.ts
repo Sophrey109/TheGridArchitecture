@@ -46,7 +46,8 @@ export const useSavedArticles = () => {
       });
     },
     onError: (error: any) => {
-      if (error.code === '23505') {
+      // Handle unique constraint violation (23505) or the new constraint name
+      if (error.code === '23505' || error.message?.includes('unique_user_article')) {
         toast({
           title: "Already saved",
           description: "This article is already in your saved list.",
