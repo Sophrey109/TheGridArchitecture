@@ -40,9 +40,21 @@ export const sanitizeHTML = (html: string): string => {
   const links = tempDiv.querySelectorAll('a[href]');
   links.forEach((link) => {
     const href = link.getAttribute('href');
-    if (href && (href.startsWith('http://') || href.startsWith('https://')) && !href.includes(window.location.hostname)) {
-      link.setAttribute('rel', 'noopener noreferrer');
-      link.setAttribute('target', '_blank');
+    if (href) {
+      // More robust external link detection
+      try {
+        const url = new URL(href, window.location.origin);
+        if (url.hostname !== window.location.hostname) {
+          link.setAttribute('rel', 'noopener noreferrer');
+          link.setAttribute('target', '_blank');
+        }
+      } catch {
+        // If URL parsing fails, treat as external for safety
+        if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+          link.setAttribute('rel', 'noopener noreferrer');
+          link.setAttribute('target', '_blank');
+        }
+      }
     }
   });
 
