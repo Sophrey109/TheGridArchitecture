@@ -139,7 +139,7 @@ export const TrendingGrid = () => {
                   alt={article.Title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                <div className="absolute top-4 left-0 flex flex-wrap gap-2">
                   <button
                     onClick={(e) => {
                       e.preventDefault();

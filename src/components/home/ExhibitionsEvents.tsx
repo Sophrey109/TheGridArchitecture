@@ -72,7 +72,7 @@ export const ExhibitionsEvents = () => {
             
             {/* Event Type Badge */}
             {event.event_type && (
-              <div className="absolute top-4 left-4 z-20">
+              <div className="absolute top-4 left-0 z-20">
                 <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
                   {event.event_type}
                 </Badge>
