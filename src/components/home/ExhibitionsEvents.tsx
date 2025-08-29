@@ -70,15 +70,18 @@ export const ExhibitionsEvents = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20" />
             )}
             
+            {/* Event Type Badge */}
+            {event.event_type && (
+              <div className="absolute top-4 left-4 z-20">
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
+                  {event.event_type}
+                </Badge>
+              </div>
+            )}
+            
             {/* Content */}
             <div className="relative z-10 p-4 h-full flex flex-col justify-between">
               <div>
-                {event.event_type && (
-                  <Badge variant="secondary" className="mb-2 bg-white/20 text-white border-white/30 text-xs">
-                    {event.event_type}
-                  </Badge>
-                )}
-                
                 <h3 className="font-bold text-base text-white mb-2 line-clamp-2 group-hover:text-primary-foreground transition-colors">
                   {event.title}
                 </h3>
