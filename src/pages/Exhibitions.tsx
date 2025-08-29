@@ -179,7 +179,7 @@ const Exhibitions = () => {
                       <Card 
                         className={`group overflow-hidden cursor-pointer transition-all duration-500 ease-out ${
                           isExpanded 
-                            ? 'absolute top-0 left-0 z-50 shadow-2xl border-primary/50 w-[500px] h-[500px]' 
+                            ? 'absolute top-0 left-0 z-50 shadow-2xl border-primary/50 w-[600px] min-h-[600px]' 
                             : 'hover:shadow-lg relative'
                         }`}
                         onClick={(e) => handleCardClick(event.id, e)}
@@ -187,7 +187,7 @@ const Exhibitions = () => {
                         <div className={`${isExpanded ? 'h-full' : ''}`}>
                           {/* Image Section */}
                           <div className={`relative overflow-hidden transition-all duration-500 ${
-                            isExpanded ? 'h-60' : 'aspect-[4/3]'
+                            isExpanded ? 'h-80' : 'aspect-[4/3]'
                           }`}>
                             {event.image_url ? (
                               <img
@@ -222,18 +222,18 @@ const Exhibitions = () => {
                           
                           {/* Content Section */}
                           <CardContent className={`transition-all duration-500 ${
-                            isExpanded ? 'p-6 h-60 overflow-y-auto' : 'p-6'
+                            isExpanded ? 'p-8' : 'p-6'
                           }`}>
-                            <h3 className={`font-semibold mb-2 group-hover:text-primary transition-colors ${
-                              isExpanded ? 'text-lg' : 'text-lg line-clamp-2'
+                            <h3 className={`font-semibold mb-4 group-hover:text-primary transition-colors ${
+                              isExpanded ? 'text-2xl' : 'text-lg line-clamp-2'
                             }`}>
                               {event.title}
                             </h3>
                             
                             {/* Description */}
                             {event.description && (
-                              <div className={`text-muted-foreground text-sm mb-3 transition-all duration-500 ${
-                                isExpanded ? 'opacity-100' : 'line-clamp-3'
+                              <div className={`text-muted-foreground mb-6 transition-all duration-500 ${
+                                isExpanded ? 'text-base leading-relaxed' : 'text-sm line-clamp-3'
                               }`}>
                                 <p className={isExpanded ? '' : 'line-clamp-3'}>
                                   {event.description}
@@ -241,9 +241,11 @@ const Exhibitions = () => {
                               </div>
                             )}
                             
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                               {event.event_date && (
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <div className={`flex items-center gap-2 text-muted-foreground ${
+                                  isExpanded ? 'text-base' : 'text-sm'
+                                }`}>
                                   <Calendar className="h-4 w-4" />
                                   <span>
                                     {format(new Date(event.event_date), 'MMM dd, yyyy')}
@@ -255,7 +257,9 @@ const Exhibitions = () => {
                               )}
                               
                               {event.location && (
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <div className={`flex items-center gap-2 text-muted-foreground ${
+                                  isExpanded ? 'text-base' : 'text-sm'
+                                }`}>
                                   <MapPin className="h-4 w-4" />
                                   <span className={isExpanded ? '' : 'line-clamp-1'}>{event.location}</span>
                                 </div>
@@ -263,12 +267,14 @@ const Exhibitions = () => {
                               
                               {/* External Link */}
                               {event.external_link && (
-                                <div className="pt-1">
+                                <div className="pt-2">
                                   <a
                                     href={event.external_link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                                    className={`inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium ${
+                                      isExpanded ? 'text-base' : 'text-sm'
+                                    }`}
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     <ExternalLink className="h-4 w-4" />
@@ -279,7 +285,9 @@ const Exhibitions = () => {
                             </div>
                             
                             {/* Expand/Collapse Hint */}
-                            <div className="pt-2 text-xs text-muted-foreground">
+                            <div className={`pt-4 text-muted-foreground ${
+                              isExpanded ? 'text-sm' : 'text-xs'
+                            }`}>
                               {isExpanded ? 'Click to collapse' : 'Click to expand'}
                             </div>
                           </CardContent>
