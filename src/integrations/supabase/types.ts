@@ -144,6 +144,33 @@ export type Database = {
           },
         ]
       }
+      contact_info: {
+        Row: {
+          contact_type: string
+          contact_value: string
+          created_at: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          contact_type: string
+          contact_value: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          contact_type?: string
+          contact_value?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       "Job Adverts": {
         Row: {
           Company: string | null
