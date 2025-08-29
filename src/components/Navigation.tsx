@@ -104,9 +104,11 @@ export const Navigation = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="flex items-center">
+                          <User className="mr-2 h-4 w-4" />
+                          Profile
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={signOut}>
@@ -225,12 +227,23 @@ export const Navigation = () => {
                           <span className="text-sm font-medium">
                             {profile?.full_name || user.email?.split('@')[0]}
                           </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          onClick={signOut}
-                          className="w-full justify-start rounded-xl"
-                        >
+                         </div>
+                         <Button
+                           variant="ghost"
+                           asChild
+                           className="w-full justify-start rounded-xl"
+                           onClick={handleNavClick}
+                         >
+                           <Link to="/profile">
+                             <User className="mr-2 h-4 w-4" />
+                             Profile
+                           </Link>
+                         </Button>
+                         <Button
+                           variant="ghost"
+                           onClick={signOut}
+                           className="w-full justify-start rounded-xl"
+                         >
                           <LogOut className="mr-2 h-4 w-4" />
                           Sign out
                         </Button>
