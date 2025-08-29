@@ -8,6 +8,7 @@ import { NewsletterSection } from '@/components/home/NewsletterSection';
 import { JobsWidget } from '@/components/home/JobsWidget';
 import { CompetitionsWidget } from '@/components/home/CompetitionsWidget';
 import { AwardsWidget } from '@/components/home/AwardsWidget';
+import { ExhibitionsEvents } from '@/components/home/ExhibitionsEvents';
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
             {/* Main content */}
             <div className="lg:col-span-3 space-y-16">
               <TrendingGrid />
+              <ExhibitionsEvents />
               <CategoriesSection />
             </div>
             

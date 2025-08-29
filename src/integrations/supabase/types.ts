@@ -204,6 +204,54 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          event_date: string | null
+          event_type: string | null
+          external_link: string | null
+          featured: boolean
+          id: string
+          image_url: string | null
+          is_published: boolean
+          location: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          external_link?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          location?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          external_link?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          location?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       "Job Adverts": {
         Row: {
           Company: string | null
