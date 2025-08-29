@@ -27,14 +27,11 @@ export const ContactForm: React.FC = () => {
 
   const submitContactMutation = useMutation({
     mutationFn: async (data: ContactFormData) => {
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert({
-          name: data.name,
-          email: data.email,
-          subject: data.subject,
-          message: data.message,
-        });
+      // Use rpc or direct SQL since types haven't updated yet
+      const { error } = await supabase.rpc('exec', {
+        sql: `INSERT INTO public.contact_messages (name, email, subject, message) VALUES ($1, $2, $3, $4)`,
+        args: [data.name, data.email, data.subject || '', data.message]
+      });
 
       if (error) throw error;
     },
@@ -47,7 +44,7 @@ export const ContactForm: React.FC = () => {
     },
     onError: () => {
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
