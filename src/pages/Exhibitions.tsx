@@ -15,6 +15,7 @@ const Exhibitions = () => {
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [countryFilter, setCountryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
   // Extract unique event types and countries from events
   const eventTypes = events ? Array.from(new Set(events.map(event => event.event_type).filter(Boolean))) : [];
@@ -40,6 +41,19 @@ const Exhibitions = () => {
   const handleEventClick = (event: any) => {
     if (event.external_link) {
       window.open(event.external_link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleCardClick = (eventId: string, e: React.MouseEvent) => {
+    // Prevent expansion when clicking on external links
+    if ((e.target as HTMLElement).closest('a')) {
+      return;
+    }
+    
+    if (expandedEvent === eventId) {
+      setExpandedEvent(null);
+    } else {
+      setExpandedEvent(eventId);
     }
   };
 
@@ -154,85 +168,122 @@ const Exhibitions = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredEvents.map((event) => (
-                  <Card 
-                    key={event.id} 
-                    className="group overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-300"
-                    onClick={() => handleEventClick(event)}
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      {event.image_url ? (
-                        <img
-                          src={event.image_url}
-                          alt={event.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                          <Calendar className="h-12 w-12 text-muted-foreground" />
+                {filteredEvents.map((event) => {
+                  const isExpanded = expandedEvent === event.id;
+                  
+                  return (
+                    <Card 
+                      key={event.id} 
+                      className={`group overflow-hidden cursor-pointer transition-all duration-500 ease-out ${
+                        isExpanded 
+                          ? 'md:col-span-2 lg:col-span-3 shadow-xl border-primary/50' 
+                          : 'hover:shadow-lg'
+                      }`}
+                      onClick={(e) => handleCardClick(event.id, e)}
+                    >
+                      <div className={`flex ${isExpanded ? 'md:flex-row' : 'flex-col'} transition-all duration-500`}>
+                        {/* Image Section */}
+                        <div className={`relative overflow-hidden transition-all duration-500 ${
+                          isExpanded ? 'md:w-1/3 aspect-[4/3] md:aspect-auto' : 'aspect-[4/3]'
+                        }`}>
+                          {event.image_url ? (
+                            <img
+                              src={event.image_url}
+                              alt={event.title}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                              <Calendar className="h-12 w-12 text-muted-foreground" />
+                            </div>
+                          )}
+                          
+                          {/* Event Type Badge */}
+                          {event.event_type && (
+                            <div className="absolute top-4 left-4">
+                              <Badge variant="secondary" className="bg-white/90 text-primary hover:bg-white transition-colors">
+                                {event.event_type}
+                              </Badge>
+                            </div>
+                          )}
+                          
+                          {/* Featured Badge */}
+                          {event.featured && (
+                            <div className="absolute top-4 right-4">
+                              <Badge className="bg-primary text-primary-foreground">
+                                Featured
+                              </Badge>
+                            </div>
+                          )}
                         </div>
-                      )}
-                      
-                      {/* Event Type Badge */}
-                      {event.event_type && (
-                        <div className="absolute top-4 left-4">
-                          <Badge variant="secondary" className="bg-white/90 text-primary">
-                            {event.event_type}
-                          </Badge>
-                        </div>
-                      )}
-                      
-                      {/* Featured Badge */}
-                      {event.featured && (
-                        <div className="absolute top-4 right-4">
-                          <Badge className="bg-primary text-primary-foreground">
-                            Featured
-                          </Badge>
-                        </div>
-                      )}
-                      
-                      {/* External Link Indicator */}
-                      {event.external_link && (
-                        <div className="absolute bottom-4 right-4">
-                          <ExternalLink className="h-5 w-5 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                      )}
-                    </div>
-                    
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                        {event.title}
-                      </h3>
-                      
-                      {event.description && (
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                          {event.description}
-                        </p>
-                      )}
-                      
-                      <div className="space-y-2">
-                        {event.event_date && (
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Calendar className="h-4 w-4" />
-                            <span>
-                              {format(new Date(event.event_date), 'MMM dd, yyyy')}
-                              {event.end_date && event.end_date !== event.event_date && 
-                                ` - ${format(new Date(event.end_date), 'MMM dd, yyyy')}`
-                              }
-                            </span>
-                          </div>
-                        )}
                         
-                        {event.location && (
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <MapPin className="h-4 w-4" />
-                            <span className="line-clamp-1">{event.location}</span>
+                        {/* Content Section */}
+                        <CardContent className={`transition-all duration-500 ${
+                          isExpanded ? 'md:w-2/3 p-8' : 'p-6'
+                        }`}>
+                          <h3 className={`font-semibold mb-2 group-hover:text-primary transition-colors ${
+                            isExpanded ? 'text-2xl' : 'text-lg line-clamp-2'
+                          }`}>
+                            {event.title}
+                          </h3>
+                          
+                          {/* Description */}
+                          <div className={`text-muted-foreground text-sm mb-4 transition-all duration-500 ${
+                            isExpanded ? 'opacity-100' : event.description ? 'line-clamp-3' : ''
+                          }`}>
+                            {event.description && (
+                              <p className={isExpanded ? '' : 'line-clamp-3'}>
+                                {event.description}
+                              </p>
+                            )}
                           </div>
-                        )}
+                          
+                          <div className="space-y-2">
+                            {event.event_date && (
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Calendar className="h-4 w-4" />
+                                <span>
+                                  {format(new Date(event.event_date), 'MMM dd, yyyy')}
+                                  {event.end_date && event.end_date !== event.event_date && 
+                                    ` - ${format(new Date(event.end_date), 'MMM dd, yyyy')}`
+                                  }
+                                </span>
+                              </div>
+                            )}
+                            
+                            {event.location && (
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <MapPin className="h-4 w-4" />
+                                <span className={isExpanded ? '' : 'line-clamp-1'}>{event.location}</span>
+                              </div>
+                            )}
+                            
+                            {/* External Link */}
+                            {event.external_link && (
+                              <div className="pt-2">
+                                <a
+                                  href={event.external_link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  Visit Event Website
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Expand/Collapse Hint */}
+                          <div className="pt-4 text-xs text-muted-foreground">
+                            {isExpanded ? 'Click to collapse' : 'Click to expand'}
+                          </div>
+                        </CardContent>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             </>
           )}
