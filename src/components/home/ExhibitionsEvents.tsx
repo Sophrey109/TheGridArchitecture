@@ -11,10 +11,10 @@ export const ExhibitionsEvents = () => {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">Exhibitions & Events</h2>
-        <div className="flex flex-wrap gap-3">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-20 w-48 rounded-xl" />
+        <h2 className="text-2xl font-bold text-foreground">Featured events</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-64 rounded-2xl" />
           ))}
         </div>
       </div>
@@ -28,7 +28,7 @@ export const ExhibitionsEvents = () => {
   if (events.length === 0) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">Exhibitions & Events</h2>
+        <h2 className="text-2xl font-bold text-foreground">Featured events</h2>
         <p className="text-muted-foreground">No upcoming events at the moment.</p>
       </div>
     );
@@ -42,66 +42,75 @@ export const ExhibitionsEvents = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground">Exhibitions & Events</h2>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-foreground">Featured events</h2>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {events.map((event) => (
           <div
             key={event.id}
             onClick={() => handleEventClick(event)}
-            className={`
-              relative p-4 rounded-xl border border-border/50 bg-card/95 backdrop-blur-sm
-              transition-all duration-300 hover:shadow-lg hover:border-border hover:scale-105
-              min-w-48 max-w-64 cursor-pointer group
-            `}
+            className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-xl cursor-pointer h-64"
           >
-            {/* Event Image */}
+            {/* Background Image */}
             {event.image_url && (
-              <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20 group-hover:opacity-30 transition-opacity">
+              <div className="absolute inset-0">
                 <img 
                   src={event.image_url} 
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               </div>
             )}
             
+            {/* Fallback background for events without images */}
+            {!event.image_url && (
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20" />
+            )}
+            
             {/* Content */}
-            <div className="relative z-10 space-y-2">
-              <div className="flex items-start justify-between">
-                <h3 className="font-semibold text-sm text-card-foreground line-clamp-2 pr-2">
+            <div className="relative z-10 p-6 h-full flex flex-col justify-between">
+              <div>
+                {event.event_type && (
+                  <Badge variant="secondary" className="mb-3 bg-white/20 text-white border-white/30">
+                    {event.event_type}
+                  </Badge>
+                )}
+                
+                <h3 className="font-bold text-lg text-white mb-2 line-clamp-2 group-hover:text-primary-foreground transition-colors">
                   {event.title}
                 </h3>
-                {event.external_link && (
-                  <ExternalLink className="h-3 w-3 text-muted-foreground flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
-                )}
               </div>
               
-              <div className="space-y-1">
+              <div className="space-y-2">
                 {event.event_date && (
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 text-white/90">
+                    <Calendar className="h-4 w-4" />
+                    <span className="text-sm font-medium">
                       {format(new Date(event.event_date), 'MMM dd, yyyy')}
                     </span>
                   </div>
                 )}
                 
                 {event.location && (
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground line-clamp-1">
+                  <div className="flex items-center gap-2 text-white/80">
+                    <MapPin className="h-4 w-4" />
+                    <span className="text-sm line-clamp-1">
                       {event.location}
                     </span>
                   </div>
                 )}
               </div>
-              
-              {event.event_type && (
-                <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                  {event.event_type}
-                </Badge>
-              )}
             </div>
+            
+            {/* External Link Indicator */}
+            {event.external_link && (
+              <div className="absolute top-4 right-4 z-20">
+                <ExternalLink className="h-5 w-5 text-white opacity-60 group-hover:opacity-100 transition-opacity" />
+              </div>
+            )}
           </div>
         ))}
       </div>
