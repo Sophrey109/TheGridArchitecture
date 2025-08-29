@@ -50,15 +50,12 @@ export const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 transition-all duration-200 hover:scale-105 group">
+          <Link to="/" className="flex items-center transition-all duration-200 hover:scale-105 group">
             <img 
-              src="/lovable-uploads/0d73e977-70c4-4609-b185-cc59495dd31a.png" 
+              src="/lovable-uploads/922fb196-454e-47f0-ac06-7eeefece7c18.png" 
               alt="The Grid Logo" 
-              className="h-10 w-auto transition-transform duration-200 group-hover:rotate-3 rounded-lg"
+              className="h-12 w-auto transition-transform duration-200 group-hover:rotate-3 rounded-lg"
             />
-            <span className="font-editorial text-2xl font-bold text-foreground bg-gradient-primary bg-clip-text text-transparent">
-              The Grid
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
