@@ -172,116 +172,120 @@ const Exhibitions = () => {
                   const isExpanded = expandedEvent === event.id;
                   
                   return (
-                    <Card 
+                    <div 
                       key={event.id} 
-                      className={`group overflow-hidden cursor-pointer transition-all duration-500 ease-out ${
-                        isExpanded 
-                          ? 'md:col-span-2 lg:col-span-3 shadow-xl border-primary/50' 
-                          : 'hover:shadow-lg'
-                      }`}
-                      onClick={(e) => handleCardClick(event.id, e)}
+                      className="relative"
                     >
-                      <div className={`flex ${isExpanded ? 'md:flex-row' : 'flex-col'} transition-all duration-500`}>
-                        {/* Image Section */}
-                        <div className={`relative overflow-hidden transition-all duration-500 ${
-                          isExpanded ? 'md:w-1/3 aspect-[4/3] md:aspect-auto' : 'aspect-[4/3]'
-                        }`}>
-                          {event.image_url ? (
-                            <img
-                              src={event.image_url}
-                              alt={event.title}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                              <Calendar className="h-12 w-12 text-muted-foreground" />
-                            </div>
-                          )}
-                          
-                          {/* Event Type Badge */}
-                          {event.event_type && (
-                            <div className="absolute top-4 left-4">
-                              <Badge variant="secondary" className="bg-white/90 text-primary hover:bg-white transition-colors">
-                                {event.event_type}
-                              </Badge>
-                            </div>
-                          )}
-                          
-                          {/* Featured Badge */}
-                          {event.featured && (
-                            <div className="absolute top-4 right-4">
-                              <Badge className="bg-primary text-primary-foreground">
-                                Featured
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* Content Section */}
-                        <CardContent className={`transition-all duration-500 ${
-                          isExpanded ? 'md:w-2/3 p-8' : 'p-6'
-                        }`}>
-                          <h3 className={`font-semibold mb-2 group-hover:text-primary transition-colors ${
-                            isExpanded ? 'text-2xl' : 'text-lg line-clamp-2'
+                      <Card 
+                        className={`group overflow-hidden cursor-pointer transition-all duration-500 ease-out ${
+                          isExpanded 
+                            ? 'absolute top-0 left-0 z-50 shadow-2xl border-primary/50 w-96 h-96' 
+                            : 'hover:shadow-lg relative'
+                        }`}
+                        onClick={(e) => handleCardClick(event.id, e)}
+                      >
+                        <div className={`${isExpanded ? 'h-full' : ''}`}>
+                          {/* Image Section */}
+                          <div className={`relative overflow-hidden transition-all duration-500 ${
+                            isExpanded ? 'h-48' : 'aspect-[4/3]'
                           }`}>
-                            {event.title}
-                          </h3>
+                            {event.image_url ? (
+                              <img
+                                src={event.image_url}
+                                alt={event.title}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                                <Calendar className="h-12 w-12 text-muted-foreground" />
+                              </div>
+                            )}
+                            
+                            {/* Event Type Badge */}
+                            {event.event_type && (
+                              <div className="absolute top-4 left-4">
+                                <Badge variant="secondary" className="bg-white/90 text-primary hover:bg-white transition-colors">
+                                  {event.event_type}
+                                </Badge>
+                              </div>
+                            )}
+                            
+                            {/* Featured Badge */}
+                            {event.featured && (
+                              <div className="absolute top-4 right-4">
+                                <Badge className="bg-primary text-primary-foreground">
+                                  Featured
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
                           
-                          {/* Description */}
-                          <div className={`text-muted-foreground text-sm mb-4 transition-all duration-500 ${
-                            isExpanded ? 'opacity-100' : event.description ? 'line-clamp-3' : ''
+                          {/* Content Section */}
+                          <CardContent className={`transition-all duration-500 ${
+                            isExpanded ? 'p-4 h-48 overflow-y-auto' : 'p-6'
                           }`}>
+                            <h3 className={`font-semibold mb-2 group-hover:text-primary transition-colors ${
+                              isExpanded ? 'text-lg' : 'text-lg line-clamp-2'
+                            }`}>
+                              {event.title}
+                            </h3>
+                            
+                            {/* Description */}
                             {event.description && (
-                              <p className={isExpanded ? '' : 'line-clamp-3'}>
-                                {event.description}
-                              </p>
-                            )}
-                          </div>
-                          
-                          <div className="space-y-2">
-                            {event.event_date && (
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Calendar className="h-4 w-4" />
-                                <span>
-                                  {format(new Date(event.event_date), 'MMM dd, yyyy')}
-                                  {event.end_date && event.end_date !== event.event_date && 
-                                    ` - ${format(new Date(event.end_date), 'MMM dd, yyyy')}`
-                                  }
-                                </span>
+                              <div className={`text-muted-foreground text-sm mb-3 transition-all duration-500 ${
+                                isExpanded ? 'opacity-100' : 'line-clamp-3'
+                              }`}>
+                                <p className={isExpanded ? '' : 'line-clamp-3'}>
+                                  {event.description}
+                                </p>
                               </div>
                             )}
                             
-                            {event.location && (
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <MapPin className="h-4 w-4" />
-                                <span className={isExpanded ? '' : 'line-clamp-1'}>{event.location}</span>
-                              </div>
-                            )}
+                            <div className="space-y-2">
+                              {event.event_date && (
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Calendar className="h-4 w-4" />
+                                  <span>
+                                    {format(new Date(event.event_date), 'MMM dd, yyyy')}
+                                    {event.end_date && event.end_date !== event.event_date && 
+                                      ` - ${format(new Date(event.end_date), 'MMM dd, yyyy')}`
+                                    }
+                                  </span>
+                                </div>
+                              )}
+                              
+                              {event.location && (
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <MapPin className="h-4 w-4" />
+                                  <span className={isExpanded ? '' : 'line-clamp-1'}>{event.location}</span>
+                                </div>
+                              )}
+                              
+                              {/* External Link */}
+                              {event.external_link && (
+                                <div className="pt-1">
+                                  <a
+                                    href={event.external_link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ExternalLink className="h-4 w-4" />
+                                    Visit Website
+                                  </a>
+                                </div>
+                              )}
+                            </div>
                             
-                            {/* External Link */}
-                            {event.external_link && (
-                              <div className="pt-2">
-                                <a
-                                  href={event.external_link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ExternalLink className="h-4 w-4" />
-                                  Visit Event Website
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* Expand/Collapse Hint */}
-                          <div className="pt-4 text-xs text-muted-foreground">
-                            {isExpanded ? 'Click to collapse' : 'Click to expand'}
-                          </div>
-                        </CardContent>
-                      </div>
-                    </Card>
+                            {/* Expand/Collapse Hint */}
+                            <div className="pt-2 text-xs text-muted-foreground">
+                              {isExpanded ? 'Click to collapse' : 'Click to expand'}
+                            </div>
+                          </CardContent>
+                        </div>
+                      </Card>
+                    </div>
                   );
                 })}
               </div>
