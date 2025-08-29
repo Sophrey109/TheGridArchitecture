@@ -177,7 +177,7 @@ export const TrendingGrid = () => {
               </div>
               
               <CardContent className="p-6">
-                <h3 className="section-title mb-3 group-hover:text-primary transition-colors">
+                <h3 className="font-sans text-base md:text-lg font-semibold tracking-tight mb-3 group-hover:text-primary transition-colors">
                   {article.Title}
                 </h3>
                 
