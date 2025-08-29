@@ -334,25 +334,30 @@ const Profile = () => {
                     <Card key={comment.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="p-6">
                         <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                              <Badge variant={comment.is_approved ? "default" : "secondary"}>
-                                {comment.is_approved ? (
-                                  <>
-                                    <CheckCircle className="h-3 w-3 mr-1" />
-                                    Approved
-                                  </>
-                                ) : (
-                                  <>
-                                    <Clock className="h-3 w-3 mr-1" />
-                                    Pending Review
-                                  </>
-                                )}
-                              </Badge>
-                              <span className="text-sm text-muted-foreground">
-                                {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
-                              </span>
-                            </div>
+                           <div className="flex items-center justify-between">
+                             <div className="flex items-center space-x-2">
+                               <Badge variant={comment.is_approved ? "default" : "secondary"}>
+                                 {comment.is_approved ? (
+                                   <>
+                                     <CheckCircle className="h-3 w-3 mr-1" />
+                                     Approved
+                                   </>
+                                 ) : (
+                                   <>
+                                     <Clock className="h-3 w-3 mr-1" />
+                                     Pending Review
+                                   </>
+                                 )}
+                               </Badge>
+                               {comment.parent_comment_id && (
+                                 <Badge variant="outline" className="text-xs">
+                                   Reply
+                                 </Badge>
+                               )}
+                               <span className="text-sm text-muted-foreground">
+                                 {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
+                               </span>
+                             </div>
                             <Button variant="ghost" size="sm" asChild>
                               <Link to={`/articles/${comment.article_id}#comment-${comment.id}`}>
                                 <ExternalLink className="h-4 w-4" />

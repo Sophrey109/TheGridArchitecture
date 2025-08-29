@@ -110,6 +110,7 @@ export type Database = {
           created_at: string
           id: string
           is_approved: boolean
+          parent_comment_id: string | null
           updated_at: string
           user_id: string
         }
@@ -119,6 +120,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
+          parent_comment_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -128,10 +130,19 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
+          parent_comment_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       "Job Adverts": {
         Row: {

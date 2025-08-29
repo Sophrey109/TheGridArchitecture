@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageCircle, Send, Edit, Trash2 } from 'lucide-react';
+import { MessageCircle, Send, Edit, Trash2, Reply } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Comment {
@@ -16,6 +16,8 @@ interface Comment {
   created_at: string;
   updated_at: string;
   is_approved: boolean;
+  parent_comment_id: string | null;
+  replies?: Comment[];
   profile?: {
     id: string;
     full_name: string | null;
@@ -32,6 +34,8 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -55,14 +59,26 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
           .select('id, full_name, username, avatar_url')
           .in('id', userIds);
 
-        // Map profiles to comments
-        return data.map(comment => ({
+        // Map profiles to comments and organize into threads
+        const commentsWithProfiles = data.map(comment => ({
           ...comment,
           profile: profiles?.find(p => p.id === comment.user_id) || null
         })) as Comment[];
+
+        // Organize comments into threads (parent comments with their replies)
+        const parentComments = commentsWithProfiles.filter(comment => !comment.parent_comment_id);
+        const childComments = commentsWithProfiles.filter(comment => comment.parent_comment_id);
+
+        // Attach replies to their parent comments  
+        return parentComments.map(parent => ({
+          ...parent,
+          replies: childComments
+            .filter(child => child.parent_comment_id === parent.id)
+            .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+        }));
       }
 
-      return (data || []) as Comment[];
+      return [];
     },
   });
 
@@ -77,7 +93,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
 
   // Add comment mutation
   const addCommentMutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async ({ content, parentId }: { content: string; parentId?: string }) => {
       if (!user) throw new Error('User not authenticated');
       
       const { data, error } = await supabase
@@ -86,6 +102,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
           article_id: articleId,
           user_id: user.id,
           content: content.trim(),
+          parent_comment_id: parentId || null,
         })
         .select()
         .single();
@@ -96,6 +113,8 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', articleId] });
       setNewComment('');
+      setReplyContent('');
+      setReplyingTo(null);
       toast({
         title: "Comment added",
         description: "Your comment has been submitted and is pending approval.",
@@ -177,7 +196,20 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
       });
       return;
     }
-    addCommentMutation.mutate(newComment);
+    addCommentMutation.mutate({ content: newComment });
+  };
+
+  const handleAddReply = (parentId: string) => {
+    if (!replyContent.trim()) return;
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to reply.",
+        variant: "destructive",
+      });
+      return;
+    }
+    addCommentMutation.mutate({ content: replyContent, parentId });
   };
 
   const handleEditComment = (comment: Comment) => {
@@ -211,14 +243,23 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
 
   const approvedComments = comments?.filter(comment => 
     comment.is_approved || (user && comment.user_id === user.id)
-  ) || [];
+  ).map(comment => ({
+    ...comment,
+    replies: comment.replies?.filter(reply => 
+      reply.is_approved || (user && reply.user_id === user.id)
+    ) || []
+  })) || [];
+
+  const totalCommentsCount = approvedComments.reduce((count, comment) => 
+    count + 1 + (comment.replies?.length || 0), 0
+  );
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MessageCircle className="h-5 w-5" />
-          Comments ({approvedComments.length})
+          Comments ({totalCommentsCount})
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -264,83 +305,218 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ articleId }) =
             </div>
           ) : (
             approvedComments.map((comment) => (
-              <div key={comment.id} className="border rounded-lg p-4 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={comment.profile?.avatar_url || ''} />
-                      <AvatarFallback>
-                        {comment.profile?.full_name 
-                          ? comment.profile.full_name.charAt(0).toUpperCase()
-                          : comment.user_id.substring(0, 2).toUpperCase()
-                        }
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {comment.profile?.full_name || comment.profile?.username || 'Anonymous User'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(comment.created_at)}
-                        {comment.updated_at !== comment.created_at && ' (edited)'}
-                        {!comment.is_approved && user && comment.user_id === user.id && (
-                          <span className="ml-2 text-yellow-600">(Pending approval)</span>
-                        )}
-                      </p>
+              <div key={comment.id} className="space-y-4">
+                {/* Main Comment */}
+                <div className="border rounded-lg p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={comment.profile?.avatar_url || ''} />
+                        <AvatarFallback>
+                          {comment.profile?.full_name 
+                            ? comment.profile.full_name.charAt(0).toUpperCase()
+                            : comment.user_id.substring(0, 2).toUpperCase()
+                          }
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {comment.profile?.full_name || comment.profile?.username || 'Anonymous User'}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatDate(comment.created_at)}
+                          {comment.updated_at !== comment.created_at && ' (edited)'}
+                          {!comment.is_approved && user && comment.user_id === user.id && (
+                            <span className="ml-2 text-yellow-600">(Pending approval)</span>
+                          )}
+                        </p>
+                      </div>
                     </div>
+                    
+                    {user && comment.user_id === user.id && (
+                      <div className="flex space-x-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditComment(comment)}
+                        >
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteComment(comment.id)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   
-                  {user && comment.user_id === user.id && (
-                    <div className="flex space-x-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditComment(comment)}
-                      >
-                        <Edit className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteComment(comment.id)}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
+                  {editingComment === comment.id ? (
+                    <div className="space-y-2">
+                      <Textarea
+                        value={editContent} 
+                        onChange={(e) => setEditContent(e.target.value)}
+                        rows={3}
+                      />
+                      <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          onClick={handleUpdateComment}
+                          disabled={updateCommentMutation.isPending}
+                        >
+                          {updateCommentMutation.isPending ? 'Saving...' : 'Save'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingComment(null);
+                            setEditContent('');
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {comment.content}
+                      </p>
+                      {user && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setReplyingTo(comment.id)}
+                          className="text-xs"
+                        >
+                          <Reply className="h-3 w-3 mr-1" />
+                          Reply
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Reply Form */}
+                  {replyingTo === comment.id && (
+                    <div className="space-y-2 border-t pt-3">
+                      <Textarea
+                        placeholder="Write your reply..."
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        rows={2}
+                      />
+                      <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleAddReply(comment.id)}
+                          disabled={!replyContent.trim() || addCommentMutation.isPending}
+                        >
+                          <Send className="mr-1 h-3 w-3" />
+                          {addCommentMutation.isPending ? 'Replying...' : 'Reply'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setReplyingTo(null);
+                            setReplyContent('');
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
-                
-                {editingComment === comment.id ? (
-                  <div className="space-y-2">
-                    <Textarea
-                      value={editContent}
-                      onChange={(e) => setEditContent(e.target.value)}
-                      rows={3}
-                    />
-                    <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        onClick={handleUpdateComment}
-                        disabled={updateCommentMutation.isPending}
-                      >
-                        {updateCommentMutation.isPending ? 'Saving...' : 'Save'}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingComment(null);
-                          setEditContent('');
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
+
+                {/* Replies */}
+                {comment.replies && comment.replies.length > 0 && (
+                  <div className="ml-8 space-y-3">
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id} className="border rounded-lg p-3 bg-muted/30">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Avatar className="h-6 w-6">
+                              <AvatarImage src={reply.profile?.avatar_url || ''} />
+                              <AvatarFallback className="text-xs">
+                                {reply.profile?.full_name 
+                                  ? reply.profile.full_name.charAt(0).toUpperCase()
+                                  : reply.user_id.substring(0, 2).toUpperCase()
+                                }
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-xs font-medium">
+                                {reply.profile?.full_name || reply.profile?.username || 'Anonymous User'}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatDate(reply.created_at)}
+                                {reply.updated_at !== reply.created_at && ' (edited)'}
+                                {!reply.is_approved && user && reply.user_id === user.id && (
+                                  <span className="ml-2 text-yellow-600">(Pending approval)</span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          {user && reply.user_id === user.id && (
+                            <div className="flex space-x-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditComment(reply)}
+                              >
+                                <Edit className="h-2 w-2" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteComment(reply.id)}
+                              >
+                                <Trash2 className="h-2 w-2" />
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {editingComment === reply.id ? (
+                          <div className="space-y-2 mt-2">
+                            <Textarea
+                              value={editContent}
+                              onChange={(e) => setEditContent(e.target.value)}
+                              rows={2}
+                            />
+                            <div className="flex space-x-2">
+                              <Button
+                                size="sm"
+                                onClick={handleUpdateComment}
+                                disabled={updateCommentMutation.isPending}
+                              >
+                                {updateCommentMutation.isPending ? 'Saving...' : 'Save'}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingComment(null);
+                                  setEditContent('');
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-xs leading-relaxed whitespace-pre-wrap mt-2">
+                            {reply.content}
+                          </p>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                    {comment.content}
-                  </p>
                 )}
               </div>
             ))

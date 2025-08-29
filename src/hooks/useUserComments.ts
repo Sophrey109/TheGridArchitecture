@@ -9,6 +9,7 @@ export interface UserComment {
   updated_at: string;
   is_approved: boolean;
   article_id: string;
+  parent_comment_id: string | null;
 }
 
 export const useUserComments = () => {
@@ -27,7 +28,8 @@ export const useUserComments = () => {
           created_at,
           updated_at,
           is_approved,
-          article_id
+          article_id,
+          parent_comment_id
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
