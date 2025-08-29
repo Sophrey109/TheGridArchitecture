@@ -179,7 +179,7 @@ const Exhibitions = () => {
                       <Card 
                         className={`group overflow-hidden cursor-pointer transition-all duration-500 ease-out ${
                           isExpanded 
-                            ? 'absolute top-0 left-0 z-50 shadow-2xl border-primary/50 w-96 h-96' 
+                            ? 'absolute top-0 left-0 z-50 shadow-2xl border-primary/50 w-[500px] h-[500px]' 
                             : 'hover:shadow-lg relative'
                         }`}
                         onClick={(e) => handleCardClick(event.id, e)}
@@ -187,7 +187,7 @@ const Exhibitions = () => {
                         <div className={`${isExpanded ? 'h-full' : ''}`}>
                           {/* Image Section */}
                           <div className={`relative overflow-hidden transition-all duration-500 ${
-                            isExpanded ? 'h-48' : 'aspect-[4/3]'
+                            isExpanded ? 'h-60' : 'aspect-[4/3]'
                           }`}>
                             {event.image_url ? (
                               <img
@@ -222,7 +222,7 @@ const Exhibitions = () => {
                           
                           {/* Content Section */}
                           <CardContent className={`transition-all duration-500 ${
-                            isExpanded ? 'p-4 h-48 overflow-y-auto' : 'p-6'
+                            isExpanded ? 'p-6 h-60 overflow-y-auto' : 'p-6'
                           }`}>
                             <h3 className={`font-semibold mb-2 group-hover:text-primary transition-colors ${
                               isExpanded ? 'text-lg' : 'text-lg line-clamp-2'
