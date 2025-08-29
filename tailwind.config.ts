@@ -114,6 +114,17 @@ export default {
 				'pulse-glow': {
 					'0%, 100%': { boxShadow: '0 0 5px hsl(var(--primary) / 0.3)' },
 					'50%': { boxShadow: '0 0 20px hsl(var(--primary) / 0.8), 0 0 30px hsl(var(--primary) / 0.4)' }
+				},
+				'textBounceEntry': {
+					'0%': { opacity: '0', transform: 'translateY(-20px) scale(0.95)' },
+					'40%': { opacity: '1', transform: 'translateY(12px) scale(1.02)' },
+					'80%': { transform: 'translateY(-6px) scale(1)' },
+					'100%': { transform: 'translateY(0) scale(1)' }
+				},
+				'textBounceExit': {
+					'0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+					'20%': { opacity: '1', transform: 'translateY(-8px) scale(1.05)' },
+					'100%': { opacity: '0', transform: 'translateY(-100px) scale(0.8)' }
 				}
 			},
 			animation: {
@@ -125,7 +136,9 @@ export default {
 				'fade-in-scale': 'fade-in-scale 0.4s ease-out',
 				'float': 'float 6s ease-in-out infinite',
 				'glow': 'glow 2s ease-in-out infinite alternate',
-				'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'textBounceEntry': 'textBounceEntry 0.8s ease-out forwards',
+				'textBounceExit': 'textBounceExit 0.8s ease-in-out forwards'
 			}
 		}
 	},
