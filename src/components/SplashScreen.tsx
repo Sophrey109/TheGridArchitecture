@@ -12,10 +12,10 @@ export const SplashScreen = ({ onAnimationComplete }: SplashScreenProps) => {
     // Start animation after delay - keep original logo timing
     const timer = setTimeout(() => {
       setIsAnimating(true);
-      // Wait 1.5 seconds after logo animation completes
+      // Quick transition after logo animation completes
       setTimeout(() => {
         onAnimationComplete();
-      }, 1500); // 1.5 seconds after logo finishes animating
+      }, 500); // Just 0.5 seconds after logo finishes animating
     }, 1200); // Keep original 1200ms delay for logo display
 
     return () => clearTimeout(timer);
