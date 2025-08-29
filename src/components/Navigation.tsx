@@ -128,7 +128,7 @@ export const Navigation = () => {
                       asChild
                       className="transition-all duration-200 hover:scale-105 rounded-xl"
                     >
-                      <Link to="/auth">Sign up</Link>
+                      <Link to="/auth?mode=signup">Sign up</Link>
                     </Button>
                   </div>
                 )}
@@ -250,7 +250,7 @@ export const Navigation = () => {
                           className="w-full rounded-xl"
                           onClick={handleNavClick}
                         >
-                          <Link to="/auth">Sign up</Link>
+                          <Link to="/auth?mode=signup">Sign up</Link>
                         </Button>
                       </div>
                     )
