@@ -16,17 +16,17 @@ const Index = () => {
       <div className="animate-fade-in">
         <FeaturedCarousel />
         
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Main content */}
-            <div className="lg:col-span-3 space-y-16">
+            <div className="lg:col-span-3 space-y-12">
               <TrendingGrid />
               <ExhibitionsEvents />
               <CategoriesSection />
             </div>
             
             {/* Sidebar */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-4">
               <JobsWidget />
             </div>
           </div>

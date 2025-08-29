@@ -12,9 +12,9 @@ export const ExhibitionsEvents = () => {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Featured events</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {[...Array(3)].map((_, i) => (
-            <Skeleton key={i} className="h-64 rounded-2xl" />
+            <Skeleton key={i} className="h-48 rounded-xl" />
           ))}
         </div>
       </div>
@@ -46,12 +46,12 @@ export const ExhibitionsEvents = () => {
         <h2 className="text-2xl font-bold text-foreground">Featured events</h2>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {events.map((event) => (
           <div
             key={event.id}
             onClick={() => handleEventClick(event)}
-            className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-xl cursor-pointer h-64"
+            className="group relative overflow-hidden rounded-xl bg-card border border-border/50 hover:border-border transition-all duration-300 hover:shadow-lg cursor-pointer h-48"
           >
             {/* Background Image */}
             {event.image_url && (
@@ -71,24 +71,24 @@ export const ExhibitionsEvents = () => {
             )}
             
             {/* Content */}
-            <div className="relative z-10 p-6 h-full flex flex-col justify-between">
+            <div className="relative z-10 p-4 h-full flex flex-col justify-between">
               <div>
                 {event.event_type && (
-                  <Badge variant="secondary" className="mb-3 bg-white/20 text-white border-white/30">
+                  <Badge variant="secondary" className="mb-2 bg-white/20 text-white border-white/30 text-xs">
                     {event.event_type}
                   </Badge>
                 )}
                 
-                <h3 className="font-bold text-lg text-white mb-2 line-clamp-2 group-hover:text-primary-foreground transition-colors">
+                <h3 className="font-bold text-base text-white mb-2 line-clamp-2 group-hover:text-primary-foreground transition-colors">
                   {event.title}
                 </h3>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {event.event_date && (
                   <div className="flex items-center gap-2 text-white/90">
-                    <Calendar className="h-4 w-4" />
-                    <span className="text-sm font-medium">
+                    <Calendar className="h-3 w-3" />
+                    <span className="text-xs font-medium">
                       {format(new Date(event.event_date), 'MMM dd, yyyy')}
                     </span>
                   </div>
@@ -96,8 +96,8 @@ export const ExhibitionsEvents = () => {
                 
                 {event.location && (
                   <div className="flex items-center gap-2 text-white/80">
-                    <MapPin className="h-4 w-4" />
-                    <span className="text-sm line-clamp-1">
+                    <MapPin className="h-3 w-3" />
+                    <span className="text-xs line-clamp-1">
                       {event.location}
                     </span>
                   </div>
