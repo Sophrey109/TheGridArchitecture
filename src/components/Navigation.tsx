@@ -20,6 +20,7 @@ export const Navigation = () => {
     { name: 'Home', path: '/' },
     { name: 'Articles', path: '/articles' },
     { name: 'Jobs', path: '/jobs' },
+    { name: 'Events', path: '/events' },
     // Hidden from public: { name: 'Competitions', path: '/competitions' },
     // Hidden from public: { name: 'Exhibitions', path: '/exhibitions' },
     { name: 'Contact', path: '/contact' },

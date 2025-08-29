@@ -10,6 +10,7 @@ import ArticleDetail from "./pages/ArticleDetail";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import Competitions from "./pages/Competitions";
+import Exhibitions from "./pages/Exhibitions";
 import Learning from "./pages/Learning";
 import Contact from "./pages/Contact";
 import AskArchitect from "./pages/AskArchitect";
@@ -34,7 +35,9 @@ const App = () => (
             <Route path="/articles/:id" element={<ArticleDetail />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<JobDetail />} />
+            <Route path="/events" element={<Exhibitions />} />
             <Route path="/competitions" element={<Competitions />} />
+            <Route path="/exhibitions" element={<Exhibitions />} />
             <Route path="/learning" element={<Learning />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/ask-architect" element={<AskArchitect />} />
