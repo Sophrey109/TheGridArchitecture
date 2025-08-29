@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Layout } from '@/components/Layout';
+import { ContactForm } from '@/components/ContactForm';
 
 const Contact = () => {
   return (
@@ -17,24 +18,16 @@ const Contact = () => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-card rounded-lg border p-8 mb-8">
               <h2 className="heading-lg mb-4 text-center">Submit a Story</h2>
-              <p className="body-text text-muted-foreground text-center leading-relaxed mb-4">
-                Want to share your story with the world? Email us your design, artwork, building or about an interesting topic. We will be in touch as soon as possible but if we haven't got back to you, please feel free to send us a reminder.
-              </p>
-              <p className="body-text text-center">
-                Email your submissions to:{" "}
-                <a 
-                  href="mailto:thegridarchitecture.uk@gmail.com" 
-                  className="text-primary hover:underline font-medium"
-                >
-                  thegridarchitecture.uk@gmail.com
-                </a>
+              <p className="body-text text-muted-foreground text-center leading-relaxed mb-6">
+                Want to share your story with the world? Use our contact form below to submit your design, artwork, building or share an interesting topic. We will be in touch as soon as possible.
               </p>
             </div>
             
-            <div className="text-center py-12">
-              <p className="body-text text-muted-foreground">
-                Contact forms for different inquiry types coming soon...
-              </p>
+            <div className="flex justify-center">
+              <ContactForm 
+                title="Send us your submission"
+                description="Use this form to submit stories, ask questions, or get in touch with us."
+              />
             </div>
           </div>
         </div>
