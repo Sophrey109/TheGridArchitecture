@@ -18,7 +18,7 @@ const Index = () => {
       <div className="animate-fade-in">
         <FeaturedCarousel />
         
-        <div className="max-w-7xl pl-2 sm:pl-4 lg:pl-6 pr-2 sm:pr-4 lg:pr-6 py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-6">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Main content */}
             <div className="lg:col-span-3 space-y-12">
