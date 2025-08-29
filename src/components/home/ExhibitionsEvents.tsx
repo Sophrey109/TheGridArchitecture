@@ -81,7 +81,7 @@ export const ExhibitionsEvents = () => {
             
             {/* Content */}
             <div className="relative z-10 p-4 h-full flex flex-col justify-between">
-              <div>
+              <div className="pt-8">
                 <h3 className="font-bold text-base text-white mb-2 line-clamp-2 group-hover:text-primary-foreground transition-colors">
                   {event.title}
                 </h3>
