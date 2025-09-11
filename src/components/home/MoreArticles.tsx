@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Calendar, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { LazyImage } from '@/components/ui/lazy-image';
 import { useFeaturedArticles } from '@/hooks/useArticles';
 
 // Helper function to extract excerpt from content or use stored excerpt
@@ -64,10 +65,11 @@ export const MoreArticles = () => {
           <Link key={article.id} to={`/articles/${article.id}`} className="block">
             <Card className="article-card group overflow-hidden cursor-pointer">
               <div className="relative aspect-[4/3] overflow-hidden">
-                <img
+                <LazyImage
                   src={article.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop'}
                   alt={article.Title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fallbackSrc="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop"
                 />
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                   <button

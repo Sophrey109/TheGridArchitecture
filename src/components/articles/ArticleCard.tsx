@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { LazyImage } from '@/components/ui/lazy-image';
 
 interface ArticleCardProps {
   id: string;
@@ -63,10 +64,11 @@ export const ArticleCard = ({ id, title, excerpt, type, types, date, imageUrl, t
     <Link to={`/articles/${id}`}>
       <Card className="article-card h-full group hover-scale animate-fade-in">
         <div className="aspect-video overflow-hidden rounded-t-lg">
-          <img
+          <LazyImage
             src={displayImage}
             alt={title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fallbackSrc="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop"
           />
         </div>
         <CardHeader className="pb-3">
