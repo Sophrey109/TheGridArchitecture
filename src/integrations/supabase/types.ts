@@ -176,31 +176,43 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          ip_address: string | null
           is_read: boolean
           message: string
           name: string
+          status: string | null
           subject: string | null
+          submitted_at: string | null
           updated_at: string
+          user_agent: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
+          ip_address?: string | null
           is_read?: boolean
           message: string
           name: string
+          status?: string | null
           subject?: string | null
+          submitted_at?: string | null
           updated_at?: string
+          user_agent?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          ip_address?: string | null
           is_read?: boolean
           message?: string
           name?: string
+          status?: string | null
           subject?: string | null
+          submitted_at?: string | null
           updated_at?: string
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -399,6 +411,42 @@ export type Database = {
           id?: string
           job_id?: number
           user_id?: string
+        }
+        Relationships: []
+      }
+      security_logs: {
+        Row: {
+          created_at: string
+          details: string | null
+          email: string | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          timestamp: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          email?: string | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          email?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

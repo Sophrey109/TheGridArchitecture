@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Mail, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ContactFormProps {
   title?: string;
@@ -40,25 +41,35 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      // Create a mailto link with the form data
-      const subject = formData.subject || 'Contact Form Submission';
-      const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
-      const mailtoLink = `mailto:thegridarchitecture.uk@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Open user's email client
-      window.location.href = mailtoLink;
-      
-      // Reset form
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      
-      toast({
-        title: "Email Client Opened",
-        description: "Your email client should now be open with your message ready to send.",
+      const { data, error } = await supabase.functions.invoke('contact-form', {
+        body: {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: formData.subject?.trim() || 'Contact Form Submission',
+          message: formData.message.trim()
+        }
       });
-    } catch (error) {
+
+      if (error) {
+        throw error;
+      }
+
+      if (data.success) {
+        // Reset form
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for your message. We'll get back to you soon.",
+        });
+      } else {
+        throw new Error(data.error || 'Failed to send message');
+      }
+    } catch (error: any) {
+      console.error('Contact form error:', error);
       toast({
         title: "Error",
-        description: "There was an issue opening your email client. Please try again.",
+        description: error.message || "There was an issue sending your message. Please try again.",
         variant: "destructive",
       });
     } finally {

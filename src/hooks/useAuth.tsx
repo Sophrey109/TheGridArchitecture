@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { useSecurityLog } from './useSecurityLog';
 
 interface Profile {
   id: string;
@@ -37,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const { logSecurityEvent } = useSecurityLog();
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -95,10 +97,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    // Log login attempt
+    await logSecurityEvent({
+      event_type: 'login_attempt',
+      email: email,
+      details: 'User attempting to sign in'
+    });
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    // Log result
+    if (error) {
+      await logSecurityEvent({
+        event_type: 'login_failure',
+        email: email,
+        details: `Login failed: ${error.message}`
+      });
+    } else {
+      await logSecurityEvent({
+        event_type: 'login_success',
+        email: email,
+        details: 'User signed in successfully'
+      });
+    }
+
     return { error };
   };
 
@@ -119,6 +144,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
+    // Log logout
+    await logSecurityEvent({
+      event_type: 'logout',
+      user_id: user?.id,
+      email: user?.email,
+      details: 'User signed out'
+    });
+
     await supabase.auth.signOut();
   };
 
