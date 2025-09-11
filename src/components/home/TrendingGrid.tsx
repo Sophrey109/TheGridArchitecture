@@ -146,7 +146,7 @@ export const TrendingGrid = () => {
                       e.stopPropagation();
                       navigate(`/articles?type=${article.article_type || 'Article'}`);
                     }}
-                    className="bg-primary text-primary-foreground px-3 py-1 text-sm font-medium rounded-full hover:opacity-90 transition-opacity cursor-pointer relative z-10"
+                    className="bg-primary text-primary-foreground px-4 py-1 text-sm font-medium rounded-full hover:opacity-90 transition-opacity cursor-pointer relative z-10"
                   >
                     {article.article_type || 'Article'}
                   </button>
@@ -159,7 +159,7 @@ export const TrendingGrid = () => {
                           e.stopPropagation();
                           navigate(`/articles?type=${subcategory}`);
                         }}
-                        className="bg-white/90 text-primary px-2 py-1 text-xs font-medium border border-primary/20 rounded-full hover:bg-white transition-colors cursor-pointer relative z-10"
+                        className="bg-white/90 text-primary px-3 py-1 text-xs font-medium border border-primary/20 rounded-full hover:bg-white transition-colors cursor-pointer relative z-10"
                       >
                         {subcategory}
                       </button>
