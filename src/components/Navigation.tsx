@@ -53,7 +53,7 @@ export const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center transition-all duration-200 hover:scale-105 group">
             <img 
-              src="/lovable-uploads/logo.webp" 
+              src="/lovable-uploads/logo-color.webp" 
               alt="The Grid Logo" 
               className="h-12 w-auto transition-transform duration-200 group-hover:rotate-3 rounded-lg"
               loading="eager"
