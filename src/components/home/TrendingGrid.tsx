@@ -142,7 +142,7 @@ export const TrendingGrid = () => {
                   fallbackSrc="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop"
                   priority={index === 0}
                 />
-                <div className="absolute top-4 left-0 flex flex-wrap gap-2">
+                <div className="absolute top-4 left-6 md:left-8 lg:left-10 flex flex-wrap gap-2">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
