@@ -133,7 +133,7 @@ export const FeaturedCarousel = () => {
                 <Calendar className="h-3 w-3" />
                 <span className="text-xs">
                   {currentArticle['Published Date'] 
-                    ? new Date(currentArticle['Published Date']).toLocaleDateString()
+                    ? new Date(currentArticle['Published Date']).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
                     : 'Recent'
                   }
                 </span>

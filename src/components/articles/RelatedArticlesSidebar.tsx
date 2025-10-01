@@ -95,7 +95,7 @@ export const RelatedArticlesSidebar: React.FC<RelatedArticlesSidebarProps> = ({ 
     if (!dateString) return 'No date';
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
-      day: 'numeric'
+      year: 'numeric'
     });
   };
 
