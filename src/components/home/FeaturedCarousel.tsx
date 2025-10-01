@@ -122,7 +122,7 @@ export const FeaturedCarousel = () => {
                   <button
                     key={index}
                     onClick={() => navigate(`/articles?type=${subcategory}`)}
-                    className="bg-white/20 text-white px-3 py-1 text-xs font-medium rounded-full border border-white/30 hover:bg-white/30 transition-colors cursor-pointer relative z-20"
+                    className="bg-white/20 text-white px-4 py-1 text-xs font-medium rounded-full border border-white/30 hover:bg-white/30 transition-colors cursor-pointer relative z-20"
                   >
                     {getTypeLabel(subcategory)}
                   </button>
