@@ -107,7 +107,7 @@ export const FeaturedCarousel = () => {
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
-            <div className="flex items-center flex-wrap gap-3 mb-6 animate-slide-in-up pl-12 md:pl-16 lg:pl-24">
+            <div className="flex items-center flex-wrap gap-3 mb-6 animate-slide-in-up pl-6 md:pl-8 lg:pl-12">
               {/* Primary type */}
               <button
                 onClick={() => navigate(`/articles?type=${currentArticle.article_type || 'Article'}`)}
