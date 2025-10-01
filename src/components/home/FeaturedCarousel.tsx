@@ -111,7 +111,7 @@ export const FeaturedCarousel = () => {
               {/* Primary type */}
               <button
                 onClick={() => navigate(`/articles?type=${currentArticle.article_type || 'Article'}`)}
-                className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer relative z-20 ml-2"
+                className="bg-gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer relative z-20 ml-12"
               >
                 {getTypeLabel(currentArticle.article_type || 'Article')}
               </button>
