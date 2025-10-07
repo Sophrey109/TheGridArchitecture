@@ -9,9 +9,10 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Helper function to extract excerpt from content or use stored excerpt
 const getExcerpt = (excerpt: string | null, content: string | null): string => {
-  if (excerpt) return excerpt;
+  const fromExcerpt = (excerpt ?? '').trim();
+  if (fromExcerpt) return fromExcerpt;
   if (!content) return "No content available.";
-  const plainText = content.replace(/<[^>]*>/g, '');
+  const plainText = content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
 };
 
