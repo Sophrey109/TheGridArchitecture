@@ -246,6 +246,9 @@
 
   .body-text {
     @apply font-sans text-base leading-relaxed;
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
   }
 
   .small-text {
